@@ -4,6 +4,4 @@
 
 Welcome to the reflection of me.
 
-I'm a Certified Professional and Fire Engineer by day, but turn into a self-taught, fledgling developer and IT junkie by night...can also be dangerous with a camera.
-
-This site serves as my portfolio of projects, writings, and photography
+I'm a software developer in Vancouver.  I make and contribute to open-source projects.  My language of choice is Rust and my focus is to turn myself into a full-stack Rust developer.  Here you will find my thoughts about code, development, and life.  I like heavy metal music, photography, sci-fi and fantasy.
