@@ -1,33 +1,42 @@
 [env]
 CARGO_MAKE_EXTEND_WORKSPACE_MAKEFILE = true
 
+[tasks.format]
+install_crate = "rustfmt"
+command = "cargo"
+args = ["fmt", "--", "--emit=files"]
+
+[tasks.clean]
+command = "cargo"
+args = ["clean"]
+
 [tasks.trunk-serve]
 description = "Builds the site in dev mode using trunk serve --open"
 script = [
-  "cargo clean",
   "cd ~/dev/source/repos/jeff-mitchell-dev/site",
   "trunk serve --open"
 ]
+dependencies = ["format", "clean"]
 
 [tasks.build-shuttle-local]
 description = "Builds the site in release mode with trunk build --release, then deploys the site locally with cargo shuttle run"
 script = [
-  "cargo clean",
   "cd ~/dev/source/repos/jeff-mitchell-dev/site",
   "trunk build --release",
   "cd ../server",
   "cargo shuttle run"
 ]
+dependencies = ["clean"]
 
 [tasks.build-shuttle-remote]
 description = "Builds the site in release mode with trunk build --release, then deploys the site to the shuttle build cluster for deployment"
 script = [
-  "cargo clean",
   "cd ~/dev/source/repos/jeff-mitchell-dev/site",
   "trunk build --release",
   "cd ../server",
   "cargo shuttle deploy"
 ]
+dependencies = ["clean"]
 
 [tasks.serve-dev]
 dependencies = [
