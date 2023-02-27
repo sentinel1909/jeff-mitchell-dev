@@ -1,0 +1,23 @@
+[package]
+name = "jdm-dev-site"
+authors = ["Jeffery D Mitchell", "<sentinel1909@protonmail.com>"]
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name = "jdm_dev_site_app"
+path = "src/app/bin.rs"
+
+[lib]
+name = "jdm_dev_site_lib"
+path = "src/lib/mod.rs"
+
+[dependencies]
+chrono = "0.4.22"
+mdsycx = "0.1"
+sycamore = "0.8"
+sycamore-router = "0.8"
+
+

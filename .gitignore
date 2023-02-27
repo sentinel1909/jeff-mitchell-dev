@@ -1,0 +1,5 @@
+# jeff-mitchell-dev gitignore
+
+/target
+/server/target
+/site/target

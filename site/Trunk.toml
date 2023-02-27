@@ -1,0 +1,4 @@
+# Trunk configuration file
+
+[build]
+dist = "../server/static"
