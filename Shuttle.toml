@@ -1,0 +1,3 @@
+# Shuttle.toml configuration
+
+assets = ["assets/*"]

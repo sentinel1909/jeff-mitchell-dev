@@ -1,0 +1,11 @@
+# .gitignore for jeff-mitchell-dev
+
+# editor configuration
+.vscode
+
+# build artifacts
+/target
+
+# Shuttle
+.shuttle-storage
+Secrets*.toml
