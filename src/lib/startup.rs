@@ -7,11 +7,13 @@ use crate::handlers::handler_404;
 use crate::handlers::health_check;
 use crate::handlers::index;
 use crate::handlers::projects;
+use crate::utilities::convert_to_html;
 use axum::{routing::get, Router};
 use tower_http::services::ServeDir;
 
 // configure function
 pub async fn configure() -> shuttle_axum::ShuttleAxum {
+    convert_to_html().unwrap();
     let router = Router::new()
         .route("/", get(index))
         .route("/about", get(about))
