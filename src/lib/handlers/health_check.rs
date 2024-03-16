@@ -6,7 +6,7 @@ use axum::{
     response::{Html, IntoResponse},
 };
 
-// health_check handler
+// health_check handler function
 pub async fn health_check() -> impl IntoResponse {
     let body = r#"
     <!DOCTYPE html>
