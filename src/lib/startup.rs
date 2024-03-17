@@ -10,10 +10,11 @@ use crate::handlers::music;
 use crate::handlers::photography;
 use crate::handlers::projects;
 use axum::{routing::get, Router};
+use shuttle_axum::AxumService;
 use tower_http::services::ServeDir;
 
 // configure function
-pub async fn configure() -> shuttle_axum::ShuttleAxum {
+pub async fn application() -> AxumService {
     let router = Router::new()
         .route("/", get(index))
         .route("/about", get(about))
@@ -25,5 +26,5 @@ pub async fn configure() -> shuttle_axum::ShuttleAxum {
         .nest_service("/assets", ServeDir::new("assets"))
         .fallback(handler_404);
 
-    Ok(router.into())
+    router.into()
 }
