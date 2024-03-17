@@ -5,28 +5,16 @@ use askama_axum::Template;
 
 #[derive(Template)]
 #[template(path = "index.html")]
-pub struct IndexTemplate {
-  pub header: String,
-  pub content: String
-}
+pub struct IndexTemplate {}
 
 #[derive(Template)]
 #[template(path = "about.html")]
-pub struct AboutTemplate {
-  pub header: String,
-  pub content: String
-}
+pub struct AboutTemplate {}
 
 #[derive(Template)]
 #[template(path = "blog.html")]
-pub struct BlogTemplate {
-  pub header: String,
-  pub content: String
-}
+pub struct BlogTemplate {}
 
 #[derive(Template)]
 #[template(path = "projects.html")]
-pub struct ProjectsTemplate {
-  pub header: String,
-  pub content: String
-}
+pub struct ProjectsTemplate {}
