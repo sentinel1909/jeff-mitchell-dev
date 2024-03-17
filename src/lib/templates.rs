@@ -16,5 +16,17 @@ pub struct AboutTemplate {}
 pub struct BlogTemplate {}
 
 #[derive(Template)]
+#[template(path = "music.html")]
+pub struct MusicTemplate {}
+
+#[derive(Template)]
+#[template(path = "photography.html")]
+pub struct PhotographyTemplate {}
+
+#[derive(Template)]
 #[template(path = "projects.html")]
 pub struct ProjectsTemplate {}
+
+#[derive(Template)]
+#[template(path = "404.html")]
+pub struct NotFoundTemplate {}

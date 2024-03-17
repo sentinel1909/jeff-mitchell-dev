@@ -6,6 +6,8 @@ use crate::handlers::blog;
 use crate::handlers::handler_404;
 use crate::handlers::health_check;
 use crate::handlers::index;
+use crate::handlers::music;
+use crate::handlers::photography;
 use crate::handlers::projects;
 use axum::{routing::get, Router};
 use tower_http::services::ServeDir;
@@ -16,7 +18,9 @@ pub async fn configure() -> shuttle_axum::ShuttleAxum {
         .route("/", get(index))
         .route("/about", get(about))
         .route("/blog", get(blog))
+        .route("/music", get(music))
         .route("/projects", get(projects))
+        .route("/photography", get(photography))
         .route("/health_check", get(health_check))
         .nest_service("/assets", ServeDir::new("assets"))
         .fallback(handler_404);

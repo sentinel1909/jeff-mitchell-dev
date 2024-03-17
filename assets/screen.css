@@ -32,7 +32,8 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 
 /* Main styles */
-body {
+body, html {
+    height: 100%;
     margin: 0;
     font-family: Arial, sans-serif;
 }
@@ -44,11 +45,23 @@ header {
     text-align: center;
 }
 
+.wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 main {
     display: flex;
+    flex-grow: 1;
+    max-width: 1024px;
+    margin: 0 auto;
     justify-content: center;
+    min-height: calc(100vh - (header height + footer height));
     align-items: center;
+    padding: 0 20px;
     padding-top: 1.25em;
+    padding-bottom: 1.25em;
 }
 
 nav {
@@ -80,7 +93,7 @@ footer {
     text-align: center;
     padding: 1rem;
     bottom: 0;
-    position: fixed;
+    position: relative;
     width: 100%;
 }
 
