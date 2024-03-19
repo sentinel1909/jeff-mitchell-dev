@@ -3,7 +3,7 @@ title: "The Second Post"
 date: "2024-03-09"
 slug: "second-post"
 category: "administrative"
-tag: "none"
+tag: "second"
 summary: "This is the summary of the second post."
 ---
 

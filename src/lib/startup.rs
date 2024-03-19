@@ -5,6 +5,7 @@ use crate::domain::AppState;
 use crate::handlers::{
     about, blog, handler_404, health_check, index, music, photography, projects,
 };
+use crate::queries::add_articles;
 use crate::utilities::{get_bodies, get_frontmatters};
 use axum::{routing::get, Router};
 use shuttle_axum::AxumService;
@@ -20,7 +21,7 @@ pub async fn application(pool: PgPool) -> Result<AxumService, CustomError> {
     .await
     .map_err(CustomError::new)?;
 
-    let state = AppState { pool };
+    let app_state = AppState { pool };
 
     let front_matters = get_frontmatters()
         .expect("Unable to retrieve frontmatter content from markdown files, cannot continue...");
@@ -28,7 +29,13 @@ pub async fn application(pool: PgPool) -> Result<AxumService, CustomError> {
     let bodies = get_bodies()
         .expect("Unable to retrieve body content from markdown files, cannot continue...");
 
-    let _articles = (front_matters, bodies);
+    add_articles(
+        axum::extract::State(app_state.clone()),
+        front_matters,
+        bodies,
+    )
+    .await
+    .unwrap();
 
     let router = Router::new()
         .route("/", get(index))
@@ -40,7 +47,7 @@ pub async fn application(pool: PgPool) -> Result<AxumService, CustomError> {
         .route("/health_check", get(health_check))
         .nest_service("/assets", ServeDir::new("assets"))
         .fallback(handler_404)
-        .with_state(state);
+        .with_state(app_state);
 
     Ok(router.into())
 }

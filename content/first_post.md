@@ -3,7 +3,7 @@ title: "The Proverbial First Post"
 date: "2024-03-08"
 slug: "first-post"
 category: "administrative"
-tag: "none"
+tag: "first"
 summary: "This is the summary of the first post."
 ---
 
