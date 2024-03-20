@@ -1,6 +1,7 @@
 // src/lib/templates.rs
 
 // dependencies
+use crate::domain::Article;
 use askama_axum::Template;
 
 #[derive(Template)]
@@ -13,7 +14,9 @@ pub struct AboutTemplate {}
 
 #[derive(Template)]
 #[template(path = "blog.html")]
-pub struct BlogTemplate {}
+pub struct BlogTemplate {
+    pub articles: Vec<Article>,
+}
 
 #[derive(Template)]
 #[template(path = "music.html")]
