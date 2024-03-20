@@ -2,6 +2,7 @@
 
 // dependencies
 use serde::Deserialize;
+use sqlx::FromRow;
 
 // struct to represent the front matter from a particular post
 #[derive(Debug, Deserialize)]
@@ -41,4 +42,25 @@ impl Default for BodyContent {
             content: "".to_string(),
         }
     }
+}
+
+// struct to represent an article
+#[derive(Debug, Deserialize, FromRow)]
+pub struct Article {
+    #[sqlx(rename = "article_id")]
+    pub id: i32,
+    #[sqlx(rename = "article_title")]
+    pub title: String,
+    #[sqlx(rename = "article_date")]
+    pub date: String,
+    #[sqlx(rename = "article_slug")]
+    pub slug: String,
+    #[sqlx(rename = "article_category")]
+    pub category: String,
+    #[sqlx(rename = "article_tag")]
+    pub tag: String,
+    #[sqlx(rename = "article_summary")]
+    pub summary: String,
+    #[sqlx(rename = "article_content")]
+    pub content: String,
 }

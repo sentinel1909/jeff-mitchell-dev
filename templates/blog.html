@@ -1,10 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section>
-  <h2>Articles</h2>
-  <article>
-    <p>Articles I've written...</p>
-  </article>
+<section class="blog-grid">
+  {% for article in articles %}
+    <article class="blog-article">
+      <h3>{{ article.title }}</h3>
+      <h4>{{ article.date }}</h4>
+      <p>Category: {{ article.category }}</p>
+      <p>Tag: {{ article.tag }}</p>
+      <p>Summary: {{ article.summary }}</p>
+      <a href="#">Do you want to know more?</a>
+    </article>
+  {% endfor %}
 </section>
 {% endblock %}

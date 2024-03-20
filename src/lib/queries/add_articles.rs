@@ -23,6 +23,6 @@ pub async fn add_articles(
             .bind(body.content)
             .execute(&app_state.pool)
             .await?;
-        }
+    }
     Ok(())
 }
