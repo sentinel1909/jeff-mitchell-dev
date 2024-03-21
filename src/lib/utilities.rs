@@ -51,3 +51,12 @@ pub fn get_bodies() -> Result<Vec<BodyContent>, AppError> {
     }
     Ok(bodies)
 }
+
+// utility function to convert markdown content into HTML
+pub fn convert_markdown(markdown_content: String) -> String {
+    let parser = pulldown_cmark::Parser::new(&markdown_content);
+    let mut html_output = String::new();
+    pulldown_cmark::html::push_html(&mut html_output, parser);
+
+   html_output
+}
