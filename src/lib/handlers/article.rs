@@ -4,6 +4,7 @@
 use crate::domain::{AppState, Segments};
 use crate::queries::get_article;
 use crate::templates::{ArticleTemplate, NotFoundTemplate};
+use crate::utilities::convert_markdown;
 use askama_axum::Template;
 use axum::{
     extract::{Path, State},
@@ -46,7 +47,7 @@ pub async fn article(
 ) -> impl IntoResponse {
     match get_article(segments, axum::extract::State(app_state)).await {
         Ok(article) => ArticleHandlerResponse::Article(ArticleTemplate {
-            article: article.content,
+            article: convert_markdown(article.content),
         }),
         Err(e) => ArticleHandlerResponse::NotFound(NotFoundTemplate {
             error: e.to_string(),
