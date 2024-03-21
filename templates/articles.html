@@ -9,7 +9,7 @@
       <p>Category: {{ article.category }}</p>
       <p>Tag: {{ article.tag }}</p>
       <p>Summary: {{ article.summary }}</p>
-      <a href="#">Do you want to know more?</a>
+      <a href="/article/{{ article.date }}/{{ article.slug }}">Do you want to know more?</a>
     </article>
   {% endfor %}
 </section>

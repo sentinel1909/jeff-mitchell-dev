@@ -64,3 +64,10 @@ pub struct Article {
     #[sqlx(rename = "article_content")]
     pub content: String,
 }
+
+// struct to represent path segments for the article handler
+#[derive(Debug, Deserialize)]
+pub struct Segments {
+    pub date: String,
+    pub slug: String,
+}

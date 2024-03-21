@@ -3,7 +3,7 @@
 // dependencies
 use crate::domain::AppState;
 use crate::handlers::{
-    about, blog, handler_404, health_check, index, music, photography, projects,
+    about, article, articles, handler_404, health_check, index, music, photography, projects,
 };
 use crate::queries::add_articles;
 use crate::utilities::{get_bodies, get_frontmatters};
@@ -40,7 +40,8 @@ pub async fn application(pool: PgPool) -> Result<AxumService, CustomError> {
     let router = Router::new()
         .route("/", get(index))
         .route("/about", get(about))
-        .route("/blog", get(blog))
+        .route("/articles", get(articles))
+        .route("/article/:date/:slug", get(article))
         .route("/music", get(music))
         .route("/projects", get(projects))
         .route("/photography", get(photography))
