@@ -156,3 +156,19 @@ footer a {
   color: white;
   text-decoration: none;
 }
+
+/* media queries */
+@media (max-width: 760px) {
+  nav ul {
+    flex-direction: column;
+  }
+
+  nav ul li {
+    margin: 0.5rem, 0;
+  }
+
+  .blog-grid {
+    display: flex;
+    flex-direction: column;
+  }
+}

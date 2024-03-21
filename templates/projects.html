@@ -3,8 +3,26 @@
 {% block content %}
 <section>
   <h2>Projects</h2>
+  <br />
+  <p>There has been many things I've fiddled with in my journey to learn Rust. Here are some of the highlights:</p>
+  <br />
   <article>
-    <p>Projects I've built...</p>
+    <h3>This Site</h3>
+    <p>I've been up and down and back and forth with a &ldquo;developer profile&rdquo; site over the years. What you see here is latest iteration. It's built with Axum and Askama and hosted on Shuttle.</p>
+  </article>
+  <br />
+  <article>
+    <h3>Zero to Production in Rust</h3>
+    <p>In 2022, I worked through <a href="https://www.zero2prod.com/index.html" target="_blank" rel="noreferrer">Zero to Production in Rust</a>, by Luca Palmieri</p>
+    <p>Rather than just work through the book as it was, I swapped the web framework for Axum instead of Actix Web. For a time, I had the code running in production on Railway, but decided to take it down for a time and eventually work on missing features.</p>
+    <p>The GitHub repo is here: <a href="https://github.com/sentinel1909/crusty-rustacean-api" target="_blank" rel="noreferrer">Crusty Rustacean API</a></p>
+  </article>
+  <br>
+  <article>
+    <h3>Rivet Head API</h3>
+    <p>In the fall of 2023 I started an API project to power a music listening diary. It's running now in basic form. I'm making this for myself, it won't be available to the public. So far, I interact with it via cURL. I'm intending on integrating it with this site, to power the Music page.</p>
+    <p>The project is made with Actix Web and hosted on Shuttle.</p>
+    <p>The Github repo is here: <a href="https://github.com/sentinel1909/rivet-head-api" target="_blank" rel="noreferrer">Rivet Head API</a></p>
   </article>
 </section>
 {% endblock %}
