@@ -3,7 +3,7 @@
 // dependencies
 use crate::domain::AppState;
 use crate::queries::get_articles;
-use crate::templates::{BlogTemplate, NotFoundTemplate};
+use crate::templates::{ArticlesTemplate, NotFoundTemplate};
 use askama_axum::Template;
 use axum::{
     extract::State,
@@ -13,7 +13,7 @@ use axum::{
 
 // enum to represent the response from the blog handler function, wraps the template types
 enum BlogHandlerResponse {
-    Articles(BlogTemplate),
+    Articles(ArticlesTemplate),
     NotFound(NotFoundTemplate),
 }
 
@@ -38,9 +38,11 @@ impl IntoResponse for BlogHandlerResponse {
 }
 
 // blog handler function
-pub async fn blog(State(app_state): State<AppState>) -> impl IntoResponse {
+pub async fn articles(State(app_state): State<AppState>) -> impl IntoResponse {
     match get_articles(axum::extract::State(app_state)).await {
-        Ok(articles) => BlogHandlerResponse::Articles(BlogTemplate { articles }),
-        Err(_) => BlogHandlerResponse::NotFound(NotFoundTemplate {}),
+        Ok(articles) => BlogHandlerResponse::Articles(ArticlesTemplate { articles }),
+        Err(e) => BlogHandlerResponse::NotFound(NotFoundTemplate {
+            error: e.to_string(),
+        }),
     }
 }

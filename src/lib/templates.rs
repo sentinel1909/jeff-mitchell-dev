@@ -13,9 +13,15 @@ pub struct IndexTemplate {}
 pub struct AboutTemplate {}
 
 #[derive(Template)]
-#[template(path = "blog.html")]
-pub struct BlogTemplate {
+#[template(path = "articles.html")]
+pub struct ArticlesTemplate {
     pub articles: Vec<Article>,
+}
+
+#[derive(Template)]
+#[template(path = "article.html")]
+pub struct ArticleTemplate {
+    pub article: String,
 }
 
 #[derive(Template)]
@@ -32,4 +38,6 @@ pub struct ProjectsTemplate {}
 
 #[derive(Template)]
 #[template(path = "404.html")]
-pub struct NotFoundTemplate {}
+pub struct NotFoundTemplate {
+    pub error: String,
+}
