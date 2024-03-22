@@ -25,6 +25,10 @@ pub struct ArticleTemplate {
 }
 
 #[derive(Template)]
+#[template(path = "admin.html")]
+pub struct AdminTemplate {}
+
+#[derive(Template)]
 #[template(path = "music.html")]
 pub struct MusicTemplate {}
 

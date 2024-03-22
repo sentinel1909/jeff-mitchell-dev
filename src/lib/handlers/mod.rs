@@ -1,6 +1,7 @@
 // src/lib/handlers/mod.rs
 
 pub mod about;
+pub mod admin;
 pub mod article;
 pub mod articles;
 pub mod handler_404;
@@ -11,6 +12,7 @@ pub mod photography;
 pub mod projects;
 
 pub use about::*;
+pub use admin::*;
 pub use article::*;
 pub use articles::*;
 pub use handler_404::*;

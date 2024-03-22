@@ -58,5 +58,5 @@ pub fn convert_markdown(markdown_content: String) -> String {
     let mut html_output = String::new();
     pulldown_cmark::html::push_html(&mut html_output, parser);
 
-   html_output
+    html_output
 }
