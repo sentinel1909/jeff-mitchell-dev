@@ -1,6 +1,6 @@
 [package]
 name = "jeff-mitchell-dev"
-version = "1.0.1"
+version = "2024.3.24"
 edition = "2021"
 description = "My dev profile site"
 readme = "README.md"
