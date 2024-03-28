@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section class="blog-grid">
+<section class="article-grid">
   {% for article in articles %}
-    <article class="blog-article">
+    <article class="article-card">
       <h3>{{ article.title }}</h3>
       <h4>{{ article.date }}</h4>
       <p>Category: {{ article.category }}</p>

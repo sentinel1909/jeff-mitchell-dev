@@ -1,5 +1,23 @@
 /* CSS Styles for jeff-mitchell-dev */
 
+/* CSS variable declarations */
+:root {
+  --site-main-font: Arial, sans-serif;
+  --site-dimensions-height: 100%;
+  --site-dimensions-margin: 0;
+  --site-link-colour: hsl(0, 0%, 100%);
+  --header-background-color: hsl(0, 0%, 20%);
+  --header-text-colour: hsl(0, 0%, 100%);
+  --nav-text-colour: hsl(0, 0%, 100%);
+  --content-background-color: hsl(0, 0%, 100%);
+  --content-main-text-color: hsl(0, 0%, 0%);
+  --article-card-border: hsl(0, 0%, 0%);
+  --article-card-background: hsl(0, 0%, 95.69%);
+  --article-container-color: hsl(0, 0%, 95.69%);
+  --footer-background-color: hsl(0, 0%, 20%);
+  --footer-text-colour: hsl(0, 0%, 100%);
+}
+
 /* CSS Reset */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -33,15 +51,15 @@ p, h1, h2, h3, h4, h5, h6 {
 
 /* Main styles */
 body, html {
-    height: 100%;
-    margin: 0;
-    font-family: Arial, sans-serif;
+    height: var(--site-dimensions-height);
+    margin: var(--site-dimensions-margin);
+    font-family: var(--site-main-font);
 }
 
 header {
-    background-color: #333;
-    color: white;
-    padding: 1rem;
+    background-color: var(--header-background-color);
+    color: var(--header-text-colour);
+    padding: 1em;
     text-align: center;
 }
 
@@ -58,14 +76,16 @@ main {
     margin: 0 auto;
     justify-content: center;
     min-height: calc(100vh - (header height + footer height));
-    padding: 0 20px;
+    padding: 0 1.25em;
     padding-top: 1.25em;
     padding-bottom: 1.25em;
+    background-color: var(--content-background-color);
+    color: var(--content-main-text-color);
 }
 
 nav {
     background-color: #333;
-    color: white;
+    color: var(--nav-text-colour);
     text-align: center;
 }
 
@@ -78,34 +98,43 @@ nav ul {
 }
 
 nav ul li {
-    margin: 0 1rem;
+    margin: 0 1.25em;
 }
 
 nav a {
-    color: white;
+    color: var(--site-link-colour);
     text-decoration: none;
 }
 
-.blog-grid {
+nav a:hover {
+  font-weight: bold;
+}
+
+.article-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-gap: 20px;
+  grid-gap: 1.25em;
   margin: 0 auto;
   max-width: 1200px;
   padding: 20px;
 }
 
-.blog-article {
-  background-color: #f4f4f4;
-  border: 1px solid #ddd;
-  padding: 20px;
+.article-card {
+  background-color: var(--article-card-background);
+  border: 2px solid var(--article-card-border);
+  padding: 1.25em;
+}
+
+.article-card h2, h3, h4 {
+  font-weight: bold;
 }
 
 .article-container {
     max-width: 800px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 1.25em;
     line-height: 1.6;
+    background-color: var(--article-container-color);
 }
 
 .article-container h1, .article-container h2, .article-container h3 {
@@ -117,17 +146,11 @@ nav a {
     margin-bottom: 1em;
 }
 
-.article-container img {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 1em;
-}
-
 footer {
-    background-color: #333;
-    color: white;
+    background-color: var(--footer-background-color);
+    color: var(--footer-text-colour);
     text-align: center;
-    padding: 1rem;
+    padding: 1.25em;
     bottom: 0;
     position: relative;
     width: 100%;
@@ -146,8 +169,12 @@ footer ul li {
 }
 
 footer a {
-  color: white;
+  color: var(--footer-text-colour);
   text-decoration: none;
+}
+
+footer a:hover {
+  font-weight: bold;
 }
 
 /* media queries */
