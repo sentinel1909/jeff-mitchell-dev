@@ -1,0 +1,3 @@
+# jeff-mitchell-dev Shuttle configuration
+name = "jeff-mitchell-dev"
+assets = ["public/*"]

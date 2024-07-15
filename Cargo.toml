@@ -1,0 +1,22 @@
+[package]
+name = "jeff-mitchell-dev"
+version = "0.5.0"
+edition = "2021"
+publish = false
+
+[[bin]]
+name = "jeff-mitchell-dev"
+path = "src/bin/main.rs"
+
+[lib]
+name = "jeff_mitchell_dev_lib"
+path = "src/lib/lib.rs"
+
+[dependencies]
+anyhow = "1.0.86"
+axum = "0.7.5"
+axum-macros = "0.4.1"
+shuttle-axum = "0.46.0"
+shuttle-runtime = { version = "0.46.0", default-features = false }
+tokio = "1"
+tower-http = { version = "0.5.0", features = ["fs"] }

@@ -1,0 +1,14 @@
+# jeff-mitchell-dev .gitignore configuration
+
+# VS Code Settings
+.vscode
+
+# Zola build output
+public
+
+# Build artifacts
+/target
+
+# Shuttle Related
+.shuttle-storage
+Secrets*.toml
