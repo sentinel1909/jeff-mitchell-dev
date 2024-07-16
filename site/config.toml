@@ -41,7 +41,7 @@ external_links_no_referrer = true
 # Put all your custom variables here
 author = "Jeff Mitchell"
 show_author = true
-theme_color = "red"
+theme_color = "orange"
 center = true
 show_categories = true
 show_tags = true
