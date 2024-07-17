@@ -12,3 +12,6 @@ public
 # Shuttle Related
 .shuttle-storage
 Secrets*.toml
+
+# Mac OS
+.DS_Store
