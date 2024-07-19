@@ -7,7 +7,7 @@ categories = ["Beginner Guides"]
 tags = ["rust", "control flow"]
 +++
 
-Last time, in [Decisions, Decisions](@/blog/2022_04_27_decisions_decisions.md), we looked at a method for adding logic within a program, via the if and if else expressions. Next up, we see how we can further control the flow, through loops. Loops allow repetition of blocks of code until some desired event or outcome. There are three kinds of loops in Rust: loop, while, and for.
+Last time, in [Decisions, Decisions](@/blog/2022/2022_04_27_decisions_decisions.md), we looked at a method for adding logic within a program, via the if and if else expressions. Next up, we see how we can further control the flow, through loops. Loops allow repetition of blocks of code until some desired event or outcome. There are three kinds of loops in Rust: loop, while, and for.
 
 ### loop
 

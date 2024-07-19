@@ -3,7 +3,7 @@ title = "The Mighty Vector"
 description = "An article introducing the vector collection type in Rust."
 date = "2023-11-07"
 [taxonomies]
-categories = ["Intermediate Guides"]
+categories = ["Beginner Guides"]
 tags = ["rust", "collections", "vectors"]
 +++
 

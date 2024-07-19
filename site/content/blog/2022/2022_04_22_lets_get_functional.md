@@ -7,7 +7,7 @@ categories = ["Beginner Guides"]
 tags = ["rust", "functions"]
 +++
 
-In my last Rusty writings, I covered Rust’s [compound data types](@/blog/2022_04_18_pouring_the_footings_compound.md). Today I will write to you about functions. Functions are essential tool to help make code more organized and maintainable.
+In my last Rusty writings, I covered Rust’s [compound data types](@/blog/2022/2022_04_18_pouring_the_footings_compound.md). Today I will write to you about functions. Functions are essential tool to help make code more organized and maintainable.
 
 ### Purpose
 

@@ -1,7 +1,7 @@
 +++
 title = "Simple Website Hosting with Shuttle"
 description = "A brief article on how to host static web site files on Shuttle."
-date = "2023-04-14"
+date = "2023-06-05"
 [taxonomies]
 categories = ["How-To"]
 tags = ["rust", "static files", "shuttle"]
