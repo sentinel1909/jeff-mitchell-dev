@@ -51,7 +51,7 @@ show_categories = true
 show_tags = true
 logo_text = "jeff-mitchell.dev :: mis-adventures with the Rust programming language"
 logo_home_link = "/"
-copyright = "Copyright &copy; 2024 Jeffery D. Mitchell :: Powered by Zola :: Hosted on Shuttle :: Inspired by Dutch kindness, damccull and Tania Rascia"
+copyright = "Copyright &copy; 2024 Jeffery D. Mitchell :: Powered by Zola :: Hosted on Shuttle"
 main_menu = [
   { url = "@/_index.md", name = "home" },
   { url = "@/about/_index.md", name = "about" },
