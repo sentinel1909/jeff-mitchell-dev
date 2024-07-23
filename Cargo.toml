@@ -16,7 +16,7 @@ path = "src/lib/lib.rs"
 anyhow = "1.0.86"
 axum = "0.7.5"
 axum-macros = "0.4.1"
-shuttle-axum = "0.46.0"
-shuttle-runtime = { version = "0.46.0", default-features = false }
+shuttle-axum = "0.47.0"
+shuttle-runtime = { version = "0.47.0", default-features = false }
 tokio = "1"
 tower-http = { version = "0.5.0", features = ["fs"] }
