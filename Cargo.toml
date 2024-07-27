@@ -1,6 +1,6 @@
 [package]
 name = "jeff-mitchell-dev"
-version = "0.6.0"
+version = "0.7.0"
 edition = "2021"
 publish = false
 
@@ -13,10 +13,6 @@ name = "jeff_mitchell_dev_lib"
 path = "src/lib/lib.rs"
 
 [dependencies]
-anyhow = "1.0.86"
-axum = "0.7.5"
-axum-macros = "0.4.1"
-shuttle-axum = "0.47.0"
-shuttle-runtime = { version = "0.47.0", default-features = false }
-tokio = "1"
-tower-http = { version = "0.5.0", features = ["fs"] }
+rocket = "0.5.1"
+shuttle-rocket = "0.47.0"
+shuttle-runtime = "0.47.0"
