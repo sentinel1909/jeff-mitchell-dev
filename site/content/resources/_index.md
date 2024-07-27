@@ -31,4 +31,4 @@ This is my sort of clearing house of resources, both Rust related and Rust adjac
 
 ## Other Blogs
 
-[Welcome to the Junge](wtjungle.com)
+[Welcome to the Jungle](https://wtjungle.com)
