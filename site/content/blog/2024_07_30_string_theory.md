@@ -1,6 +1,6 @@
 +++
 title = "String Theory"
-description = "An article highlighting the owned string type in Rust"
+description = "An article highlighting the two important string types in Rust"
 date = "2024-07-30"
 draft = false
 [taxonomies]
@@ -10,7 +10,11 @@ tags = ["rust", "collections", "strings"]
 
 ## Introduction
 
-String in Rust are hard. The difficulty stems from the different way strings are handled by the language. This article reflects the two core types of strings and my understanding of them. It will evolve over time.
+String in Rust are hard. The difficulty stems from the different ways strings are handled by the language. This article reflects the two core types of strings and my understanding of them. It will evolve over time. Be aware, this does not offer the be-all-end-all explanation of strings. The main purpose here is to provide a jumping off point for me, and you, to dive deeper as needed. To often, I avoid writing because I feel I can't do a topic justice.
+
+This is just an excuse.
+
+Let's go.
 
 ## What the Heck is UTF-8?
 
