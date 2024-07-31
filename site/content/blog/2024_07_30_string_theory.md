@@ -1,8 +1,8 @@
 +++
 title = "String Theory"
 description = "An article highlighting the owned string type in Rust"
-date = "2024-07-23"
-draft = true
+date = "2024-07-30"
+draft = false
 [taxonomies]
 categories = ["Beginner Guides"]
 tags = ["rust", "collections", "strings"]
@@ -64,7 +64,7 @@ The last two a functionally equivalent, your choice comes down to style and pref
 
 ## A View to a String
 
-That was `String` what is a string slice? Again, let's ask ChatGPT:
+That was `String`, what is a string slice? Again, let's ask ChatGPT:
 
 <blockquote>
 Let's imagine that a string slice in Rust is like a piece of paper with words on it that you can look at but not change.
@@ -83,11 +83,24 @@ In Rust, a string slice (&str) is a way to look at a piece of text without chang
 
 </blockquote>
 
+A `&str` is a pointer into memory which holds a string slice.
+
 ## Use Cases - When to Choose `String` over `&str`
+
+The `String` type is most useful when you don't want to worry about ownership and lifetimes. However, be aware that you're allocating memory every time you create a new `String` variable. This may incur a performance penalty that's unacceptable. Also, the `String` type doesn't implement the `Copy` trait, so using it as a field in a `struct` may cause issues and cloning is your best option...which again, may incur a performance hit that might or might not be ok.
+
+Since a `&str` is a view to a String, you can't change it, you can only view it. The `&str` type is good for function parameters, where many times you're just passing information in and don't need to worry about ownership of the data being passed.
 
 ## Conclusion
 
+That was your brief introduction to strings in Rust! This is a very, very watered down version, there is much more to know. Please check out the full scoop in the Rust Book.
+
 ## References
 
-[The Rust Programming Language, Chapter 4.3: The Slice Type](https://doc.rust-lang.org/book/ch04-03-slices.html)
-[The Rust Programming Language, Chapter 8.2: Storing UTF-8 Encoded Text with String](https://doc.rust-lang.org/book/ch08-02-strings.html)
+- [The Rust Programming Language, Chapter 4.3: The Slice Type](https://doc.rust-lang.org/book/ch04-03-slices.html)
+- [The Rust Programming Language, Chapter 8.2: Storing UTF-8 Encoded Text with String](https://doc.rust-lang.org/book/ch08-02-strings.html)
+- [Rust By Example: Strings](https://doc.rust-lang.org/rust-by-example/std/str.html)
+
+## Blog Articles
+
+- [How Strings Work in Rust](https://zerotomastery.io/blog/how-strings-work-in-rust/)
