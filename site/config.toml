@@ -13,17 +13,14 @@ theme = "zerm"
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
 
+# Generate RSS feed
+generate_feed = true
+
 # Taxonomies configuration
 taxonomies = [
   { name = "categories", feed = true },
   { name = "tags", feed = true },
 ]
-
-# Whether to build a search index to be used later on by a JavaScript library
-build_search_index = true
-
-[search]
-index_format = "elasticlunr_json"
 
 [markdown]
 # Whether to do syntax highlighting
@@ -58,5 +55,4 @@ main_menu = [
   { url = "https://github.com/sentinel1909", name = "GitHub", external = true },
   { url = "https://query.rs", name = "query.rs", external = true }
 ]
-
 read_more = "read"

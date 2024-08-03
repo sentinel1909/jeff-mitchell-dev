@@ -15,3 +15,6 @@ Secrets*.toml
 
 # Mac OS
 .DS_Store
+
+# Zola executable
+site/zola
