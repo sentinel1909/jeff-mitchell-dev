@@ -2,6 +2,8 @@
 title = "markdown-html-rs - Converting Markdown Content to HTML"
 description = "Highlighting markdown-to-html, a Rust CLI program which helps you convert markdown content to HTML."
 date = "2024-07-24"
+authors = ["Jeff Mitchell"]
+draft = false
 [taxonomies]
 categories = ["Projects"]
 tags = ["rust", "CLI app", "markdown"]

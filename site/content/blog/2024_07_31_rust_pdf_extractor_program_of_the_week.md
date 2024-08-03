@@ -2,6 +2,7 @@
 title = "rust-pdf-extractor - Turning PDF Documents into Plain Text"
 description = "My Rust program of the week takes a pdf file as input and converts it to a plain text file as output."
 date = "2024-07-31"
+authors = ["Jeff Mitchell"]
 draft = false
 [taxonomies]
 categories = ["Projects"]

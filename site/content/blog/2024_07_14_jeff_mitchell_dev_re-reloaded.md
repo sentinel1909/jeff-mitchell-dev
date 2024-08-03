@@ -2,6 +2,8 @@
 title = "Jeff Mitchell Dev - Re-Re-Loaded"
 description = "Some thoughts from the author regarding this latest iteration of this blog."
 date = "2024-07-04"
+authors = ["Jeff Mitchell"]
+draft = false
 [taxonomies]
 categories = ["Author's Notes"]
 tags = ["meta"]

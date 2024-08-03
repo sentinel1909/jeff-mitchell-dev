@@ -2,6 +2,8 @@
 title = "nf - An Empty File Maker"
 description = "Highlighting nf, a Rust program which makes an empty, new file."
 date = "2024-07-16"
+authors = ["Jeff Mitchell"]
+draft = false
 [taxonomies]
 categories = ["Projects"]
 tags = ["rust", "CLI app", "file IO"]

@@ -2,6 +2,7 @@
 title = "String Theory"
 description = "An article highlighting the two important string types in Rust."
 date = "2024-07-30"
+authors = ["Jeff Mitchell"]
 draft = false
 [taxonomies]
 categories = ["Beginner Guides"]
