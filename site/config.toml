@@ -52,6 +52,7 @@ main_menu = [
   { url = "/tags", name = "tags" },
   { url = "/projects", name = "projects" },
   { url = "/resources", name = "resources"},
+  { url = "/atom.xml", name = "RSS" },
   { url = "https://github.com/sentinel1909", name = "GitHub", external = true },
   { url = "https://query.rs", name = "query.rs", external = true }
 ]
