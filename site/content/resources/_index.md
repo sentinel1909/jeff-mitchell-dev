@@ -23,12 +23,17 @@ This is my sort of clearing house of resources, both Rust related and Rust adjac
 
 ## Back End
 
-[Rocket](https://rocket.rs)
+[Axum](https://docs.rs/axum/latest/axum/)
+
+## Asynchronous Runtime
+
+[Tokio](https://tokio.rs)
 
 ## Platforms
 
 [Shuttle](https://shuttle.rs)
 
-## Other Blogs
+## Other Blogs and Written Things
 
-[Welcome to the Jungle](https://wtjungle.com)
+- [This Week in Rust](https://this-week-in-rust.org)
+- [Welcome to the Jungle](https://wtjungle.com)
