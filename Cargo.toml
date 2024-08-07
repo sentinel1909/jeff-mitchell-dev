@@ -1,18 +1,16 @@
 [package]
 name = "jeff-mitchell-dev"
-version = "0.7.2"
+authors = ["Jeffery D. Mitchell", "<sentinel1909@jeff-mitchell.dev>"]
+version = "0.8.0"
 edition = "2021"
+description = "My Zola blog, served up by Axum, hosted on Shuttle"
+readme = "README.md"
+repository = "https://github.com/sentinel1909/crusty-rustacean-api"
+license = "MIT"
 publish = false
 
-[[bin]]
-name = "jeff-mitchell-dev"
-path = "src/bin/main.rs"
-
-[lib]
-name = "jeff_mitchell_dev_lib"
-path = "src/lib/lib.rs"
-
 [dependencies]
-rocket = "0.5.1"
-shuttle-rocket = "0.47.0"
+axum = "0.7.5"
+shuttle-axum = "0.47.0"
 shuttle-runtime = "0.47.0"
+tower-http = { version = "0.5.2", features = [ "fs"] }
