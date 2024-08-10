@@ -10,8 +10,8 @@ license = "MIT"
 publish = false
 
 [[bin]]
-name = "httpd"
-path = "src/bin/httpd.rs"
+name = "jeff-mitchell-dev"
+path = "src/bin/main.rs"
 
 [lib]
 name = "jeff_mitchell_dev_lib"
