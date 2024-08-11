@@ -1,5 +1,5 @@
 +++
 sort_by="date"
 transparent = true
-paginate_by = 3
+paginate_by = 5
 +++

@@ -1,0 +1,10 @@
+{% extends "zerm/templates/404.html" -%} {%- block title %} {{ super() }} {%-
+endblock title -%} {%- block main -%}
+<p>Sorry, this page doesn't exist. Did you type the address incorrectly?</p>
+<p>
+  <a
+    href="{%- if config.extra.logo_home_link -%}{{ config.extra.logo_home_link }}{%- else -%}{{ config.base_url }}{%- endif -%}"
+    >Go back home?</a
+  >
+</p>
+{%- endblock main -%}

@@ -1,8 +1,8 @@
 # jeff-mitchell-dev just command runner configuration
 
-build-site:
+build:
   cd site && ./zola build --output-dir ../public --force
 
-serve-dev:
+dev:
   cd site && ./zola serve
 
