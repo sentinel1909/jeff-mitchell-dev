@@ -739,13 +739,12 @@ checksum = "49f1f14873335454500d59611f1cf4a4b0f786f9ac11f4312a78e4cf2566695b"
 
 [[package]]
 name = "jeff-mitchell-dev"
-version = "0.9.0"
+version = "0.9.1"
 dependencies = [
  "axum 0.7.5",
  "http 1.1.0",
  "shuttle-axum",
  "shuttle-runtime",
- "tokio",
  "tower",
  "tower-http",
  "tracing",

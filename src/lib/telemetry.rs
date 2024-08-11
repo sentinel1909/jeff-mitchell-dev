@@ -2,7 +2,6 @@
 
 // dependencies
 use http::Request;
-use tokio::task::JoinHandle;
 use tower_http::request_id::{MakeRequestId, RequestId};
 use tracing::subscriber::set_global_default;
 use tracing::Subscriber;
@@ -23,16 +22,6 @@ impl MakeRequestId for MakeRequestUuid {
 
         Some(RequestId::new(request_id.parse().unwrap()))
     }
-}
-
-// spawn blocking with tracing function
-pub fn spawn_blocking_with_tracing<F, R>(f: F) -> JoinHandle<R>
-where
-    F: FnOnce() -> R + Send + 'static,
-    R: Send + 'static,
-{
-    let current_span = tracing::Span::current();
-    tokio::task::spawn_blocking(move || current_span.in_scope(f))
 }
 
 // get subscriber function, sets up a tracing subscriber
