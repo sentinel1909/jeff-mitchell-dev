@@ -1,22 +1,27 @@
+# jeff-mitchell-dev package configuration
+# site content built with Zola and served from the public directory
 [package]
 name = "jeff-mitchell-dev"
 authors = ["Jeffery D. Mitchell", "<sentinel1909@jeff-mitchell.dev>"]
-version = "0.9.2"
+version = "0.9.3"
 edition = "2021"
 description = "My Zola blog, served up by Axum, hosted on Shuttle"
 readme = "README.md"
-repository = "https://github.com/sentinel1909/crusty-rustacean-api"
+repository = "https://github.com/sentinel1909/jeff-mitchell-dev.git"
 license = "MIT"
 publish = false
 
+# server binary
 [[bin]]
 name = "jeff-mitchell-dev"
 path = "src/bin/main.rs"
 
+# server library
 [lib]
 name = "jeff_mitchell_dev_lib"
 path = "src/lib/lib.rs"
 
+# project dependencies
 [dependencies]
 axum = "0.7.5"
 http = "1.1.0"
