@@ -18,9 +18,9 @@
       endif -%}
     </div>
     <div>
-      { Word Count: {{ page.word_count }} words | {% if page.reading_time >= 2
-      %} {{ page.reading_time }} minutes {% else %} {{ page.reading_time }}
-      minute {% endif %} }
+      { Word Count: {{ page.word_count }} words | Reading Time: {% if
+      page.reading_time >= 2 %} {{ page.reading_time }} minutes {% else %} {{
+      page.reading_time }} minute {% endif %} }
     </div>
     {% if page.description or page.summary -%}
     <div>
