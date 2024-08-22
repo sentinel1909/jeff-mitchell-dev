@@ -109,7 +109,7 @@ http://localhost:8000
 
 You should be greeted with:
 
-![](hello-from-axum.png)
+![Hello from Axum](hello-from-axum.png)
 
 Pretty cool hey?
 
