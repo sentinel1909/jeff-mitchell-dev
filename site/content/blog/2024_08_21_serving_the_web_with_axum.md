@@ -1,9 +1,9 @@
 +++
 title = "Serving the Web with Axum"
 description = "An overview of how to get started with the Axum web framework"
-date = "2024-08-14"
+date = "2024-08-21"
 authors = ["Jeff Mitchell"]
-draft = true
+draft = false
 [taxonomies]
 categories = ["How To"]
 tags = ["server", "axum"]
@@ -39,18 +39,18 @@ async fn main() {
     let app = Router::new().route("/", get(hello_from_axum));
 
     // create an address
-    let addr = "127.0.0.1";
+    let addr = IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1));
 
     // create a port
-    let port: usize = 8000
+    let port: u16 = 8000;
 
-    // create an address to listen on
+    // create a socket to listen on
     let socket = SocketAddr::new(addr, port);
 
     // get a listener, use the socket we just created; the TcpListener::bind method could fail, so we use a match statement to handle that
    // we panic if we can't get a listener, there's no point in going any further
     let listener = match TcpListener::bind(&addr).await {
-        Ok(tcp_listener) =>; tcp_listener,
+        Ok(tcp_listener) => tcp_listener,
         Err(err) => panic!("Could not get a TcpListener, {}", err),
     };
 
@@ -109,8 +109,10 @@ http://localhost:8000
 
 You should be greeted with:
 
+![](hello-from-axum.png)
+
 Pretty cool hey?
 
-I know, not really. It’s pretty basic and not very interesting. It’s yet another example of how uninteresting and boring Rust code is, which is great. Axum is terrific in its simplicity, but at the same time has much power and a great ecosystem. It really is garnering the mindshare of the Rust community and many projects appear to be standardizing around it.
+I know, not really. It’s pretty basic and not very interesting. Axum is terrific in its simplicity, but at the same time has much power and a great ecosystem. It really is garnering the mindshare of the Rust community and many projects appear to be standardizing around it. I bounced around between things for a long time, but have recently decided to just learn Axum properly.
 
 There are a few warts on this simple server, chief of which is it doesn’t shut down very gracefully. I’ll show you how to do that in a future post.
