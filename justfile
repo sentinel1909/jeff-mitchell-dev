@@ -4,5 +4,5 @@ build:
   cd site && ./zola build --output-dir ../public --force
 
 dev:
-  cd site && ./zola serve
+  cd site && ./zola serve --drafts
 
