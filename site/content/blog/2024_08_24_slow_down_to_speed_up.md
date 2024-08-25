@@ -1,6 +1,6 @@
 +++
 title = "Slow Down...to Speed Up...Reflections on the Coding Journey"
-description = "An article highlighting the very basics of how to get started with the Git version control system."
+description = "Some reflection on difficulties in this coding journey."
 date = "2024-08-24"
 authors = ["Jeff Mitchell"]
 draft = false
