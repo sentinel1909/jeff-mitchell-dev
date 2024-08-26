@@ -11,7 +11,7 @@ tags = ["web", "html", "css", "javascript"]
 
 ## Back to Basics
 
-Carrying on from [yesterday](@/blog/2024_08_25_back_to_basics_how_the_web_works/index.md), I'm going to write a few pieces about the basics of how the web works. Much of my motivation for getting into Rust was WebAssembly, and wanting to take a different path to become a productive web developer. I haven't spent near enough time just understanding how exactly the web functions. I've had a stubborn refusal to really dig into the basic building blocks. I'll never be independent if I don't understand these foundations.
+Carrying on from [yesterday](@/blog/2024_08_24_slow_down_to_speed_up.md), I'm going to write a few pieces about the basics of how the web works. Much of my motivation for getting into Rust was WebAssembly, and wanting to take a different path to become a productive web developer. I haven't spent near enough time just understanding how exactly the web functions. I've had a stubborn refusal to really dig into the basic building blocks. I'll never be independent if I don't understand these foundations.
 
 So, I'm going to rectify that.
 
