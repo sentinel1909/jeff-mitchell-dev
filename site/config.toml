@@ -22,6 +22,11 @@ taxonomies = [
   { name = "tags", feed = true },
 ]
 
+# build search index
+build_search_index = true
+[search]
+index_format = "elasticlunr_json"
+
 [markdown]
 # Whether to do syntax highlighting
 # Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola

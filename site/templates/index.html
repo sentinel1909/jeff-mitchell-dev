@@ -30,6 +30,12 @@ as pagination -%} {% import "macros/footer.html" as footer -%} {% import
 
     <div class="{{ container }}">
       {%- block header -%} {{ header::header() }} {%- endblock header -%}
+      <div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </div>
       <div class="content">
         {%- block main -%} {{ lists::list_pages() }} {%- endblock main -%}
       </div>
@@ -74,5 +80,7 @@ Statcounter"
         /></a></div
     ></noscript>
     <!-- End of Statcounter Code -->
+     <script type="text/javascript" src="{{ get_url(path="elasticlunr.min.js") }}"></script>
+     <script type="text/javascript" src="{{ get_url(path="search.js") }}"></script>
   </body>
 </html>
