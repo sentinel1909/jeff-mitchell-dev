@@ -1,9 +1,9 @@
 +++
 title = "The Mystery of the Hashmap"
 description = "An article highlighting the hashmap collection type in Rust"
-date = "2024-08-23"
+date = "2024-08-26"
 authors = ["Jeff Mitchell"]
-draft = true
+draft = false
 [taxonomies]
 categories = ["Beginner Guides"]
 tags = ["rust", "collections", "hashmap"]
@@ -13,7 +13,7 @@ tags = ["rust", "collections", "hashmap"]
 
 A little over two years ago, I started seriously doubling down on the Rust programming language. I found [Zero to Mastery](https://zerotomastery.io) and their Rust course. With a great head of steam, as I did the course, I also started blogging my way through the Rust Book. This head of steam continued nicely through the more basic aspects of the language, but as I entered the deeper waters, I faltered.
 
-One of the areas I faltered in was the Hashmap collection type. I found it difficult to think up something specific to write about, but didn't want to just rehash/regurgitate the chapter content from the Rust book. So, this morning I asked ChatGPT, which is great for offering suggestions, and it gave me a few clues. Oddly enough, this interaction also gave me a clue in general for a structure for posts on this blog.
+One of the areas I faltered in was the Hashmap collection type. I found it difficult to think up something specific to write about, but didn't want to just rehash/regurgitate the chapter content from the Rust book. So, I asked ChatGPT, which is great for offering suggestions, and it gave me a few clues. Oddly enough, this interaction also gave me a clue in general for a structure for future posts on this blog.
 
 I can come up with a problem, then write about how to solve it in a structured way. In this instance, how can we use hashmaps as part of the solution to a particular problem?
 
@@ -27,7 +27,7 @@ HashMaps are stored in heap memory. Their keys must be all of the same type and 
 
 ## The Problem
 
-I'm terrible at keeping track of what I know. I'd like a simple way of remembering snippets of Rust code, so that I don't have to go hunting for them all the time on the internet. I'd like some tool that will be a portable memory aid. It should let me create, retrieve, update and delete items of knowledge. I'd like it to have storage so that what I enter is not lost. Finally, I want to be able to take this program with me whereever I go.
+I'd like a simple way of remembering snippets of text with a keyword attached to each for searching. I'd like some tool that will be a portable memory aid. It should let me create, retrieve, update and delete items of knowledge. I'd like it to have storage so that what I enter is not lost. Finally, I want to be able to take this program with me whereever I go.
 
 ## The Solution
 
@@ -37,7 +37,7 @@ Admittedly, this is a little contrived, and there are probably much, much better
 
 _Data Types - Snippet_
 
-I've learned that in Rust, types are central. We begin by thinking about our data and the constrait that it needs to be represented by a HashMap. I want to store code snippets that I've developed. Our key could be just a word, like "Tera" for entries related to the Tera template engine. The key can just be a string. The associated value is words and characters, representing our code snippet. It could also be stored as a string. We're going to wrap our Snippet HashMap in a struct, which will let us implement the `Default` trait for it, making it easy to initialize or even outright reset our data. Our Snippet type will look like this:
+I've learned that in Rust, types are central (duh, I know). We begin by thinking about our data and the constrait that it needs to be represented by a HashMap. I want to store text snippetssuch as web links. Our key could be just a word, like "Tera" for entries related to the Tera template engine. The key can just be a string. The associated value is words and characters, representing our code snippet. It could also be stored as a string. We're going to wrap our Snippet HashMap in a struct, which will let us implement the `Default` trait for it, making it easy to initialize or even outright reset our data. Our Snippet type will look like this:
 
 ```rust
 #[derive(Debug)]
@@ -104,11 +104,11 @@ We'll need to declare our data types, their methods, as well as a couple of help
 
 The program will run in a loop, presenting menu choices to the user for further action. The loop will be endless until the user chooses the "Exit" menu option, at which time the program will terminate.
 
-We'll try to keep our main function pretty thin, it will initialize key things, then call other functions to get the job done.
+After a couple of weeks of messing about, and yes, drifting between other things, here's what I came up with:
 
 ### Final Code
 
-Here's the final code:
+In future I probably won't spit out the entire code like this, but for today I will. Here's the final result:
 
 ```rust
 // src/main.rs
@@ -129,17 +129,17 @@ struct Snippet {
 
 // methods for the Snippet type
 impl Snippet {
-    // create method; creates a new key, value pair
+    // create method; creates a new key, value pair, returns an String wrapped by the Option type
     fn create(&mut self, key: String, value: String) -> Option<String> {
         self.items.insert(key, value)
     }
 
-    // retrieve method; retrieves a given value given a key
+    // retrieve method; retrieves a given value given a key, returns a reference to a String, wrapped by the Option type
     fn retrieve(&self, key: String) -> Option<&String> {
         self.items.get(&key)
     }
 
-    // update method; updates the value associated with a given key
+    // update method; updates the value associated with a given key returns the unit type or an error String, wrapped in a Result type
     fn update(&mut self, key: String, updated_value: String) -> UpdateResult {
         self.items
             .get_mut(&key)
@@ -147,7 +147,7 @@ impl Snippet {
             .ok_or_else(|| format!("Item '{}' not found", key))
     }
 
-    // delete method; deletes a key, value pair given a key
+    // delete method; deletes a key, value pair given a key, returns a String, wrapped by the Option type
     fn delete(&mut self, key: String) -> Option<String> {
         self.items.remove(&key)
     }
@@ -170,7 +170,7 @@ fn read_data() -> std::io::Result<Vec<u8>> {
 
 // function to convert the saved input into our Snippet type
 fn input_to_snippet(raw_data: Vec<u8>, mut snippet: Snippet) -> Snippet {
-    let string_data = String::from_utf8(raw_data).unwrap();
+    let string_data = String::from_utf8(raw_data).expect("Unable to read the data stored in the file.");
     let key_value_pairs = string_data.split("\n").collect::<Vec<&str>>();
     let pairs: Vec<(&str, &str)> = key_value_pairs
         .iter()
@@ -184,11 +184,11 @@ fn input_to_snippet(raw_data: Vec<u8>, mut snippet: Snippet) -> Snippet {
 }
 
 // function to get user input and pass it back for use
-fn get_user_input() -> String {
+fn get_user_input() -> io::Result<String> {
     let mut input = String::new();
-    io::stdin().read_line(&mut input).unwrap();
+    io::stdin().read_line(&mut input)?;
     let input = input.trim().to_string();
-    input
+    Ok(input)
 }
 
 // function to write output to stdout
@@ -203,13 +203,13 @@ fn write_message(message: &[u8], writer: &mut dyn Write) {
 }
 
 // function which triggers the appropriate program functionality, based on the user choice
-fn handle_menu_choice(choice: Menu, snippet: &mut Snippet, mut handle: &mut dyn Write) {
+fn handle_menu_choice(choice: Menu, snippet: &mut Snippet, mut handle: &mut dyn Write) -> io::Result<()> {
     match choice {
         Menu::Create => {
             write_message(b"Enter the new key:", &mut handle);
-            let new_key = get_user_input();
+            let new_key = get_user_input()?;
             write_message(b"Enter the new value for that key: ", &mut handle);
-            let new_value = get_user_input();
+            let new_value = get_user_input()?;
             Snippet::create(snippet, new_key.clone(), new_value.clone());
             write_message(
                 format!("Created new key: {} with value: {}\n", new_key, new_value).as_bytes(),
@@ -218,7 +218,7 @@ fn handle_menu_choice(choice: Menu, snippet: &mut Snippet, mut handle: &mut dyn 
         }
         Menu::Retrieve => {
             write_message(b"Enter the desired key: ", &mut handle);
-            let key = get_user_input();
+            let key = get_user_input()?;
             match Snippet::retrieve(snippet, key) {
                 Some(value) => {
                     write_message(format!("Retrieved: {:?}\n", value).as_bytes(), &mut handle)
@@ -230,15 +230,15 @@ fn handle_menu_choice(choice: Menu, snippet: &mut Snippet, mut handle: &mut dyn 
         }
         Menu::Update => {
             write_message(b"Enter the desired key to update: ", &mut handle);
-            let key = get_user_input();
+            let key = get_user_input()?;
             write_message(b"Enter the desired new value: ", &mut handle);
-            let updated_value = get_user_input();
+            let updated_value = get_user_input()?;
             let _result = Snippet::update(snippet, key.clone(), updated_value);
             write_message(format!("Updated {:?} successfully.\n", key).as_bytes(), &mut handle);
         }
         Menu::Delete => {
             write_message(b"Enter the desired key to delete: ", &mut handle);
-            let key = get_user_input();
+            let key = get_user_input()?;
             let result = Snippet::delete(snippet, key);
             if let Some(deleted) = result {
                 write_message(format!("Deleted: {:?}\n", deleted).as_bytes(), &mut handle);
@@ -249,6 +249,8 @@ fn handle_menu_choice(choice: Menu, snippet: &mut Snippet, mut handle: &mut dyn 
             write_message(b"Exiting the program.\n", &mut handle);
         }
     }
+
+    Ok(())
 }
 
 // main function
@@ -279,17 +281,17 @@ fn main() -> std::io::Result<()> {
         write_message(b"Enter your choice: \n", &mut handle);
 
         // trigger the appropriate menu option based on the user's choice
-        match get_user_input().to_uppercase().as_str() {
-            "C" => handle_menu_choice(Menu::Create, &mut data, &mut handle),
-            "R" => handle_menu_choice(Menu::Retrieve, &mut data, &mut handle),
-            "U" => handle_menu_choice(Menu::Update, &mut data, &mut handle),
-            "D" => handle_menu_choice(Menu::Delete, &mut data, &mut handle),
+        match get_user_input()?.to_uppercase().as_str() {
+            "C" => handle_menu_choice(Menu::Create, &mut data, &mut handle)?,
+            "R" => handle_menu_choice(Menu::Retrieve, &mut data, &mut handle)?,
+            "U" => handle_menu_choice(Menu::Update, &mut data, &mut handle)?,
+            "D" => handle_menu_choice(Menu::Delete, &mut data, &mut handle)?,
             "E" => {
-                handle_menu_choice(Menu::Exit, &mut data, &mut handle);
+                handle_menu_choice(Menu::Exit, &mut data, &mut handle)?;
                 break;
             }
             _ => {
-                writeln!(handle, "Invalid Choice. Please enter C, R, U, D, or E.\n").unwrap();
+                writeln!(handle, "Invalid Choice. Please enter C, R, U, D, or E.\n")?
             }
         };
     }
@@ -298,13 +300,26 @@ fn main() -> std::io::Result<()> {
 }
 ```
 
-## Breakdonw
+## Some Key Aspects
 
-Let's break the pieces down one by one.
+There are a couple of key things to call out:
+
+- I have an odd obsession with not using the `println!' macro. As of this program, I'm kind of favouring to not do things with macros.
+- I've tried to get rid of all pesky `.unwraps()`, errors should generally be handled decently
+- I haven't made a custom error type or pulled in `anyhow` or `color_eyre` because, generally, failures can be handled by returning a `std::io::Result<()>`
+  - I've used one `.except()`, in the `input_to_snippet` function, which I feel is reasonable because if you can't read in the saved data (the `String::from_utf8` conversion could fail for characters that are not UTF-8) there's not much point in continuing. You may disagree.
+
+## Areas for Further Work
+
+This "tool" isn't complete. I haven't implemented the ability to save yet. I thought I'd leave you the reader to tackle that. How would you modify my code to append data back to the file? In the future I'll write about my solution.
+
+## Closing
+
+Thanks for reading. I hope the HashMap collection type is a little less mysterious for you. It's much less mysterious for me after going through this exercise.
 
 ## Code on GitHub
 
-You can find the full code for this article here:
+You can find a repo to support for this article here:
 
 [memoria-rs](https://github.com/sentinel1909/memoria-rs)
 
