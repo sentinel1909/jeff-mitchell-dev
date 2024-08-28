@@ -72,6 +72,4 @@ Earlier this year, I made a [vanilla web template](https://github.com/sentinel19
 
 I'm a big believer in semantic web, so my starter is reflective of that and will get you off on the right foot. I try to keep `<div>` soup to a minimum. From this minimal starter, you can build out a whole site by adding sub-pages, links, and more content.
 
-Here is the repo for the rest of my [vanilla web template](https://github.com/sentinel1909/vanilla-web-template).
-
 I hope it's a useful starting point for you, if you don't already have your own.
