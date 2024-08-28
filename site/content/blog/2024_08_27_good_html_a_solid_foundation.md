@@ -3,7 +3,7 @@ title = "Solid HTML: A Starting Foundation"
 description = "An article which provides some starting HTML for your web endeavours"
 date = "2024-08-27"
 authors = ["Jeff Mitchell"]
-draft = true
+draft = false
 [taxonomies]
 categories = ["Vanilla Web"]
 tags = ["html"]
