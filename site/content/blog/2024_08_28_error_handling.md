@@ -11,6 +11,12 @@ tags = ["rust", "errors", "error handling"]
 
 ## Introduction
 
+Today, we look at error handling in Rust. The sophistication of error handling is one of the big selling points of the language. It's easy to handle whatever errors may arise.
+
+## Sticking Your Head in the Sand
+
+In Rust, often, you can not deal at all with errors, you can just throw them away.
+
 ## Don't Panic! ...or Panic! If You Really Want To
 
 ## We Can Be More Graceful
