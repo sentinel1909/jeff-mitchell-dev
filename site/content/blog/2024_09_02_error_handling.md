@@ -1,7 +1,7 @@
 +++
 title = "Saving the Day: Error Handling"
 description = "An article providing insight on how to handle errors in Rust."
-date = "2024-08-27"
+date = "2024-09-02"
 authors = ["Jeff Mitchell"]
 draft = true
 [taxonomies]
@@ -19,11 +19,11 @@ Let's take a look more deeply.
 
 It's a fact of life that operations can fail, often in myriad unexpected ways. When things go wrong, what can we do? Errors come in two flavours, unrecoverable and recoverable. It's worth thinking about these classifications for a moment.
 
-*Unrecoverable Errors*
+_Unrecoverable Errors_
 
 Sometimes, things go so wrong that there's just nothing that can be done. In these instances, we halt execution of our program and provide some final message or output that will allow you the programmer to figure out what went wrong.
 
-*Recoverable Errors*
+_Recoverable Errors_
 
 There are many instances where, yes, something can go wrong, but whatever it was could be recovered from such that we pick ourselves up, dust off, and carry on. We can communicate some bit of information to the user such that they can fix a typo in their input or make an alternate choice that let's the program continue.
 
