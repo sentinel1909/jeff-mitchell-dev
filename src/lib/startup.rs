@@ -3,12 +3,12 @@
 // dependencies
 use crate::handlers::health_check;
 use crate::telemetry::MakeRequestUuid;
-use axum::{routing::get, Router};
+use axum::{http::HeaderName, routing::get, Router};
 use tower::ServiceBuilder;
 use tower_http::{
+    request_id::{PropagateRequestIdLayer, SetRequestIdLayer},
     services::ServeDir,
     trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer},
-    ServiceBuilderExt,
 };
 use tracing::Level;
 
@@ -28,14 +28,18 @@ pub fn build() -> Router {
         .layer(&trace_layer)
         .service(ServeDir::new("public"));
 
-    // build the router
+    // build the router and wrap it with the telemetry layers
+    let x_request_id = HeaderName::from_static("x-request-id");
     let api = Router::new()
         .route("/health_check", get(health_check))
         .layer(
             ServiceBuilder::new()
-                .set_x_request_id(MakeRequestUuid)
+                .layer(SetRequestIdLayer::new(
+                    x_request_id.clone(),
+                    MakeRequestUuid,
+                ))
                 .layer(trace_layer)
-                .propagate_x_request_id(),
+                .layer(PropagateRequestIdLayer::new(x_request_id)),
         );
 
     // combine the api and public assets to make the app
