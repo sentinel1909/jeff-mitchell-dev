@@ -13,7 +13,7 @@ It is the day after yesterday's mini CSS induced meltdown.
 
 Today is brighter.
 
-My Metallica page is started and available here: [Metallica Weekend](https://metallica-weekend-fvbb.shuttle.app)
+My Metallica page is started and available here: [Metallica Weekend](https://metallica-weekend.shuttleapp.rs)
 
 For those of you finding and reading my content, yesterday is a bit of a warning. I will, on occasion, freak out and be public in my freaking out.
 
@@ -23,6 +23,8 @@ Anyhow, I'm still no closer to a solid, viable method for learning CSS. I read a
 
 I just want the answer.
 
-This is something I've struggled with my whole life...I just...want..the answer. Oftentime, my brain is unable to figure out what it needs to do to get to the answer, it's like there's missing bits or something. How can I train my brain to enjoy the journey and not just the end result?
+To add extra flavour, in my mind people are judging me as weak for not immediately having the answer.
 
-Anyways, onwards and upwards. Apologies for the rant yesterday and I thank you for reading my trials and tribulations.
+This is something I've struggled with my whole life...I just...want..the answer. Oftentimes, my brain is unable to figure out what it needs to do to get to the answer, it's like there's missing bits or something. How can I train my brain to enjoy the journey and not just the end result?
+
+Anyways, onwards and upwards. This writing is my way of therapy. Apologies for the rant yesterday and I thank you for reading my trials and tribulations.
