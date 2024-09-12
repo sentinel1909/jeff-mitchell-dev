@@ -5,8 +5,8 @@ date = "2024-08-07"
 authors = ["Jeff Mitchell"]
 draft = false
 [taxonomies]
-categories = ["Other Blogs"]
-tags = ["rust", "twir", "preludes and globs"]
+categories = ["Rust Ecosystem"]
+tags = ["twir", "preludes and globs"]
 +++
 
 Happy Wednesday everyone!
