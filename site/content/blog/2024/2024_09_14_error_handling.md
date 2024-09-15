@@ -3,10 +3,10 @@ title = "Saving the Day: Error Handling"
 description = "An article providing insight on how to handle errors in Rust."
 date = "2024-09-14"
 authors = ["Jeff Mitchell"]
-draft = true
+draft = false
 [taxonomies]
 categories = ["Beginner Guides"]
-tags = ["rust", "errors", "error handling"]
+tags = ["rust", "Result type", "error handling"]
 +++
 
 ## Introduction
