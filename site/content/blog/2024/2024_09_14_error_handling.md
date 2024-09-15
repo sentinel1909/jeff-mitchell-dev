@@ -109,7 +109,7 @@ Use of the `?` operator makes your Rust programs a whole lot more concise. In yo
 
 When the `?` is used in a function body, the function signature must include returning a Result type. In this instance we say we are "propagating" the error back to the caller, which could potentially be the main function. It will be up to the main function to handle the returned result type in some final, possibly different, way.
 
-When the Result type is used, program termination is more under the programmers control. The type can be used to set pathways that allow recovery and continued program operation.
+When the Result type is used, program termination is more under the programmers control. The type can be used to set pathways that allow recovery and continued program operation. The example program above does not handle errors any more gracefully per se, but using the Result type, together with embelished error information (the actual error is included with the overall message) the programmer gains more control over the messaging.
 
 ## Closing Thoughts
 
