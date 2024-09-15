@@ -35,7 +35,7 @@ cargo new --bin --vcs none project-with-git
 
 A new Rust project that contains a skeleton "Hello World" executable program will be created for you. The `--vcs none` flag tells Cargo not to do any git setup.
 
-## Initailization
+## Initalization
 
 Change into the directory of the project you just created, `cd project-with-git` and type: `git init`. This will initialize a repository "repo" for you and create a `.git` directory which holds the configuration and instructions for how the git will manage the repo.
 
