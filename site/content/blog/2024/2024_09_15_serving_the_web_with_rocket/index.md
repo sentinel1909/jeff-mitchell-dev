@@ -1,9 +1,9 @@
 +++
 title = "Serving the Web with Rocket"
 description = "An article providing a starter for how to serve up templates and web content with Rocket."
-date = "2024-08-30"
+date = "2024-09-15"
 authors = ["Jeff Mitchell"]
-draft = true
+draft = false
 [taxonomies]
 categories = ["How To"]
 tags = ["rust", "web", "rocket", "templates", "static files"]
@@ -13,7 +13,7 @@ tags = ["rust", "web", "rocket", "templates", "static files"]
 
 I want to challenge the notion that it's difficult to do things with Rust. Yes, you have to learn the language, and yes, the learning curve is steep. However, I maintain that you don't have to be all the way up the learning curve to be productive.
 
-Thanks to "batteries included" web frameworks like [Rocket](https://rocket.rs) it's quick to get started. In 30 minutes, at worst an hour, you can have a minimal web server together which let's you do server side rendering with templates. The served templates can be styled with CSS and livened with JavaScript, all with plain 'ol vanilla web teck.
+Thanks to "batteries included" web frameworks like [Rocket](https://rocket.rs) it's quick to get started. In 30 minutes, at worst an hour, you can have a minimal web server together which let's you do server side rendering with templates. The served templates can be styled with CSS and livened with JavaScript, all with plain 'ol vanilla web tech.
 
 Even better, you can host on [Shuttle's](https://shuttle.rs) Rust native development platform, which takes the heavy lifting away so you can focus on what you actually want to make.
 
@@ -93,7 +93,8 @@ fn health() -> Status {
 // function which returns the index page template
 #[get("/")]
 fn index() -> Template {
-    Template::render("index", context! { message: "Hello World!" })
+    let message = "Hello, World!";
+    Template::render("index", context! { message })
 }
 
 // function to create a rocket instance
@@ -103,6 +104,7 @@ fn create() -> Rocket<Build> {
         .mount("/", routes![index])
         .mount("/api", routes![health])
         .mount("/static", FileServer::from(relative!("static")))
+        .mount("/assets", FileServer::from(relative!("assets")))
 }
 
 // main function
@@ -129,48 +131,65 @@ We add a route and handler function which serves back the equivalent of `index.h
 There are a couple of last things to do, we need to actually have some templates. Create `base.tera.html` and `index.tera.html` in the templates folder, and give them the following content:
 
 base.tera.html:
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preload" href="static/screen.css" as="style" />
     <link rel="preload" href="static/scripts.js" as="script" />
-    <title>Metallica Weekend | Home</title>
-    <link rel="stylesheet" type="text/css" href="static/screen.css" media="screen" />
+    <title>Rocket Web Template | Home</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="static/screen.css"
+      media="screen"
+    />
     <link rel="icon" type="image/ico" href="static/favicon.ico" />
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <h1>Metallica Weekend</h1>
-        <h2>Welcome to my site devoted to my weekend with Metallica</h2>
+      <h1>Rocket Web Template</h1>
     </header>
-    <main>
-        <section>
-            <h3>{{ message }}</h3>
-            <article>
-                <p>In August 2024, I attended the two Seattle shows of the Metallica M72 tour. These are my photos!</p>
-            </article>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; <span id="year"></span> Jeffery D. Mitchell</p>
-    </footer>
+    <main>{% block content %}{% endblock %}</main>
     <script src="static/scripts.js"></script>
-</body>
+  </body>
 </html>
 ```
 
 index.tera.html:
+
 ```html
-{% extends "base" %}
-{% block content %}
-<h1> {{ message }} </h1>
+{% extends "base" %} {% block content %}
+<section>{{ message }}</section>
 {% endblock content %}
 ```
 
+### The Moment of Truth
+
+With all these pieces in place:
+
+```bash
+cargo shuttle run
+```
+
+Once the Rocket web server launches, open your browser and navigate to `http://localhost:8000` and you should see served up in your browser:
+
+![Rocket Hello World](rocket-hello-world.png)
+
+Easy peasy!
+
+From here, you can add more resources, routes, logic, whatever you need. Assets are served up from the `assets` folder and you can apply CSS styles and JavaScript as you traditionally would in a vanilla web tech site.
+
 ## Closing Thoughts
+
+I think it's lazy to default to JavaScript for the backend when simple, easy to get started with solutions like Rocket exist. Yes, you have to know Rust, and that can be a blocker, but you don't have to know _that_ much Rust. You sure won't be forced into dealing with lifetimes and all the higher order concepts alone. Rocket takes care of many things for you and quite simply just gets out of your way.
+
+Think about it, for your next project.
 
 ## References
 
+[The Rocket Programming Guide](https://rocket.rs/guide/v0.5/)
+[Tera Template Engine for Rust](https://keats.github.io/tera/)
