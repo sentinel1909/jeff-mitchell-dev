@@ -24,6 +24,7 @@ This is my sort of clearing house of resources, both Rust related and Rust adjac
 ## Back End
 
 [Axum](https://docs.rs/axum/latest/axum/)
+[Rocket](https://rocket.rs)
 
 ## Asynchronous Runtime
 
@@ -37,3 +38,4 @@ This is my sort of clearing house of resources, both Rust related and Rust adjac
 
 - [This Week in Rust](https://this-week-in-rust.org)
 - [Welcome to the Jungle](https://wtjungle.com)
+- [Writing an OS in Rust](https://os.phil-opp.com/)
