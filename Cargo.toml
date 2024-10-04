@@ -3,7 +3,7 @@
 [package]
 name = "jeff-mitchell-dev"
 authors = ["Jeffery D. Mitchell", "<sentinel1909@jeff-mitchell.dev>"]
-version = "0.11.0"
+version = "0.12.0"
 edition = "2021"
 description = "My Zola blog, served up by Axum, hosted on Shuttle"
 readme = "README.md"
@@ -23,10 +23,10 @@ path = "src/lib/lib.rs"
 
 # project dependencies
 [dependencies]
-axum = "0.7.6"
+axum = "0.7.7"
 http = "1.1.0"
-shuttle-axum = "0.47.0"
-shuttle-runtime = { version = "0.47.0", default-features = false }
+shuttle-axum = "0.48.0"
+shuttle-runtime = { version = "0.48.0", default-features = false }
 tower = "0.5.1"
 tower-http = { version = "0.6.1", features = [ "fs", "request-id", "trace", "util" ] }
 tracing = { version = "0.1.40", features = [ "log" ] }
