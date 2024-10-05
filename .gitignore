@@ -3,9 +3,6 @@
 # VS Code Settings
 .vscode
 
-# Zola build output
-public
-
 # Build artifacts
 /target
 

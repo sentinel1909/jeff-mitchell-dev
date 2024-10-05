@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>jeff-mitchell.dev - option</title>
+    <subtitle>A blog mostly about Rust...mostly...</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://jeff-mitchell.dev/tags/option/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2022-09-13T00:00:00+00:00</updated>
+    <id>https://jeff-mitchell.dev/tags/option/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Is it Something or Nothing: The Option Type</title>
+        <published>2022-09-13T00:00:00+00:00</published>
+        <updated>2022-09-13T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-08-13-option-is-it-something-or-nothing/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-08-13-option-is-it-something-or-nothing/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-08-13-option-is-it-something-or-nothing/">&lt;p&gt;I apologize, dear readers, for my lack of consistency in posting here on Medium. Writing and generating content is a challenge for me. If I can provide you with a nugget of perspective once a month, that’s what I’m going to aim for. As the saying goes, practice makes perfect, so eventually, you might see more from me. I thank all of you for your interest in reading my thoughts on the Rust language.&lt;&#x2F;p&gt;
+&lt;p&gt;In an earlier article, I introduced the notion of enumerations, or enums, that are useful to represent types in Rust. You’ll also recall that Enums can optionally contain data. It’s time to introduce one of two special Rust enums…the Option type. Today I give you a short bite on this topic.&lt;&#x2F;p&gt;
+&lt;p&gt;An Option can contain something and or it can contain nothing. It’s a little like Schrödinger&#x27;s Cat, it might be alive (contains something) or it might be dead (contains nothing) and you don’t know until you check. Let’s dive in.&lt;&#x2F;p&gt;
+&lt;p&gt;An Option looks like this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;enum &lt;&#x2F;span&gt;&lt;span&gt;Option&amp;lt;T&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;	None,
+&lt;&#x2F;span&gt;&lt;span&gt;	Some(T),
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The None variant is used when the option holds nothing, no data. The Some variant can contain something. The &lt;T&gt; is the notation for a generic type parameter. I haven’t covered generics yet, but their nuts and bolts are not super important for this discussion. In the context of the Option enum, it means a data type of any kind. It could, for example, contain a single integer.&lt;&#x2F;p&gt;
+&lt;p&gt;The Option enum provides a graceful way to implement a null value. The notion of a null value has wreaked havoc on the computing world, to say the least.&lt;&#x2F;p&gt;
+&lt;p&gt;This Option concept is best illustrated with an example. Consider this program which takes two numbers, tries to divide them, and provides the result:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span&gt;function &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;divide&lt;&#x2F;span&gt;&lt;span&gt;(numerator: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f64&lt;&#x2F;span&gt;&lt;span&gt;, denominator: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f64&lt;&#x2F;span&gt;&lt;span&gt;) -&amp;gt; Option&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f64&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if&lt;&#x2F;span&gt;&lt;span&gt; denominator == &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0 &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;		None
+&lt;&#x2F;span&gt;&lt;span&gt;	} &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;else &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;		Some(numerator&#x2F;denominator)
+&lt;&#x2F;span&gt;&lt;span&gt;	}
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; numerator = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;10.0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; denominator = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0.0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; result = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;divide&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;10.0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0.0&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;match&lt;&#x2F;span&gt;&lt;span&gt; result {
+&lt;&#x2F;span&gt;&lt;span&gt;		Some(x) =&amp;gt; println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Result: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, x),
+&lt;&#x2F;span&gt;&lt;span&gt;		None =&amp;gt; println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Sorry, cannot divide by 0&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;),
+&lt;&#x2F;span&gt;&lt;span&gt;        }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This program has a main function and a function called divide. In the main function, we declare two floating point numbers as the numerator and denominator variables, then we pass them to the divide function and assign the answer to the variable result. The divide function accepts two floating point parameters, the numerator and the denominator. It returns an option, which will either be a floating point number or nothing. The function checks if the denominator is zero, if it is, our returned option is assigned None as its value. If the denominator is non-zero, our math can proceed and our option will return the calculation result.&lt;&#x2F;p&gt;
+&lt;p&gt;Back inside the main program, with the result in hand, we run a match expression on it and output the answer. If our option contains something we output the result of the calculation. If our option contains nothing, we output a message stating that you can’t divide by zero.&lt;&#x2F;p&gt;
+&lt;p&gt;The option type is almost always combined with a match expression for further processing.&lt;&#x2F;p&gt;
+&lt;p&gt;Option is a flexible and versatile construct in the Rust language. It is often used for:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;initial values&lt;&#x2F;li&gt;
+&lt;li&gt;optional function arguments&lt;&#x2F;li&gt;
+&lt;li&gt;swapping things out of difficult situations&lt;&#x2F;li&gt;
+&lt;li&gt;basic error handling, where None is returned and perhaps combined with a message to represent the error&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;The Rust standard library documentation has a good in-depth description of the option type. I recommend you read it for the full scoop.&lt;&#x2F;p&gt;
+&lt;p&gt;In a future article, I’ll go through the Result type, which is the second special enum type built into the Rust language. Thanks for reading!&lt;&#x2F;p&gt;
+&lt;p&gt;References:
+&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch06-01-defining-an-enum.html&quot;&gt;The Rust Programming Language, Chapter 6.1, Defining an Enum&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

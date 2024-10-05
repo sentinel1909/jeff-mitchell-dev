@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Baby Steps with Rust - Jeff Mitchell</title>
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"><meta name="description" content="A blog mostly about Rust...mostly... Baby Steps with Rust Every journey starts with small steps, this is an introduction to the Rust programming language."/><meta name="keywords" content="Beginner Guides, rust, hello world" />
+    <meta property="og:title" content="jeff-mitchell.dev -&nbsp;Baby Steps with Rust" />
+    <meta property="og:type" content="website"/><meta property="og:url" content="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2022&#x2F;2022-04-05-baby-steps-with-rust&#x2F;"/><meta property="og:description" content="Every journey starts with small steps, this is an introduction to the Rust programming language."/>
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://jeff-mitchell.dev/style.css?h=97e262212a0704163528">
+    <link rel="stylesheet" href=" https://jeff-mitchell.dev/color/orange.css?h=a5a5d7faf9d4bc3e0b18">
+    
+<link rel="alternate" type="application/atom+xml" title="jeff-mitchell.dev RSS" href="https://jeff-mitchell.dev/atom.xml"></head>
+  <body>
+    <div class="container center">
+<header class="header">
+    <div class="header__inner">
+        <div class="header__logo">
+            <a href="&#x2F;">
+    <div class="logo">
+        jeff-mitchell.dev :: mis-adventures with the Rust programming language
+    </div>
+</a>
+        </div>
+        <div class="menu-trigger">menu</div>
+    </div>
+    
+    <nav class="menu">
+        <ul class="menu__inner menu__inner--desktop">
+            
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li></ul>
+
+        <ul class="menu__inner menu__inner--mobile">
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li>
+        </ul>
+    </nav>
+
+    </header>
+<div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </div>
+      <div class="content"><article class="post">
+        <header>
+            <h1 class="post-title">
+                <a href="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2022&#x2F;2022-04-05-baby-steps-with-rust&#x2F;">Baby Steps with Rust</a>
+            </h1>
+            
+    <div class="post-meta">
+        <span class="post-date">2022.04.05
+                </span>
+
+        <span class="post-author">
+    ::
+    Jeff Mitchell</span>
+
+        
+
+    
+    :: {<a href="https://jeff-mitchell.dev/categories/beginner-guides/">Beginner Guides</a>} 
+
+            
+    ::
+    #<a href="https://jeff-mitchell.dev/tags/rust/">rust</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/hello-world/">hello world</a>
+        
+    
+            
+        
+    </div>
+
+            
+    
+</header><h3 id="why">Why?</h3>
+<p>Late in 2020, I decided I needed to properly learn to code. The goal is to modernize myself and build things that will help myself and eventually the world around me. I’ve danced with several things but at the beginning of 2022 decided to double down on the Rust language. Rust is an immensely powerful tool which can be used to create pretty much any kind of software imaginable. It has a steep learning curve, but it’s well worth mastering. Rust is inherently safe and performant, has excellent tools, and some of the best compiler help I’ve ever experienced.</p>
+<p>Rust is available for Windows, Linux, and macOS and generally can be used to create software for any/all of these platforms. I say generally because you will hit the odd occasion where certain libraries (referred to as “crates” in the Rust world) are only compiled for say Linux but not Windows or macOS. I hit this last year when following a tutorial to build a vim clone, one of the supporting crates was only compiled for Linux. The project wouldn’t work on Windows.</p>
+<p>This is a short article which will help you get off the ground should you wish to explore this language.</p>
+<h3 id="assumptions">Assumptions:</h3>
+<ul>
+<li>a solid foundation of general computer skills</li>
+<li>comfort with the command line (on the platform of your choice)</li>
+<li>experience in another compiled programming language (I don’t recommend coming to Rust cold, you should pick something else first if you have no previous experience)</li>
+<li>you’re using Visual Studio Code as your editor</li>
+</ul>
+<h3 id="concepts">Concepts:</h3>
+<p>Rust is a compiled language, meaning the programs you write need to be translated (compiled) into a format that your computer can use. This is different from an interpreted language, in which you can write your programs and have the computer immediately do the work so you can see the result. If you’d like a more in-depth explanation of the difference, this article on freeCodeCamp is a great start.</p>
+<p>Rust uses a system of packages, crates, and modules in which to organize code, The Rust Book states:</p>
+<blockquote>
+<p>Rust has a number of features that allow you to manage your code’s organization, including which details are exposed, which details are private, and what names are in each scope in your programs. These features, sometimes collectively referred to as the module system</p>
+</blockquote>
+<p>Cargo is Rust’s package management tool. Cargo allows you to build, test, run and deploy your program. You can create Rust programs without it, but I don’t recommend that. I will use Cargo exclusively for the rest of this article as well as in everything I write/do going forward.</p>
+<h3 id="installation">Installation:</h3>
+<p>If you haven’t already, follow the official installation instructions for your computer platform to get Rust installed.</p>
+<p>Greeting</p>
+<p>It’s a cliche, but let’s make a program that says hello and displays your name. Create a directory in a location of your choosing and type:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">cargo</span><span> new HelloName
+</span></code></pre>
+<p>This will create a new binary project in a directory called HelloWorld. Rust programs fall into two broad types, binaries and libraries. A binary is an independent program which can be run on its own. A library cannot be run on its own and is meant to be used as a dependency internally to your program or by other Rust programs.</p>
+<p>Next, type:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#96b5b4;">cd</span><span> HelloName
+</span></code></pre>
+<p>This will change you into the freshly created HelloName project directory. From here, fire up Visual Studio code by typing:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">code</span><span> .
+</span></code></pre>
+<p>Visual Studio Code will launch and open the HelloWorld directory and display all its contents in the file browser. You should see a directory called src, click on it to reveal main.rs, the entry point of the bare bones Rust program that Cargo created for you. Cargo actually mocks up all the code we need without anything additional. The code should look like this:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>     </span><span style="color:#b48ead;">let</span><span> name = &quot;</span><span style="color:#a3be8c;">Jeff</span><span>&quot;;
+</span><span>     println!(&quot;</span><span style="color:#a3be8c;">Hello, </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;">!</span><span>&quot;, name);
+</span><span>}
+</span></code></pre>
+<p>This extremely simple starting point highlights some key components of a Rust program:</p>
+<ul>
+<li>the main() function serves as the entry point to your program</li>
+<li>we bind the string &quot;Jeff&quot; to a variable called &quot;name&quot; (you should change this to be your own name!)</li>
+<li>the println! macro takes the string &quot;Hello, {}!&quot; as an argument, inserts the value of name in place of the curly braces and prints it to the console</li>
+</ul>
+<p>The other key items to note are are that Rust expressions must terminate with a semi-colon and expressions and statements within a function are surrounded by curly braces. The curly braces are especially important in the discussion of ownership, a core memory management feature offered by Rust</p>
+<p>To run our very basic program, back at the command line, type:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">cargo</span><span> run
+</span></code></pre>
+<p>You should see the message “Hello, (your name)” outputted to the terminal. Congratulations! No matter how simple, you’ve just programmed in Rust.</p>
+<p>That’s it for this very bare bones introduction. The language has a lot of power and there are many concepts to learn and master. More to come in the future!</p>
+<h3 id="resources">Resources:</h3>
+<p><a rel="noopener noreferrer" target="_blank" href="https://doc.rust-lang.org/book/">The Rust Programming Language</a></p>
+<p><a rel="noopener noreferrer" target="_blank" href="https://doc.rust-lang.org/cargo/index.html">The Cargo Book</a></p>
+
+
+        
+    
+
+        
+        
+    </article></div>
+    <div class="pagination">
+        <div class="pagination__buttons">
+            </div>
+    </div>
+<footer class="footer">
+        <div class="footer__inner"><div class="copyright">
+            <span>© 2024 Jeffery D Mitchell :: Powered by <a href="https://www.getzola.org/">Zola</a>:: Zerm theme made by <a href="https://github.com/ejmg">ejmg</a> :: Hosted on <a href="https://shuttle.rs">Shuttle</a> :: Follow me (and ask questions or comment) on <a href="https://bsky.app/profile/jeff-mitchell-dev.bsky.social">Bluesky</a></span>
+        </div>
+    <script type="text/javascript" src="https://jeff-mitchell.dev/assets/js/main.js"></script>
+</div>
+        
+
+      </footer></div>
+    <!-- Default Statcounter code for Jeff Mitchell Dev https://jeff-mitchell.dev
+-->
+    <script type="text/javascript">
+      var sc_project = 13027926;
+      var sc_invisible = 1;
+      var sc_security = "1625b230";
+    </script>
+    <script
+      type="text/javascript"
+      src="https://www.statcounter.com/counter/counter.js"
+      async
+    ></script>
+    <noscript
+      ><div class="statcounter">
+        <a
+          title="Web Analytics Made Easy -
+Statcounter"
+          href="https://statcounter.com/"
+          target="_blank"
+          ><img
+            class="statcounter"
+            src="https://c.statcounter.com/13027926/0/1625b230/1/"
+            alt="Web Analytics Made Easy - Statcounter"
+            referrerpolicy="no-referrer-when-downgrade"
+        /></a></div
+    ></noscript>
+    <!-- End of Statcounter Code -->
+     <script type="text/javascript" src="https://jeff-mitchell.dev/elasticlunr.min.js"></script>
+     <script type="text/javascript" src="https://jeff-mitchell.dev/search.js"></script>
+  </body>
+</html>

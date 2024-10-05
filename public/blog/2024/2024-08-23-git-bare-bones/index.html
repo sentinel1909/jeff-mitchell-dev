@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Git - The Bare Bones - Jeff Mitchell</title>
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"><meta name="description" content="A blog mostly about Rust...mostly... Git - The Bare Bones An article highlighting the very basics of how to get started with the Git version control system."/><meta name="keywords" content="Software Development, tools, version control, git" />
+    <meta property="og:title" content="jeff-mitchell.dev -&nbsp;Git - The Bare Bones" />
+    <meta property="og:type" content="website"/><meta property="og:url" content="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2024&#x2F;2024-08-23-git-bare-bones&#x2F;"/><meta property="og:description" content="An article highlighting the very basics of how to get started with the Git version control system."/>
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://jeff-mitchell.dev/style.css?h=97e262212a0704163528">
+    <link rel="stylesheet" href=" https://jeff-mitchell.dev/color/orange.css?h=a5a5d7faf9d4bc3e0b18">
+    
+<link rel="alternate" type="application/atom+xml" title="jeff-mitchell.dev RSS" href="https://jeff-mitchell.dev/atom.xml"></head>
+  <body>
+    <div class="container center">
+<header class="header">
+    <div class="header__inner">
+        <div class="header__logo">
+            <a href="&#x2F;">
+    <div class="logo">
+        jeff-mitchell.dev :: mis-adventures with the Rust programming language
+    </div>
+</a>
+        </div>
+        <div class="menu-trigger">menu</div>
+    </div>
+    
+    <nav class="menu">
+        <ul class="menu__inner menu__inner--desktop">
+            
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li></ul>
+
+        <ul class="menu__inner menu__inner--mobile">
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li>
+        </ul>
+    </nav>
+
+    </header>
+<div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </div>
+      <div class="content"><article class="post">
+        <header>
+            <h1 class="post-title">
+                <a href="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2024&#x2F;2024-08-23-git-bare-bones&#x2F;">Git - The Bare Bones</a>
+            </h1>
+            
+    <div class="post-meta">
+        <span class="post-date">2024.08.23
+                </span>
+
+        <span class="post-author">
+    ::
+    Jeff Mitchell</span>
+
+        
+
+    
+    :: {<a href="https://jeff-mitchell.dev/categories/software-development/">Software Development</a>} 
+
+            
+    ::
+    #<a href="https://jeff-mitchell.dev/tags/tools/">tools</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/version-control/">version control</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/git/">git</a>
+        
+    
+            
+        
+    </div>
+
+            
+    
+</header><p>Early in my &quot;learn to code&quot; journey, I discovered the work of <a rel="noopener noreferrer" target="_blank" href="https://www.taniarascia.com">Tania Rascia</a>. I found her fresh and inspiring. Her clean and clear explanation style helped me gain insight into important concepts.</p>
+<p>This article today is inspired by some of her work. I'm going to write a little about git.</p>
+<p>Git is a version control system, mostly aimed at software development, but you can use it for anything where you want to track changes and undo any foot wounds inflicted on yourself. Git was built by Linus Torvalds in 2005. You can read a short history of it <a rel="noopener noreferrer" target="_blank" href="https://git-scm.com/book/en/v2/Getting-Started-A-Short-History-of-Git">here</a>. I'm not going to cover GitHub in this article. Git is the system for version control, whereas GitHub is an online hosted repository for hosting and sharing code &quot;pushed&quot; to it from a local project on your computer.</p>
+<p>Alright, let's git into it and give you the bare bones...haha, see what I did there? I know...terrible...</p>
+<h2 id="what-is-git">What is Git?</h2>
+<p>As I said above, Git is a version control system. Teams benefit most from using it. A group can collaborate on a code base, and by building on &quot;branches&quot;, individuals can work together without stepping on each others toes. Git does the heavy lifting of tracking changes and history of coding projects. While teams benefit most, anyone can add it to their coding workflow.</p>
+<h2 id="installing">Installing</h2>
+<p>I'll refer you to Tania's article on Git, linked in the references.</p>
+<h2 id="initial-steps">Initial Steps</h2>
+<p>Let's start a Rust program, initially with no support from Git, then we'll add it. In fairness, the <code>cargo</code> build tool configures a project for you automatically with git support, but frequently I like to ignore that and git going (yes, I need to stop) after the initial setup is complete. Do this wherever you want to work on your code:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">cargo</span><span> new</span><span style="color:#bf616a;"> --bin --vcs</span><span> none project-with-git
+</span></code></pre>
+<p>A new Rust project that contains a skeleton &quot;Hello World&quot; executable program will be created for you. The <code>--vcs none</code> flag tells Cargo not to do any git setup.</p>
+<h2 id="initialization">Initialization</h2>
+<p>Change into the directory of the project you just created, <code>cd project-with-git</code> and type: <code>git init</code>. This will initialize a repository &quot;repo&quot; for you and create a <code>.git</code> directory which holds the configuration and instructions for how the git will manage the repo.</p>
+<h2 id="what-to-ignore">What to Ignore</h2>
+<p>Next, type: <code>touch .gitignore</code>. Open the project in your editor of choice, for me that's VS Code, and you should see the freshly created <code>.gitignore</code> along with the other project files. Git will track everything in your project if you let it. That's great mostly, but you don't need to track anything in the <code>/target</code> directory, which contains build artifacts and other internals generated by the Rust compiler. Edit your <code>.gitignore</code> to look like:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#65737e;"># gitignore for project-with-get
+</span><span>
+</span><span style="color:#bf616a;">/target
+</span></code></pre>
+<p>The syntax of a <code>.gitignore</code> is pretty straightforward:</p>
+<ul>
+<li>anything preceded by <code>#</code> is a comment</li>
+<li>exclude directories by doing <code>&lt;/directory_name&gt;</code></li>
+<li>you can use wildcards, i.e. <code>Shuttle*.toml</code></li>
+</ul>
+<h2 id="adding-files-to-track">Adding Files to Track</h2>
+<p>To add the files you do want to track, type: <code>git add .</code> This will add everything not excluded by <code>.gitignore</code> into git's list of what to officially keep track of.</p>
+<h2 id="committing">Committing</h2>
+<p>Once you've added the files, changes aren't tracked until you actually &quot;commit&quot; them. To do that type: <code>git commit -m &quot;Initial commit&quot;</code> This will create your first commit into the history with the message &quot;Initial Commit&quot;. Well done! You've offically begun tracking the history of this project. You're project lives locally on your computer at this point, it's not connected to the internet and you are the only one who can work on it.</p>
+<h2 id="branching">Branching</h2>
+<p>After the above, youi'll be on the &quot;main&quot; branch of your project. Let's say you've worked awhile, but change your mind and want to explore another direction, without losing what you just started. You can make a branch.</p>
+<p>To create a branch, type: <code>git branch &lt;new-branch-name&gt;</code>. This will create a branch in which you can work on a new feature, a bug fix, or just explore a different direction, but not lose your original work. Branches have to be &quot;checked out&quot; when you make them, by doing: <code>git checkout &lt;new-branch-name&gt;</code>.</p>
+<p>Follow the sames steps as above to commit your branch into the tracking sytem. You can go back to <code>main</code> by: <code>git checkout main</code>. This will switch you back to your main branch. If you look, you'll see that any changes you just made are not in this main branch.</p>
+<h2 id="merging">Merging</h2>
+<p>Let's say you end up liking the approach you took in the fresh branch you just created. When it comes time to unite the two branches do this: <code>git merge &lt;new-branch-name&gt;</code> this will &quot;merge&quot; the new code into the old and unite it under the <code>main</code> branch. You can then push out to production and the new feature or bug fix will be incorporated.</p>
+<p>Pretty nifty hey?!</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>There's really no reason not to use git. It makes your software development life much easier. If you make a mistake or what to start over, by leveraging the branching system you can simply &quot;switch back&quot; to an earlier point in time. It's really a no-brainer.</p>
+<p>In this short piece I've given you the basics to get started. From here, you can practice on your own and explore the links I've provided below to learn more. Remember, <code>cargo</code> initializes a git repo for you, you don't need to go through the steps above every time.</p>
+<h2 id="references">References</h2>
+<ul>
+<li>
+<p><a rel="noopener noreferrer" target="_blank" href="https://git-scm.com/">Git</a></p>
+</li>
+<li>
+<p><a rel="noopener noreferrer" target="_blank" href="https://www.taniarascia.com/getting-started-with-git/">Getting Started with Git for Version Control</a></p>
+</li>
+<li>
+<p><a rel="noopener noreferrer" target="_blank" href="https://github.com/firemodels/fds/wiki/Git-Notes-Getting-Started">Git Notes Getting Started</a></p>
+</li>
+</ul>
+
+
+        
+    
+
+        
+        
+    </article></div>
+    <div class="pagination">
+        <div class="pagination__buttons">
+            </div>
+    </div>
+<footer class="footer">
+        <div class="footer__inner"><div class="copyright">
+            <span>© 2024 Jeffery D Mitchell :: Powered by <a href="https://www.getzola.org/">Zola</a>:: Zerm theme made by <a href="https://github.com/ejmg">ejmg</a> :: Hosted on <a href="https://shuttle.rs">Shuttle</a> :: Follow me (and ask questions or comment) on <a href="https://bsky.app/profile/jeff-mitchell-dev.bsky.social">Bluesky</a></span>
+        </div>
+    <script type="text/javascript" src="https://jeff-mitchell.dev/assets/js/main.js"></script>
+</div>
+        
+
+      </footer></div>
+    <!-- Default Statcounter code for Jeff Mitchell Dev https://jeff-mitchell.dev
+-->
+    <script type="text/javascript">
+      var sc_project = 13027926;
+      var sc_invisible = 1;
+      var sc_security = "1625b230";
+    </script>
+    <script
+      type="text/javascript"
+      src="https://www.statcounter.com/counter/counter.js"
+      async
+    ></script>
+    <noscript
+      ><div class="statcounter">
+        <a
+          title="Web Analytics Made Easy -
+Statcounter"
+          href="https://statcounter.com/"
+          target="_blank"
+          ><img
+            class="statcounter"
+            src="https://c.statcounter.com/13027926/0/1625b230/1/"
+            alt="Web Analytics Made Easy - Statcounter"
+            referrerpolicy="no-referrer-when-downgrade"
+        /></a></div
+    ></noscript>
+    <!-- End of Statcounter Code -->
+     <script type="text/javascript" src="https://jeff-mitchell.dev/elasticlunr.min.js"></script>
+     <script type="text/javascript" src="https://jeff-mitchell.dev/search.js"></script>
+  </body>
+</html>

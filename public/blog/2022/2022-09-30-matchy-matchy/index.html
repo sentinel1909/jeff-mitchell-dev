@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Matchy Matchy - Jeff Mitchell</title>
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"><meta name="description" content="A blog mostly about Rust...mostly... Matchy Matchy An introduction to match syntax for flow control."/><meta name="keywords" content="Intermediate Guides, rust, control flow, match" />
+    <meta property="og:title" content="jeff-mitchell.dev -&nbsp;Matchy Matchy" />
+    <meta property="og:type" content="website"/><meta property="og:url" content="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2022&#x2F;2022-09-30-matchy-matchy&#x2F;"/><meta property="og:description" content="An introduction to match syntax for flow control."/>
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://jeff-mitchell.dev/style.css?h=97e262212a0704163528">
+    <link rel="stylesheet" href=" https://jeff-mitchell.dev/color/orange.css?h=a5a5d7faf9d4bc3e0b18">
+    
+<link rel="alternate" type="application/atom+xml" title="jeff-mitchell.dev RSS" href="https://jeff-mitchell.dev/atom.xml"></head>
+  <body>
+    <div class="container center">
+<header class="header">
+    <div class="header__inner">
+        <div class="header__logo">
+            <a href="&#x2F;">
+    <div class="logo">
+        jeff-mitchell.dev :: mis-adventures with the Rust programming language
+    </div>
+</a>
+        </div>
+        <div class="menu-trigger">menu</div>
+    </div>
+    
+    <nav class="menu">
+        <ul class="menu__inner menu__inner--desktop">
+            
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li></ul>
+
+        <ul class="menu__inner menu__inner--mobile">
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li>
+        </ul>
+    </nav>
+
+    </header>
+<div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </div>
+      <div class="content"><article class="post">
+        <header>
+            <h1 class="post-title">
+                <a href="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2022&#x2F;2022-09-30-matchy-matchy&#x2F;">Matchy Matchy</a>
+            </h1>
+            
+    <div class="post-meta">
+        <span class="post-date">2022.09.30
+                </span>
+
+        <span class="post-author">
+    ::
+    Jeff Mitchell</span>
+
+        
+
+    
+    :: {<a href="https://jeff-mitchell.dev/categories/intermediate-guides/">Intermediate Guides</a>} 
+
+            
+    ::
+    #<a href="https://jeff-mitchell.dev/tags/rust/">rust</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/control-flow/">control flow</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/match/">match</a>
+        
+    
+            
+        
+    </div>
+
+            
+    
+</header><p>My journey in learning the Rust language continues. Today, let’s explore one of Rust’s unique methods of controlling program flow, known as the match construct. The match syntax is really addictive, and sorely missed when you use other languages.</p>
+<p>Previously, I’ve explored the traditional ways of controlling program flow, namely if..else and looping. Rust has another way, the match construct, which allows your code to evaluate and act on multiple possibilities.</p>
+<p>Let’s dive in and explore through a fun, silly little Star Wars themed example.</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">enum </span><span>Classification {
+</span><span>    Starfighter,
+</span><span>    Freighter,
+</span><span>    Corvette,
+</span><span>    Frigate,
+</span><span>    StarDestroyer
+</span><span>}
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">get_ship_type</span><span>(</span><span style="color:#bf616a;">ship</span><span>: Classification) -&gt; &amp;</span><span style="color:#b48ead;">&#39;static str </span><span>{
+</span><span>    </span><span style="color:#b48ead;">match</span><span> ship {
+</span><span>        Classification::Starfighter =&gt; &quot;</span><span style="color:#a3be8c;">A small fighter-type craft</span><span>&quot;,
+</span><span>        Classification::Freighter =&gt; &quot;</span><span style="color:#a3be8c;">A craft which carries cargo and things</span><span>&quot;,
+</span><span>        Classification::Corvette =&gt; &quot;</span><span style="color:#a3be8c;">The ship that carried Princess Leia in Star Wars: A New Hope</span><span>&quot;,
+</span><span>        Classification::Frigate =&gt; &quot;</span><span style="color:#a3be8c;">Like the ship Luke was on at the end of The Empire Strikes Back</span><span>&quot;,
+</span><span>        Classification::StarDestroyer =&gt; &quot;</span><span style="color:#a3be8c;">The classic wedge shaped subjugator of worlds</span><span>&quot;
+</span><span>    }
+</span><span>}
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> xwing = Classification::Starfighter;
+</span><span>    </span><span style="color:#b48ead;">let</span><span> millenium_falcon = Classification::Freighter;
+</span><span>    </span><span style="color:#b48ead;">let</span><span> tantive_iv = Classification::Corvette;
+</span><span>    </span><span style="color:#b48ead;">let</span><span> medical_frigate = Classification::Frigate;
+</span><span>    </span><span style="color:#b48ead;">let</span><span> devastator = Classification::StarDestroyer;
+</span><span>
+</span><span>    println!(&quot;</span><span style="color:#a3be8c;">An X-wing is: </span><span style="color:#d08770;">{}</span><span>&quot;, </span><span style="color:#96b5b4;">get_ship_type</span><span>(xwing));
+</span><span>    println!(&quot;</span><span style="color:#a3be8c;">The Millennium Falcon is: </span><span style="color:#d08770;">{}</span><span>&quot;, </span><span style="color:#96b5b4;">get_ship_type</span><span>(millenium_falcon));
+</span><span>    println!(&quot;</span><span style="color:#a3be8c;">The Tantive IV is: </span><span style="color:#d08770;">{}</span><span>&quot;, </span><span style="color:#96b5b4;">get_ship_type</span><span>(tantive_iv));
+</span><span>    println!(&quot;</span><span style="color:#a3be8c;">The Medical Frigate is: </span><span style="color:#d08770;">{}</span><span>&quot;, </span><span style="color:#96b5b4;">get_ship_type</span><span>(medical_frigate));
+</span><span>    println!(&quot;</span><span style="color:#a3be8c;">The Devastator is: </span><span style="color:#d08770;">{}</span><span>&quot;, </span><span style="color:#96b5b4;">get_ship_type</span><span>(devastator));
+</span><span>}
+</span></code></pre>
+<p>We first declare an enumeration which creates some different types of space craft. We then declare a function called get_ship_type whose job is to receive a ship type as a parameter and return a string with a descriptive message. The meat of this function is a match construct.</p>
+<p>Match has the notion of “arms” which are evaluated one at a time. The first match that is found forms the return value for the function. The other possibilities are ignored until the function is called again with a different ship type. In this case, our function returns a simple static string. For now, ignore the “tick” lifetime modifier on the static str return type, it isn’t important for the topic at hand. I will write about lifetimes in a future article.</p>
+<p>Matches must be exhaustive, all the types we set out in our enum must have a corresponding match arm to check against. The compiler will squawk if you don’t handle all the possibilities.</p>
+<p>In the main function, we declare variables, one to represent each of our possible ship classifications. Then, one by one, we print out a message, calling our get_ship_type function each time to gather the rest of the message.</p>
+<p>Individual arms within each part of the match can contain multiple Rust statements, simply enclose the code within curly braces. This is where the power of match comes, sophisticated possibilities and code blocks can form each arm of the match. The results of a particular match arm an also bind to a variable.</p>
+<p>Match evaluations must be exhaustive. We have to evaluate every possible outcome otherwise a compiler error will occur. What happens if we care about one or two patterns and nothing else? The catch-all pattern, _ , is available. Let’s look at another example:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">extern crate</span><span> rand;
+</span><span style="color:#b48ead;">use </span><span>rand::Rng;
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> dice_roll = rand::thread_rng();
+</span><span>    </span><span style="color:#b48ead;">match</span><span> dice_roll.</span><span style="color:#96b5b4;">gen_range</span><span>(</span><span style="color:#d08770;">1</span><span>..</span><span style="color:#d08770;">20</span><span>) {
+</span><span>        </span><span style="color:#d08770;">20 </span><span>=&gt; println!(&quot;</span><span style="color:#a3be8c;">Critical hit!</span><span>&quot;),
+</span><span>        _ =&gt; println!(&quot;</span><span style="color:#a3be8c;">Sorry, you missed.</span><span>&quot;),
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>You can copy this code into the Rust Playground and it will compile so that you can see the output.</p>
+<p>I haven’t talked about crates yet, but know that we use an external Rust crate which helps generate random numbers. We declare a mutable variable called dice_roll which which contains our random number. Then, we create a random number between 1 and 20 and match on it. If our random number is 20, we print out a success message. If the random number is any other number, then we print out a failure message.</p>
+<p>The catch-all is useful in situations where we care about one particular result and others can just have a common outcome.</p>
+<p>Match is useful in error handling code. It is also useful in extracting values out of the Some variant within the Option enum type. It’s a little more elegant that plain old if..else and helps your code be more readable and understandable, as you can avoid complex nested logic. There are some advanced concepts that you can incorporate with the use of match, including the notion of “guards”. I’ll discuss these in a future article.</p>
+<p>Thanks for reading! I hope you are enjoying your own Rust journey and are feeling more and more empowered by this amazing language.</p>
+<h3 id="references">References:</h3>
+<p><a rel="noopener noreferrer" target="_blank" href="https://doc.rust-lang.org/book/ch06-02-match.html">The Rust Book, Chapter 6.2, The Match Control Flow Construct</a></p>
+
+
+        
+    
+
+        
+        
+    </article></div>
+    <div class="pagination">
+        <div class="pagination__buttons">
+            </div>
+    </div>
+<footer class="footer">
+        <div class="footer__inner"><div class="copyright">
+            <span>© 2024 Jeffery D Mitchell :: Powered by <a href="https://www.getzola.org/">Zola</a>:: Zerm theme made by <a href="https://github.com/ejmg">ejmg</a> :: Hosted on <a href="https://shuttle.rs">Shuttle</a> :: Follow me (and ask questions or comment) on <a href="https://bsky.app/profile/jeff-mitchell-dev.bsky.social">Bluesky</a></span>
+        </div>
+    <script type="text/javascript" src="https://jeff-mitchell.dev/assets/js/main.js"></script>
+</div>
+        
+
+      </footer></div>
+    <!-- Default Statcounter code for Jeff Mitchell Dev https://jeff-mitchell.dev
+-->
+    <script type="text/javascript">
+      var sc_project = 13027926;
+      var sc_invisible = 1;
+      var sc_security = "1625b230";
+    </script>
+    <script
+      type="text/javascript"
+      src="https://www.statcounter.com/counter/counter.js"
+      async
+    ></script>
+    <noscript
+      ><div class="statcounter">
+        <a
+          title="Web Analytics Made Easy -
+Statcounter"
+          href="https://statcounter.com/"
+          target="_blank"
+          ><img
+            class="statcounter"
+            src="https://c.statcounter.com/13027926/0/1625b230/1/"
+            alt="Web Analytics Made Easy - Statcounter"
+            referrerpolicy="no-referrer-when-downgrade"
+        /></a></div
+    ></noscript>
+    <!-- End of Statcounter Code -->
+     <script type="text/javascript" src="https://jeff-mitchell.dev/elasticlunr.min.js"></script>
+     <script type="text/javascript" src="https://jeff-mitchell.dev/search.js"></script>
+  </body>
+</html>

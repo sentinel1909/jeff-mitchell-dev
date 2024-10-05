@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Packages, Modules, and Crates..Oh My! - Jeff Mitchell</title>
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"><meta name="description" content="A blog mostly about Rust...mostly... Packages, Modules, and Crates..Oh My! An overview of to structure a Rust program, using crates, packages, and modules."/><meta name="keywords" content="Intermediate Guides, rust, organization" />
+    <meta property="og:title" content="jeff-mitchell.dev -&nbsp;Packages, Modules, and Crates..Oh My!" />
+    <meta property="og:type" content="website"/><meta property="og:url" content="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2023&#x2F;2023-07-31-packages-modules-crates-oh-my&#x2F;"/><meta property="og:description" content="An overview of to structure a Rust program, using crates, packages, and modules."/>
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://jeff-mitchell.dev/style.css?h=97e262212a0704163528">
+    <link rel="stylesheet" href=" https://jeff-mitchell.dev/color/orange.css?h=a5a5d7faf9d4bc3e0b18">
+    
+<link rel="alternate" type="application/atom+xml" title="jeff-mitchell.dev RSS" href="https://jeff-mitchell.dev/atom.xml"></head>
+  <body>
+    <div class="container center">
+<header class="header">
+    <div class="header__inner">
+        <div class="header__logo">
+            <a href="&#x2F;">
+    <div class="logo">
+        jeff-mitchell.dev :: mis-adventures with the Rust programming language
+    </div>
+</a>
+        </div>
+        <div class="menu-trigger">menu</div>
+    </div>
+    
+    <nav class="menu">
+        <ul class="menu__inner menu__inner--desktop">
+            
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li></ul>
+
+        <ul class="menu__inner menu__inner--mobile">
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li>
+        </ul>
+    </nav>
+
+    </header>
+<div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </div>
+      <div class="content"><article class="post">
+        <header>
+            <h1 class="post-title">
+                <a href="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2023&#x2F;2023-07-31-packages-modules-crates-oh-my&#x2F;">Packages, Modules, and Crates..Oh My!</a>
+            </h1>
+            
+    <div class="post-meta">
+        <span class="post-date">2023.07.31
+                </span>
+
+        <span class="post-author">
+    ::
+    Jeff Mitchell</span>
+
+        
+
+    
+    :: {<a href="https://jeff-mitchell.dev/categories/intermediate-guides/">Intermediate Guides</a>} 
+
+            
+    ::
+    #<a href="https://jeff-mitchell.dev/tags/rust/">rust</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/organization/">organization</a>
+        
+    
+            
+        
+    </div>
+
+            
+    
+</header><p>Today, I will give you my take on crates, packages and modules. I've found the organization system for Rust programs to be difficult to master. However, time and practice are solidifying things for me.</p>
+<p>Let's dive in...</p>
+<h2 id="crates">Crates</h2>
+<p>A crate is the smallest possible Rust program. The Rust compiler considers this code sample to be a crate:</p>
+<pre data-lang="Rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-Rust "><code class="language-Rust" data-lang="Rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>  println!(&quot;</span><span style="color:#a3be8c;">I am a crate.</span><span>&quot;);
+</span><span>}
+</span></code></pre>
+<p>An important concept is the crate root. The root is the place the compiler starts from when building out a program. In the tiny example above, whatever we name the file, say &quot;something.rs&quot;, it is the crate root.</p>
+<p>There are two types of crates, <em>binary</em> crates and <em>library</em> cates. A <em>binary</em> crate is self contained in that it has an executable file, containing a main function, which can be run on its own without any further action. A <em>library</em> crate contains some piece of functionality meant to be depended on by other crates. It doesn't have a main function and can't run on its own.</p>
+<p>A common way to organize a Rust program is to split it into a binary crate and a library crate. The binary crate contains the executable file, named main.rs or something else you choose. The binary crate then pulls in added functionality from its library crate.</p>
+<h2 id="packages">Packages</h2>
+<p>A package is a bundle of one or more crates that combine to provide some piece of functionality. A package contains a <em>cargo.toml</em> file which explains to the Rust compiler how to build the crates contained within the package. Packages can contain one or more binary crates, but only one library crate. There must be at least one crate in the package, be it binary or library.</p>
+<p>The presence of a Cargo.toml file at the root of the project directory defines the package. By default, Cargo follows the convention that src/main.rs is the root of a binary crate and src/lib.rs is the root of a library crate. The name of the package is taken from the name of the binary or the name of the library, whichever one is present. You can adjust this if you wish and I'll talk about it in the next issue.</p>
+<p>It's totally up to you as to how to organize your Rust programs. I've found a useful way to organize is to have one binary crate, containing a main.rs file which has initialization and startup logic. The binary crate then calls into the library crate which contains the meat of the program. If your Rust program is small, then it's overkill to organize in this way. However, for larger code bases, such as APIs, organizing like this helps keep the code modular and readable.</p>
+<h2 id="modules">Modules</h2>
+<p>Crates can be further divided with modules which can live either in one file or separate files. Modules serve as an organizational tool, allowing code to be grouped into units for easier re-use. A second purpose of modules is to control privacy of items. Code in a module is private by default, meaning it's not visible to other code outside that module. Modules can be made public, meaning they are available to be made into dependencies within the program as a whole. You can put modules all into one file, but this can quickly become difficult to navigate. It's usually preferable to setup a structure in which modules are organized into separate files.</p>
+<h2 id="paths">Paths</h2>
+<p>The Rust compiler needs to know where things are. A path can be used in a similar fashion to navigating file system on Windows, Linux, or macOS. Paths can take a couple of forms:</p>
+<ul>
+<li>absolute: the full path starting from the crate root (begins with the crate name for an external crate and begins with the literal crate for code from the current crate)</li>
+<li>relative: starts from the current module and uses the keywords self, super or an identifier in the current module (super, for example, will reference the next level up)</li>
+</ul>
+<h2 id="use-keyword">Use Keyword</h2>
+<p>The use keyword brings a module into scope, allowing its contents to be accessible to other parts of a Rust program.</p>
+<h2 id="namespace-operator">Namespace Operator</h2>
+<p>The namespace operator in Rust is a double colon, :: The namespace operator is used in conjunction with the use keyword.</p>
+<p>Putting it all together...</p>
+<p>With all these concepts in mind, how do we put it all together? Stay tuned...in a future post I'll show you how to start using these concepts to make your Rust programs more understandable.</p>
+
+
+        
+    
+
+        
+        
+    </article></div>
+    <div class="pagination">
+        <div class="pagination__buttons">
+            </div>
+    </div>
+<footer class="footer">
+        <div class="footer__inner"><div class="copyright">
+            <span>© 2024 Jeffery D Mitchell :: Powered by <a href="https://www.getzola.org/">Zola</a>:: Zerm theme made by <a href="https://github.com/ejmg">ejmg</a> :: Hosted on <a href="https://shuttle.rs">Shuttle</a> :: Follow me (and ask questions or comment) on <a href="https://bsky.app/profile/jeff-mitchell-dev.bsky.social">Bluesky</a></span>
+        </div>
+    <script type="text/javascript" src="https://jeff-mitchell.dev/assets/js/main.js"></script>
+</div>
+        
+
+      </footer></div>
+    <!-- Default Statcounter code for Jeff Mitchell Dev https://jeff-mitchell.dev
+-->
+    <script type="text/javascript">
+      var sc_project = 13027926;
+      var sc_invisible = 1;
+      var sc_security = "1625b230";
+    </script>
+    <script
+      type="text/javascript"
+      src="https://www.statcounter.com/counter/counter.js"
+      async
+    ></script>
+    <noscript
+      ><div class="statcounter">
+        <a
+          title="Web Analytics Made Easy -
+Statcounter"
+          href="https://statcounter.com/"
+          target="_blank"
+          ><img
+            class="statcounter"
+            src="https://c.statcounter.com/13027926/0/1625b230/1/"
+            alt="Web Analytics Made Easy - Statcounter"
+            referrerpolicy="no-referrer-when-downgrade"
+        /></a></div
+    ></noscript>
+    <!-- End of Statcounter Code -->
+     <script type="text/javascript" src="https://jeff-mitchell.dev/elasticlunr.min.js"></script>
+     <script type="text/javascript" src="https://jeff-mitchell.dev/search.js"></script>
+  </body>
+</html>

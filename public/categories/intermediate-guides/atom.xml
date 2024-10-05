@@ -1,0 +1,668 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>jeff-mitchell.dev - Intermediate Guides</title>
+    <subtitle>A blog mostly about Rust...mostly...</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://jeff-mitchell.dev/categories/intermediate-guides/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2023-07-31T00:00:00+00:00</updated>
+    <id>https://jeff-mitchell.dev/categories/intermediate-guides/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Packages, Modules, and Crates..Oh My!</title>
+        <published>2023-07-31T00:00:00+00:00</published>
+        <updated>2023-07-31T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2023/2023-07-31-packages-modules-crates-oh-my/"/>
+        <id>https://jeff-mitchell.dev/blog/2023/2023-07-31-packages-modules-crates-oh-my/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2023/2023-07-31-packages-modules-crates-oh-my/">&lt;p&gt;Today, I will give you my take on crates, packages and modules. I&#x27;ve found the organization system for Rust programs to be difficult to master. However, time and practice are solidifying things for me.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s dive in...&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;crates&quot;&gt;Crates&lt;&#x2F;h2&gt;
+&lt;p&gt;A crate is the smallest possible Rust program. The Rust compiler considers this code sample to be a crate:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;Rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-Rust &quot;&gt;&lt;code class=&quot;language-Rust&quot; data-lang=&quot;Rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;  println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;I am a crate.&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;An important concept is the crate root. The root is the place the compiler starts from when building out a program. In the tiny example above, whatever we name the file, say &amp;quot;something.rs&amp;quot;, it is the crate root.&lt;&#x2F;p&gt;
+&lt;p&gt;There are two types of crates, &lt;em&gt;binary&lt;&#x2F;em&gt; crates and &lt;em&gt;library&lt;&#x2F;em&gt; cates. A &lt;em&gt;binary&lt;&#x2F;em&gt; crate is self contained in that it has an executable file, containing a main function, which can be run on its own without any further action. A &lt;em&gt;library&lt;&#x2F;em&gt; crate contains some piece of functionality meant to be depended on by other crates. It doesn&#x27;t have a main function and can&#x27;t run on its own.&lt;&#x2F;p&gt;
+&lt;p&gt;A common way to organize a Rust program is to split it into a binary crate and a library crate. The binary crate contains the executable file, named main.rs or something else you choose. The binary crate then pulls in added functionality from its library crate.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;packages&quot;&gt;Packages&lt;&#x2F;h2&gt;
+&lt;p&gt;A package is a bundle of one or more crates that combine to provide some piece of functionality. A package contains a &lt;em&gt;cargo.toml&lt;&#x2F;em&gt; file which explains to the Rust compiler how to build the crates contained within the package. Packages can contain one or more binary crates, but only one library crate. There must be at least one crate in the package, be it binary or library.&lt;&#x2F;p&gt;
+&lt;p&gt;The presence of a Cargo.toml file at the root of the project directory defines the package. By default, Cargo follows the convention that src&#x2F;main.rs is the root of a binary crate and src&#x2F;lib.rs is the root of a library crate. The name of the package is taken from the name of the binary or the name of the library, whichever one is present. You can adjust this if you wish and I&#x27;ll talk about it in the next issue.&lt;&#x2F;p&gt;
+&lt;p&gt;It&#x27;s totally up to you as to how to organize your Rust programs. I&#x27;ve found a useful way to organize is to have one binary crate, containing a main.rs file which has initialization and startup logic. The binary crate then calls into the library crate which contains the meat of the program. If your Rust program is small, then it&#x27;s overkill to organize in this way. However, for larger code bases, such as APIs, organizing like this helps keep the code modular and readable.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;modules&quot;&gt;Modules&lt;&#x2F;h2&gt;
+&lt;p&gt;Crates can be further divided with modules which can live either in one file or separate files. Modules serve as an organizational tool, allowing code to be grouped into units for easier re-use. A second purpose of modules is to control privacy of items. Code in a module is private by default, meaning it&#x27;s not visible to other code outside that module. Modules can be made public, meaning they are available to be made into dependencies within the program as a whole. You can put modules all into one file, but this can quickly become difficult to navigate. It&#x27;s usually preferable to setup a structure in which modules are organized into separate files.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;paths&quot;&gt;Paths&lt;&#x2F;h2&gt;
+&lt;p&gt;The Rust compiler needs to know where things are. A path can be used in a similar fashion to navigating file system on Windows, Linux, or macOS. Paths can take a couple of forms:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;absolute: the full path starting from the crate root (begins with the crate name for an external crate and begins with the literal crate for code from the current crate)&lt;&#x2F;li&gt;
+&lt;li&gt;relative: starts from the current module and uses the keywords self, super or an identifier in the current module (super, for example, will reference the next level up)&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;use-keyword&quot;&gt;Use Keyword&lt;&#x2F;h2&gt;
+&lt;p&gt;The use keyword brings a module into scope, allowing its contents to be accessible to other parts of a Rust program.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;namespace-operator&quot;&gt;Namespace Operator&lt;&#x2F;h2&gt;
+&lt;p&gt;The namespace operator in Rust is a double colon, :: The namespace operator is used in conjunction with the use keyword.&lt;&#x2F;p&gt;
+&lt;p&gt;Putting it all together...&lt;&#x2F;p&gt;
+&lt;p&gt;With all these concepts in mind, how do we put it all together? Stay tuned...in a future post I&#x27;ll show you how to start using these concepts to make your Rust programs more understandable.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Result-ful Thinking</title>
+        <published>2023-04-14T00:00:00+00:00</published>
+        <updated>2023-04-14T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2023/2023-04-14-resultful-thinking-error-handling-in-rust/"/>
+        <id>https://jeff-mitchell.dev/blog/2023/2023-04-14-resultful-thinking-error-handling-in-rust/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2023/2023-04-14-resultful-thinking-error-handling-in-rust/">&lt;p&gt;The Result enumeration in Rust is the second special enumeration available in the standard library. It is a powerful tool for error handling and enables you to handle errors in an elegant, recoverable fashion. Using the Result enum is a bit of a shift in thinking from other languages.&lt;&#x2F;p&gt;
+&lt;p&gt;The Result enum has the following signature:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;enum &lt;&#x2F;span&gt;&lt;span&gt;Result&amp;lt;T, E&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;	Ok(T),
+&lt;&#x2F;span&gt;&lt;span&gt;	Err(E),
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;I&#x27;ve yet to write a lot about generics yet, but similar to the Option enum, Result has two generic type parameters. The T represents the type that will be returned in a success case, it&#x27;s wrapped in a n &amp;quot;Ok&amp;quot; variant. The E represents and error type that is reutrned in a failure case, it&#x27;s wrapped in an &amp;quot;Err&amp;quot; variant.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s revisit the contrived example of a program that divides two numbers, as I used in the article on the Option enum:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;divide &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;numerator&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f64&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;denominator&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f64&lt;&#x2F;span&gt;&lt;span&gt;) -&amp;gt; Result&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f64&lt;&#x2F;span&gt;&lt;span&gt;, String&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if&lt;&#x2F;span&gt;&lt;span&gt; denominator == &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0.0 &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;		Err(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Cannot divide by zero&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;to_string&lt;&#x2F;span&gt;&lt;span&gt;())
+&lt;&#x2F;span&gt;&lt;span&gt;	} &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;else &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;		Ok(numerator&#x2F;denominator)
+&lt;&#x2F;span&gt;&lt;span&gt;	}
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; numerator = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;10.0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; denominator = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2.0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; answer = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;divide&lt;&#x2F;span&gt;&lt;span&gt;(numerator, denominator);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;match&lt;&#x2F;span&gt;&lt;span&gt; answer {
+&lt;&#x2F;span&gt;&lt;span&gt;		Ok(ans) =&amp;gt; println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Result: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, ans),
+&lt;&#x2F;span&gt;&lt;span&gt;		Err(err) =&amp;gt; println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, err),
+&lt;&#x2F;span&gt;&lt;span&gt;  }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;In our main function, we declare a numerator variable and a denominator variable. We call the divide function, sending in the numerator and denominator as parameters. The divide function returns a Result, which will either contain our answer, or an error message. The body of the function uses an if statement to establish the return value, be it error or answer. If the denominator passed in as input is zero, this generates a string stating &amp;quot;Cannot divide by zero&amp;quot;. The main function does a match on the answer value returned by the divide function. We either print out the answer, or print out our error message.&lt;&#x2F;p&gt;
+&lt;p&gt;Handling errors in this way is very elegant. Rather than just throw out an error which could be not very meaningful, we can actually write code that explains very specifically what the issue is. The end result is code which is far more robust.&lt;&#x2F;p&gt;
+&lt;p&gt;Want to know more about the Result type? Head over to official Rust Programming language book and &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch09-02-recoverable-errors-with-result.html&quot;&gt;read more&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Matchy Matchy</title>
+        <published>2022-09-30T00:00:00+00:00</published>
+        <updated>2022-09-30T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-09-30-matchy-matchy/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-09-30-matchy-matchy/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-09-30-matchy-matchy/">&lt;p&gt;My journey in learning the Rust language continues. Today, let’s explore one of Rust’s unique methods of controlling program flow, known as the match construct. The match syntax is really addictive, and sorely missed when you use other languages.&lt;&#x2F;p&gt;
+&lt;p&gt;Previously, I’ve explored the traditional ways of controlling program flow, namely if..else and looping. Rust has another way, the match construct, which allows your code to evaluate and act on multiple possibilities.&lt;&#x2F;p&gt;
+&lt;p&gt;Let’s dive in and explore through a fun, silly little Star Wars themed example.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;enum &lt;&#x2F;span&gt;&lt;span&gt;Classification {
+&lt;&#x2F;span&gt;&lt;span&gt;    Starfighter,
+&lt;&#x2F;span&gt;&lt;span&gt;    Freighter,
+&lt;&#x2F;span&gt;&lt;span&gt;    Corvette,
+&lt;&#x2F;span&gt;&lt;span&gt;    Frigate,
+&lt;&#x2F;span&gt;&lt;span&gt;    StarDestroyer
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;get_ship_type&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ship&lt;&#x2F;span&gt;&lt;span&gt;: Classification) -&amp;gt; &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;&amp;#39;static str &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;match&lt;&#x2F;span&gt;&lt;span&gt; ship {
+&lt;&#x2F;span&gt;&lt;span&gt;        Classification::Starfighter =&amp;gt; &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;A small fighter-type craft&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;,
+&lt;&#x2F;span&gt;&lt;span&gt;        Classification::Freighter =&amp;gt; &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;A craft which carries cargo and things&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;,
+&lt;&#x2F;span&gt;&lt;span&gt;        Classification::Corvette =&amp;gt; &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;The ship that carried Princess Leia in Star Wars: A New Hope&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;,
+&lt;&#x2F;span&gt;&lt;span&gt;        Classification::Frigate =&amp;gt; &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Like the ship Luke was on at the end of The Empire Strikes Back&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;,
+&lt;&#x2F;span&gt;&lt;span&gt;        Classification::StarDestroyer =&amp;gt; &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;The classic wedge shaped subjugator of worlds&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; xwing = Classification::Starfighter;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; millenium_falcon = Classification::Freighter;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; tantive_iv = Classification::Corvette;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; medical_frigate = Classification::Frigate;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; devastator = Classification::StarDestroyer;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;An X-wing is: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;get_ship_type&lt;&#x2F;span&gt;&lt;span&gt;(xwing));
+&lt;&#x2F;span&gt;&lt;span&gt;    println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;The Millennium Falcon is: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;get_ship_type&lt;&#x2F;span&gt;&lt;span&gt;(millenium_falcon));
+&lt;&#x2F;span&gt;&lt;span&gt;    println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;The Tantive IV is: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;get_ship_type&lt;&#x2F;span&gt;&lt;span&gt;(tantive_iv));
+&lt;&#x2F;span&gt;&lt;span&gt;    println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;The Medical Frigate is: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;get_ship_type&lt;&#x2F;span&gt;&lt;span&gt;(medical_frigate));
+&lt;&#x2F;span&gt;&lt;span&gt;    println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;The Devastator is: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;get_ship_type&lt;&#x2F;span&gt;&lt;span&gt;(devastator));
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We first declare an enumeration which creates some different types of space craft. We then declare a function called get_ship_type whose job is to receive a ship type as a parameter and return a string with a descriptive message. The meat of this function is a match construct.&lt;&#x2F;p&gt;
+&lt;p&gt;Match has the notion of “arms” which are evaluated one at a time. The first match that is found forms the return value for the function. The other possibilities are ignored until the function is called again with a different ship type. In this case, our function returns a simple static string. For now, ignore the “tick” lifetime modifier on the static str return type, it isn’t important for the topic at hand. I will write about lifetimes in a future article.&lt;&#x2F;p&gt;
+&lt;p&gt;Matches must be exhaustive, all the types we set out in our enum must have a corresponding match arm to check against. The compiler will squawk if you don’t handle all the possibilities.&lt;&#x2F;p&gt;
+&lt;p&gt;In the main function, we declare variables, one to represent each of our possible ship classifications. Then, one by one, we print out a message, calling our get_ship_type function each time to gather the rest of the message.&lt;&#x2F;p&gt;
+&lt;p&gt;Individual arms within each part of the match can contain multiple Rust statements, simply enclose the code within curly braces. This is where the power of match comes, sophisticated possibilities and code blocks can form each arm of the match. The results of a particular match arm an also bind to a variable.&lt;&#x2F;p&gt;
+&lt;p&gt;Match evaluations must be exhaustive. We have to evaluate every possible outcome otherwise a compiler error will occur. What happens if we care about one or two patterns and nothing else? The catch-all pattern, _ , is available. Let’s look at another example:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;extern crate&lt;&#x2F;span&gt;&lt;span&gt; rand;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;rand::Rng;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; dice_roll = rand::thread_rng();
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;match&lt;&#x2F;span&gt;&lt;span&gt; dice_roll.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;gen_range&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;..&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;20&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;20 &lt;&#x2F;span&gt;&lt;span&gt;=&amp;gt; println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Critical hit!&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;),
+&lt;&#x2F;span&gt;&lt;span&gt;        _ =&amp;gt; println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Sorry, you missed.&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;),
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;You can copy this code into the Rust Playground and it will compile so that you can see the output.&lt;&#x2F;p&gt;
+&lt;p&gt;I haven’t talked about crates yet, but know that we use an external Rust crate which helps generate random numbers. We declare a mutable variable called dice_roll which which contains our random number. Then, we create a random number between 1 and 20 and match on it. If our random number is 20, we print out a success message. If the random number is any other number, then we print out a failure message.&lt;&#x2F;p&gt;
+&lt;p&gt;The catch-all is useful in situations where we care about one particular result and others can just have a common outcome.&lt;&#x2F;p&gt;
+&lt;p&gt;Match is useful in error handling code. It is also useful in extracting values out of the Some variant within the Option enum type. It’s a little more elegant that plain old if..else and helps your code be more readable and understandable, as you can avoid complex nested logic. There are some advanced concepts that you can incorporate with the use of match, including the notion of “guards”. I’ll discuss these in a future article.&lt;&#x2F;p&gt;
+&lt;p&gt;Thanks for reading! I hope you are enjoying your own Rust journey and are feeling more and more empowered by this amazing language.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;references&quot;&gt;References:&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch06-02-match.html&quot;&gt;The Rust Book, Chapter 6.2, The Match Control Flow Construct&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Is it Something or Nothing: The Option Type</title>
+        <published>2022-09-13T00:00:00+00:00</published>
+        <updated>2022-09-13T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-08-13-option-is-it-something-or-nothing/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-08-13-option-is-it-something-or-nothing/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-08-13-option-is-it-something-or-nothing/">&lt;p&gt;I apologize, dear readers, for my lack of consistency in posting here on Medium. Writing and generating content is a challenge for me. If I can provide you with a nugget of perspective once a month, that’s what I’m going to aim for. As the saying goes, practice makes perfect, so eventually, you might see more from me. I thank all of you for your interest in reading my thoughts on the Rust language.&lt;&#x2F;p&gt;
+&lt;p&gt;In an earlier article, I introduced the notion of enumerations, or enums, that are useful to represent types in Rust. You’ll also recall that Enums can optionally contain data. It’s time to introduce one of two special Rust enums…the Option type. Today I give you a short bite on this topic.&lt;&#x2F;p&gt;
+&lt;p&gt;An Option can contain something and or it can contain nothing. It’s a little like Schrödinger&#x27;s Cat, it might be alive (contains something) or it might be dead (contains nothing) and you don’t know until you check. Let’s dive in.&lt;&#x2F;p&gt;
+&lt;p&gt;An Option looks like this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;enum &lt;&#x2F;span&gt;&lt;span&gt;Option&amp;lt;T&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;	None,
+&lt;&#x2F;span&gt;&lt;span&gt;	Some(T),
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The None variant is used when the option holds nothing, no data. The Some variant can contain something. The &lt;T&gt; is the notation for a generic type parameter. I haven’t covered generics yet, but their nuts and bolts are not super important for this discussion. In the context of the Option enum, it means a data type of any kind. It could, for example, contain a single integer.&lt;&#x2F;p&gt;
+&lt;p&gt;The Option enum provides a graceful way to implement a null value. The notion of a null value has wreaked havoc on the computing world, to say the least.&lt;&#x2F;p&gt;
+&lt;p&gt;This Option concept is best illustrated with an example. Consider this program which takes two numbers, tries to divide them, and provides the result:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span&gt;function &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;divide&lt;&#x2F;span&gt;&lt;span&gt;(numerator: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f64&lt;&#x2F;span&gt;&lt;span&gt;, denominator: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f64&lt;&#x2F;span&gt;&lt;span&gt;) -&amp;gt; Option&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f64&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if&lt;&#x2F;span&gt;&lt;span&gt; denominator == &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0 &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;		None
+&lt;&#x2F;span&gt;&lt;span&gt;	} &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;else &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;		Some(numerator&#x2F;denominator)
+&lt;&#x2F;span&gt;&lt;span&gt;	}
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; numerator = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;10.0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; denominator = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0.0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; result = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;divide&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;10.0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0.0&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;match&lt;&#x2F;span&gt;&lt;span&gt; result {
+&lt;&#x2F;span&gt;&lt;span&gt;		Some(x) =&amp;gt; println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Result: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, x),
+&lt;&#x2F;span&gt;&lt;span&gt;		None =&amp;gt; println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Sorry, cannot divide by 0&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;),
+&lt;&#x2F;span&gt;&lt;span&gt;        }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This program has a main function and a function called divide. In the main function, we declare two floating point numbers as the numerator and denominator variables, then we pass them to the divide function and assign the answer to the variable result. The divide function accepts two floating point parameters, the numerator and the denominator. It returns an option, which will either be a floating point number or nothing. The function checks if the denominator is zero, if it is, our returned option is assigned None as its value. If the denominator is non-zero, our math can proceed and our option will return the calculation result.&lt;&#x2F;p&gt;
+&lt;p&gt;Back inside the main program, with the result in hand, we run a match expression on it and output the answer. If our option contains something we output the result of the calculation. If our option contains nothing, we output a message stating that you can’t divide by zero.&lt;&#x2F;p&gt;
+&lt;p&gt;The option type is almost always combined with a match expression for further processing.&lt;&#x2F;p&gt;
+&lt;p&gt;Option is a flexible and versatile construct in the Rust language. It is often used for:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;initial values&lt;&#x2F;li&gt;
+&lt;li&gt;optional function arguments&lt;&#x2F;li&gt;
+&lt;li&gt;swapping things out of difficult situations&lt;&#x2F;li&gt;
+&lt;li&gt;basic error handling, where None is returned and perhaps combined with a message to represent the error&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;The Rust standard library documentation has a good in-depth description of the option type. I recommend you read it for the full scoop.&lt;&#x2F;p&gt;
+&lt;p&gt;In a future article, I’ll go through the Result type, which is the second special enum type built into the Rust language. Thanks for reading!&lt;&#x2F;p&gt;
+&lt;p&gt;References:
+&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch06-01-defining-an-enum.html&quot;&gt;The Rust Programming Language, Chapter 6.1, Defining an Enum&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>The Memory Doesn&#x27;t Remain</title>
+        <published>2022-07-14T00:00:00+00:00</published>
+        <updated>2022-07-14T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-07-14-the-memory-doesnt-remain/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-07-14-the-memory-doesnt-remain/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-07-14-the-memory-doesnt-remain/">&lt;blockquote&gt;
+&lt;p&gt;&amp;quot;Fortune, fame, mirror vain, gone insane...but the memory remains!&amp;quot; - Metallica, The Memory Remains&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;This is the article I’ve been needing to write for about a month (maybe two) but have fretted and procrastinated.&lt;&#x2F;p&gt;
+&lt;p&gt;Memory, ownership, borrowing…oh my!&lt;&#x2F;p&gt;
+&lt;p&gt;These concepts are probably the most difficult things in Rust. I worry that I’m not doing these topics justice. However, I’m going to shove this worry aside and just go for it. I intend on returning to this article periodically to update it as my understanding improves.&lt;&#x2F;p&gt;
+&lt;p&gt;If you never start, you never finish, so here we go…&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;dealing-with-garbage&quot;&gt;Dealing with Garbage&lt;&#x2F;h3&gt;
+&lt;p&gt;In programming languages, there are two broad approaches to handling the use and cleanup of memory.&lt;&#x2F;p&gt;
+&lt;p&gt;The first is manual, as in it’s all on you the programmer. An example is the C language. The C compiler leaves memory use entirely up to you. If you forget to free memory after you’ve finished with it, an error may result because the C compiler is blissfully unaware. More than likely, you’ll be dealing with the consequences later.&lt;&#x2F;p&gt;
+&lt;p&gt;The second is so-called garbage collection. Languages such as JavaScript use a built-in memory manager, called a garbage collector, that follows along behind you to clean up memory. This brings overhead, which may be unacceptable for resource-constrained systems.&lt;&#x2F;p&gt;
+&lt;p&gt;Rust introduces a third way. The Rust compiler brings a set of rules that are checked at compile time. Code will not compile if any of the rules are broken. The rules do not impact the performance of your program because they are enforced at compile time.&lt;&#x2F;p&gt;
+&lt;p&gt;Before we get into the nitty gritty of this seemingly magical system, there are a couple of other general concepts to review.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;the-stack-vs-the-heap&quot;&gt;The Stack vs. The Heap&lt;&#x2F;h3&gt;
+&lt;p&gt;Like C, Rust works within the same two memory regions, the stack and the heap.&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;the-stack&quot;&gt;The Stack&lt;&#x2F;h4&gt;
+&lt;p&gt;Anytime you create a variable using Rust’s simple types, like an integer, the variable is created on a region of memory known as the stack. Things that go on the stack have to be fixed in size and can’t change. Fresh data is always stored at the top of the stack. Storing on the stack is quick. I recommend the ownership chapter of the Rust Book, which provides a good overview of the stack.&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;the-heap&quot;&gt;The Heap&lt;&#x2F;h4&gt;
+&lt;p&gt;The heap is a dynamic area of memory that can grow and shrink as needed. When data is placed in the heap, the memory allocator finds a contiguous block of space and returns a reference called a pointer. Accessing memory on the heap is slower than on the stack, because, in effect, it needs to be looked up first. I recommend the ownership chapter of the Rust Book, which serves as a good overview of the heap.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;ownership-and-scope&quot;&gt;Ownership and Scope&lt;&#x2F;h3&gt;
+&lt;p&gt;Rust has three rules of ownership:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Each Rust value has a variable called its “owner”.&lt;&#x2F;li&gt;
+&lt;li&gt;Each value can have only one owner at a time.&lt;&#x2F;li&gt;
+&lt;li&gt;When the owner goes out of scope, the value will be dropped.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;To begin thinking about ownership, it’s essential to think about scope. A scope is denoted by curly braces. Here’s an example:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; fuel = &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Give me fuel, give me fire&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We declare a string literal and bind it to a variable called fuel. Variable fuel comes into scope as it’s declared. We can do what we need with it right up until the closing curly brace. Past that point, Rust calls a special internal drop function to clean up the trash. The memory that our fuel variable used is freed up.&lt;&#x2F;p&gt;
+&lt;p&gt;Any variable in the Rust language is valid when it comes into scope and it remains valid until it goes out of scope. The compiler will throw an error if you attempt to access the value in a variable that has gone out of scope.&lt;&#x2F;p&gt;
+&lt;p&gt;A consequence of this notion of validity until the scope ends, where functions are concerned, is that we have to pass in AND pass back anything that we want to use later. If we don’t the values will be lost.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; fuel = String::from(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Give me fuel, give me fire&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;(fuel2, len) = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;calculate_length&lt;&#x2F;span&gt;&lt;span&gt;(fuel);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;The length of &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39; is &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, fuel2, len);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;calculate_length&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;s&lt;&#x2F;span&gt;&lt;span&gt;: String) -&amp;gt; (String, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;usize&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; length = s.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;len&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	(s, length)
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here, we declare a variable called fuel and bind the same string literal as above to it. We then declare a tuple, consisting of a new string variable and an integer (to represent the string length that we’re going to determine) and we bind to the tuple returned by the function calculate length. We pass in our fuel variable to this function.&lt;&#x2F;p&gt;
+&lt;p&gt;The function takes our passed string and returns it along with its length. The len() method is used on our passed-in string to determine the length. We finally print the string and its length to the console.&lt;&#x2F;p&gt;
+&lt;p&gt;This is a lot of work. We need to do a lot of moving and passing around values to make sure we don’t lose them due to variables going out of scope. Fortunately, we’re saved by the notions of references and borrowing.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;references-and-borrowing&quot;&gt;References and Borrowing&lt;&#x2F;h3&gt;
+&lt;p&gt;The second pillar of Rust memory management is the notion of a reference. We can use values owned by other variables without claiming ownership. This is called borrowing.&lt;&#x2F;p&gt;
+&lt;p&gt;What if we could simply reference values in variables without taking ownership of them? Let’s revisit our previous example.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; fuel = String::from(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Give me fuel, give me fire&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; len = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;calculate_length&lt;&#x2F;span&gt;&lt;span&gt;(&amp;amp;fuel);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;The length of &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39; is &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, fuel, len);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;calculate_length&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;s&lt;&#x2F;span&gt;&lt;span&gt;: &amp;amp;String) -&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;usize &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;	s.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;len&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This code may not seem simpler, but it is. We declare a string variable and give it a value as before. Next, we call a function to get the string length, but this time we pass in a reference to our fuel variable. The &amp;amp; represents a reference, allowing us to refer to a value without taking ownership of it.&lt;&#x2F;p&gt;
+&lt;p&gt;You’ll notice the function signature simplifies as it now takes a reference to a string and returns a usize, which is basically an integer. Inside the function, we again get the length of the string using the len() method.&lt;&#x2F;p&gt;
+&lt;p&gt;We have just borrowed the value of another variable to do something with it.&lt;&#x2F;p&gt;
+&lt;p&gt;You’ll note here that we don’t need to return the value from the function calculate_length, to give back ownership, because change never had ownership in the first place.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;mutability-and-borrowing&quot;&gt;Mutability and Borrowing&lt;&#x2F;h3&gt;
+&lt;p&gt;References are immutable by default. We can’t change the value of something we don’t own. To change the value referenced, we have to use a mutable borrow. Let’s look at an example:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; fuel = String::from(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Give me fuel, give me fire&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;change&lt;&#x2F;span&gt;&lt;span&gt;(&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; fuel);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;change&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;some_string&lt;&#x2F;span&gt;&lt;span&gt;: &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; String) {
+&lt;&#x2F;span&gt;&lt;span&gt;	some_string.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;push_str&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;, give me that which I desire&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We declare a mutable variable called string and we bind our favourite song lyrics to it. The fuel variable can change because we made it mutable. Next, we call a function called to change and pass it a mutable reference to our fuel variable. Ownership will not be transferred, and the value of fuel will not be moved to the function, because we are simply borrowing this variable. The change function takes a string as a parameter, which is annotated as a reference to a mutable String. The function body appends some text to the string to complete our song lyrics. Once again, the function makes our change but does not have to pass anything back.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
+&lt;p&gt;The concepts of ownership and borrowing are difficult to get used to. There is a lot of so-called “fighting the borrow checker” which comes with the early days of learning in Rust. However, over time the concepts do become relatively intuitive. Rust’s rules of ownership combine to make Rust’s code inherently safe, performant and free of the issues that plague languages like C. The compiler checks for us, giving us confidence that our code is, out of the gate, safe and trustworthy.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;references&quot;&gt;References&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch04-01-what-is-ownership.html&quot;&gt;The Rust Programming Language, Chapter 4.1, What is Ownership?&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch04-02-references-and-borrowing.html&quot;&gt;The Rust Programming Language, Chapter 4.2, References and Borrowing&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Method to the Madness</title>
+        <published>2022-07-01T00:00:00+00:00</published>
+        <updated>2022-07-01T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-07-01-method-to-the-madness/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-07-01-method-to-the-madness/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-07-01-method-to-the-madness/">&lt;h3 id=&quot;the-method-syntax&quot;&gt;The Method Syntax&lt;&#x2F;h3&gt;
+&lt;p&gt;I’m going to turn my attention now to something called the method syntax. It’s common to structs and enums, which I’ve covered in previous outings.&lt;&#x2F;p&gt;
+&lt;p&gt;Structs and enums can have methods associated with them. This enables custom functionality to be implemented.&lt;&#x2F;p&gt;
+&lt;p&gt;Let’s do this discussion with the help of an example.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;a-circle-calculator&quot;&gt;A Circle Calculator&lt;&#x2F;h3&gt;
+&lt;p&gt;Here is a Rust program which will help us calculate the key characteristics of a circle, namely its area, diameter, and circumference. Respectively, these characteristics are:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;area: the amount of space inside the circle, the equation for calculating the area is: A = pi x r²&lt;&#x2F;li&gt;
+&lt;li&gt;diameter: the “width” of the circle, the equation for calculating the diameter is: D = 2 x r&lt;&#x2F;li&gt;
+&lt;li&gt;circumference: the distance around the circle, the equation for calculating the circumference is: C = 2 x pi x r&lt;&#x2F;li&gt;
+&lt;li&gt;r is the radius of the circle and pi is the Archimedes’ constant which is 3.14&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;std::f32:consts::&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;PI&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct &lt;&#x2F;span&gt;&lt;span&gt;Circle(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f32&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;impl &lt;&#x2F;span&gt;&lt;span&gt;Circle {
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;area&lt;&#x2F;span&gt;&lt;span&gt;(&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;) -&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f32 &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;PI &lt;&#x2F;span&gt;&lt;span&gt;* (&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0 &lt;&#x2F;span&gt;&lt;span&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;	}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;diameter&lt;&#x2F;span&gt;&lt;span&gt;(&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;) -&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f32 &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2.0 &lt;&#x2F;span&gt;&lt;span&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0
+&lt;&#x2F;span&gt;&lt;span&gt;	}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;circumference&lt;&#x2F;span&gt;&lt;span&gt;(&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;) -&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;f32 &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2.0 &lt;&#x2F;span&gt;&lt;span&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;PI &lt;&#x2F;span&gt;&lt;span&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0
+&lt;&#x2F;span&gt;&lt;span&gt;	}
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; circle1 = Circle(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;15.0&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;	println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;The area of the circle is: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt; metres&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, circle1.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;area&lt;&#x2F;span&gt;&lt;span&gt;());
+&lt;&#x2F;span&gt;&lt;span&gt;	println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;The diameter of the circle is: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt; metres&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, circle1.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;diameter&lt;&#x2F;span&gt;&lt;span&gt;());
+&lt;&#x2F;span&gt;&lt;span&gt;	println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;The circumference of the circle is: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt; metres&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, circle1.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;circumference&lt;&#x2F;span&gt;&lt;span&gt;());
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We need the constant pi, which is available to us in Rust’s standard library, so we pull this in as a dependency with a use statement. Next, we declare a typle struct called Circle. This tuple struct contains one value, a 32-bit floating-point number which represents the radius. Next, we get to the meat of the matter. Structs can have methods defined for them, which allow you to write code to do something with the struct. Methods are started with the impl keyword, followed by a name which must match the name of the struct. Inside the curly braces, we define one or more functions which comprise our “implementation block” for the Circle struct. Everything inside this block is associated with the Circle struct.&lt;&#x2F;p&gt;
+&lt;p&gt;The first function, called area, takes a reference to the struct itself as a parameter (still haven’t talked about references and borrowing yet…I will get there, I promise) and returns the area of the circle. The equation I gave above for area is used. To access the radius value contained within our struct, we use self.0 to reference it. It’s important to note that Methods must take self as their first parameter. The can have other parameters, but self is always the first.&lt;&#x2F;p&gt;
+&lt;p&gt;The diameter and circumference functions perform a similar task, taking the radius provided as part of the struct, using the equations I noted earlier, and returning the diameter and circumference.&lt;&#x2F;p&gt;
+&lt;p&gt;The main function ends up being very lean, given we’ve implemented most of the program through the methods on the Circle struct. We declare an instance of our Circle struct, called circle1, and give it a radius value of 15.0 metres. Then, we calculate and output our results by calling, in turn, each of the methods we created. Methods are called by simply appending the method’s name to the struct variable, using dot notation.&lt;&#x2F;p&gt;
+&lt;p&gt;The output from this program will be:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span&gt;The area of the circle is: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;706.5&lt;&#x2F;span&gt;&lt;span&gt; metres
+&lt;&#x2F;span&gt;&lt;span&gt;The diameter of the circle is: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;30&lt;&#x2F;span&gt;&lt;span&gt; metres
+&lt;&#x2F;span&gt;&lt;span&gt;The circumference of the circle is: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;94.2&lt;&#x2F;span&gt;&lt;span&gt; metres
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;I’ll leave you to embellish this program with things like user input, maybe from command line arguments using the clap crate or whatever other way you choose. You could also fancy up the output if you like.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
+&lt;p&gt;I’ve presented the method syntax to you with a simple, practical example. Methods are a means of providing encapsulation and organization to your Rust programs. They enable the selective exposure of functionality to users as well as other parts of the program. Everything related to Circles is in one place, making it straightforward to know how to interact with the program.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;references&quot;&gt;References&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch05-03-method-syntax.html&quot;&gt;The Rust Programming Language, Chapter 5.3, Method Syntax&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bigger Building Blocks: Structs Reloaded</title>
+        <published>2022-06-11T00:00:00+00:00</published>
+        <updated>2022-06-11T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-06-11-bigger-building-blocks-structs-reloaded/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-06-11-bigger-building-blocks-structs-reloaded/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-06-11-bigger-building-blocks-structs-reloaded/">&lt;p&gt;In a previous article, I introduced you to structs in Rust. Structs are flexible data structures that allow the grouping of fields together under one roof. Structs have a lot of capability. Let’s take a look at the things I didn’t cover last time out.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;the-field-init-shorthand&quot;&gt;The Field Init Shorthand&lt;&#x2F;h3&gt;
+&lt;p&gt;The fields of a struct can be initialized quickly by using the field init shorthand. Let’s see this through an example.&lt;&#x2F;p&gt;
+&lt;p&gt;We’ll start by defining a struct to hold information about photos. Our struct will contain fields for an identifier, the date the photo was taken, the time the photo was taken, and the location the photo was taken:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct &lt;&#x2F;span&gt;&lt;span&gt;Photo {
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;id&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;i32&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;date&lt;&#x2F;span&gt;&lt;span&gt;: String,
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;time&lt;&#x2F;span&gt;&lt;span&gt;: String,
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;location&lt;&#x2F;span&gt;&lt;span&gt;: String,
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Next, we build a function that’s used to create and return our Photo struct with information in its fields:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;build_photo&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;id&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;i32&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;date&lt;&#x2F;span&gt;&lt;span&gt;: String) -&amp;gt; Photo {
+&lt;&#x2F;span&gt;&lt;span&gt;	Photo {
+&lt;&#x2F;span&gt;&lt;span&gt;		id,
+&lt;&#x2F;span&gt;&lt;span&gt;		date,
+&lt;&#x2F;span&gt;&lt;span&gt;		time: &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;1.00pm&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;to_owned&lt;&#x2F;span&gt;&lt;span&gt;(),
+&lt;&#x2F;span&gt;&lt;span&gt;		location: &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Boundary Bay, Vancouver, BC&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;to_owned&lt;&#x2F;span&gt;&lt;span&gt;(),
+&lt;&#x2F;span&gt;&lt;span&gt;	}
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This function fills in the id and date fields of the Photo struct by using the id and date parameters received from the function. Because the struct fields have the same names as the incoming parameters of the function, they are automatically populated. We choose to initialize the other two fields manually, but there’s no reason why the function couldn’t have as many parameters as the struct fields. In this case, all of them would be automatically initialized.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;the-update-syntax&quot;&gt;The Update Syntax&lt;&#x2F;h3&gt;
+&lt;p&gt;It’s frequently useful to create an instance of a struct by copying data from another one. There’s a nice shorthand to achieve this, called the struct update syntax.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;	let photo2 = Photo {
+&lt;&#x2F;span&gt;&lt;span&gt;		date: &amp;quot;2022 06 05&amp;quot;.to_owned(),
+&lt;&#x2F;span&gt;&lt;span&gt;		..photo1
+&lt;&#x2F;span&gt;&lt;span&gt;	};
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;In this snip, we’re declaring a new variable called photo2, and then initializing it with all the fields from a previously declared photo1 variable, but changing the date field to have new data.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;tuple-structs-without-named-fields&quot;&gt;Tuple Structs without Named Fields&lt;&#x2F;h3&gt;
+&lt;p&gt;Structs don’t necessarily need their fields spelled out. We can combine them with the tuple data structure. Let’s say we need to represent a position in space. This can be done with three coordinates, typically noted as x, y, and z.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct &lt;&#x2F;span&gt;&lt;span&gt;Coordinates(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;i32&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;i32&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;i32&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here, we declare a tuple struct that contains three integers to represent our x, y, and z coordinates. This struct can then be used to contain position data, like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;	let position1 = Coordinates(0, 1, 5);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The data inside tuple structs can be accessed using dot notation and the positions of the particular fields. Our Coordinates struct has three fields, so you could do this to access the individual data points:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; x = position1.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; y = position1.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; z = position1.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Tuple structs are best for containing small quantities of fields where it’s easy to remember their purpose. If you need more than say two or three fields, it’s probably better to use a struct with named fields.&lt;&#x2F;p&gt;
+&lt;p&gt;Tuple structs form their own type, even though the fields within two tuple structs might be the same. You can’t mix and match two different tuple structs together.&lt;&#x2F;p&gt;
+&lt;p&gt;Unit Structs with No Fields
+Structs do not need to contain data. They can be made into “unit structs”. Rust has a concept known as the “unit type”, which is denoted by round brackets with nothing inside, (). Let’s take a look at the example used in the Rust Book:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct &lt;&#x2F;span&gt;&lt;span&gt;AlwaysEqual;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; subject = AlwaysEqual;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We declare our struct using the name AlwaysEqual. There’s no need to explicitly write empty brackets, we can just terminate our declaration with a semicolon. Then, in our main function, we declare an instance of our AlwaysEqual type by binding it to a variable named subject.&lt;&#x2F;p&gt;
+&lt;p&gt;Structs created in this manner are most useful when creating Traits, which will come in a future article. Traits are a way of defining common behaviour and are a powerful piece of the Rust puzzle.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
+&lt;p&gt;To recap, in this article I’ve shown you the remaining concepts that make structs an important part of the Rust language. I’ve covered shortcuts for initializing data and updating the information within a struct. I’ve also covered the notion of tuple structs, useful for small amounts of data where named fields aren’t a necessity. Lastly, I touched on the notion of unit structs that have no data but instead can be used to represent a type.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;references&quot;&gt;References&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch05-01-defining-structs.html&quot;&gt;Chapter 5.2, Defining and Instantiating Structs&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bigger Building Blocks: Intro to Enumerations</title>
+        <published>2022-05-21T00:00:00+00:00</published>
+        <updated>2022-05-21T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-05-21-bigger-building-blocks-intro-to-enumerations/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-05-21-bigger-building-blocks-intro-to-enumerations/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-05-21-bigger-building-blocks-intro-to-enumerations/">&lt;p&gt;Today I will cover the very basics of Rust’s enum type. Enums are a pillar of the language.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;what-is-an-enumeration&quot;&gt;What is an Enumeration?&lt;&#x2F;h3&gt;
+&lt;p&gt;An enumeration, or enum, is a type of data structure useful for enumerating possible variants of something. In addition, enums can optionally contain data. Enums are best to describe variations of one particular thing. They differ from structs, as structs can contain multiple things all grouped under one category.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;how-do-i-create-an-enumeration&quot;&gt;How Do I Create an Enumeration?&lt;&#x2F;h3&gt;
+&lt;p&gt;Let’s say we needed a data structure to define several possible variants of peppers. We can do it with an enum:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;enum &lt;&#x2F;span&gt;&lt;span&gt;Pepper {
+&lt;&#x2F;span&gt;&lt;span&gt;	Bell,
+&lt;&#x2F;span&gt;&lt;span&gt;	Banana,
+&lt;&#x2F;span&gt;&lt;span&gt;	Pimento,
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;I’ve now defined a custom type that can be used throughout the rest of a program.&lt;&#x2F;p&gt;
+&lt;p&gt;Enums can also contain data. Data can be attached directly, without the need for another data structure. We can embody some data about spiciness, by adding the Scoville Heat Unit rating, right into the enum variants, like so:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;enum &lt;&#x2F;span&gt;&lt;span&gt;Pepper {
+&lt;&#x2F;span&gt;&lt;span&gt;	Bell(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;i32&lt;&#x2F;span&gt;&lt;span&gt;),
+&lt;&#x2F;span&gt;&lt;span&gt;	Habanero(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;i32&lt;&#x2F;span&gt;&lt;span&gt;),
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We’ve added an integer data type with each of our peppers so that we can later add in a Scoville Heat Unit value. Each element in an enum can be assigned different quantities and types of data. There is no limitation on the number of variations an enum can contain. I’ve kept it simple for the purposes of this article.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;how-do-i-use-an-enumeration&quot;&gt;How Do I Use an Enumeration?&lt;&#x2F;h3&gt;
+&lt;p&gt;Let’s see how we can use our Pepper enum.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; sweet = Pepper::Bell(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; spicy = Pepper::Habanero(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;100000&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here, we declare two variables, sweet and spicy, and assign them the types we declared in our Pepper enum. We also assign an integer to embody the Scoville Heat Unit rating.&lt;&#x2F;p&gt;
+&lt;p&gt;To access the data contained in our Pepper enums, we have to use the match keyword. I’ve not introduced match yet in my writing, so consider this the first glimpse. I will write more in-depth on it in a future article.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;enum &lt;&#x2F;span&gt;&lt;span&gt;Pepper {
+&lt;&#x2F;span&gt;&lt;span&gt;     Bell(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;i32&lt;&#x2F;span&gt;&lt;span&gt;),
+&lt;&#x2F;span&gt;&lt;span&gt;     Habanero(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;i32&lt;&#x2F;span&gt;&lt;span&gt;),
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; sweet = Pepper::Bell(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; spicy = Pepper::Habanero(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;100000&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;match&lt;&#x2F;span&gt;&lt;span&gt; sweet {
+&lt;&#x2F;span&gt;&lt;span&gt;		Pepper::Bell(shu) =&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;			println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;The Scoville Heat Unit rating of the bell pepper is: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, shu);
+&lt;&#x2F;span&gt;&lt;span&gt;		},
+&lt;&#x2F;span&gt;&lt;span&gt;		_ =&amp;gt; ()
+&lt;&#x2F;span&gt;&lt;span&gt;	}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;match&lt;&#x2F;span&gt;&lt;span&gt; spicy {
+&lt;&#x2F;span&gt;&lt;span&gt;		Pepper::Habanero(shu) =&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;			println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;The Scoville Heat Unit rating of the habanero pepper is: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, shu);
+&lt;&#x2F;span&gt;&lt;span&gt;		},
+&lt;&#x2F;span&gt;&lt;span&gt;		_ =&amp;gt; ()
+&lt;&#x2F;span&gt;&lt;span&gt;  }
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This program will result in the following output to the terminal:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;The Scoville Heat Unit rating of the bell pepper is: 0
+&lt;&#x2F;span&gt;&lt;span&gt;The Scoville Heat Unit rating of the habanero pepper is: 100000
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The match keyword in Rust can be used as a sort of flow control, evaluating all possible options of an enum and providing a custom code path to execute for each one. It’s important, when writing match expressions, that ALL possible variants of an enum must be accounted for. If you don’t, you’ll get a compiler error.&lt;&#x2F;p&gt;
+&lt;p&gt;Let’s break down what we did above.&lt;&#x2F;p&gt;
+&lt;p&gt;We create a match expression first for the sweet pepper variable we declared earlier. We access the data inside the bell pepper variant by declaring a new variable called shu, to represent the Scoville Heat Unit. The first “arm” of our match will result in the output of a simple statement printed to the console, including the value of the Scoville Heat Unit rating. The second, empty match arm is needed because the enum might not contain a value. Remember that all possible variations must be accounted for. In this case, we simply want to do nothing, hence the use of the unit type (), which returns nothing but satisfies the need to deal with all possible variants. In this made-up code sample, our Pepper enum always contains a value, so after execution of our first match arm, code execution continues on to the spicy pepper case.&lt;&#x2F;p&gt;
+&lt;p&gt;We write a second match expression, structured similarly, for our spicy pepper, which outputs its Scoville Heat Unit rating.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
+&lt;p&gt;I’ve shown you the very bare bones of Rust’s enum structure, which is useful to create custom data types. Enum’s can optionally contain data, increasing their flexibility. The match keyword is used to access internal data within an enum and use it or take other action based on the internal data. Enums are a core part of the powerful type system in Rust.&lt;&#x2F;p&gt;
+&lt;p&gt;There are two special versions of the enum type, Option and Result, which contribute to Rust’s robust error handling ability. I will cover these in a future article.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;references&quot;&gt;References&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch06-01-defining-an-enum.html&quot;&gt;The Rust Programming Language, Chapter 6.1.Defining an Enum&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bigger Building Blocks: Intro to Structs</title>
+        <published>2022-05-11T00:00:00+00:00</published>
+        <updated>2022-05-11T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-05-11-bigger-building-blocks-intro-to-structs/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-05-11-bigger-building-blocks-intro-to-structs/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-05-11-bigger-building-blocks-intro-to-structs/">&lt;p&gt;I’m roughly following the order of The Rust Book in my writings, but I intend on deviating a little. The next topic is ownership and borrowing, but I don’t feel like I’m quite able to write about those two things coherently yet. Instead, I will write about the first of Rust’s bigger building blocks — structs.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;what-is-a-struct&quot;&gt;What is a Struct?&lt;&#x2F;h3&gt;
+&lt;p&gt;A struct is a flexible data structure that allows creation of different data fields within one group. Structs are similar to tuples but more flexible. Each data field is named and can be accessed directly. There is no need to rely on the order of the data in a struct. Named fields serve to make it more clear the overall purpose and details embodied by the struct.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;how-do-i-construct-a-struct&quot;&gt;How Do I Construct a Struct?&lt;&#x2F;h3&gt;
+&lt;p&gt;Let’s look at how we construct a struct (see what I did there…):&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;struct Album {
+&lt;&#x2F;span&gt;&lt;span&gt;	id: u32,
+&lt;&#x2F;span&gt;&lt;span&gt;	genre: String,
+&lt;&#x2F;span&gt;&lt;span&gt;	artist: String,
+&lt;&#x2F;span&gt;&lt;span&gt;	name: String,
+&lt;&#x2F;span&gt;&lt;span&gt;	release_date: String,
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We create a struct by using the struct keyword immediately followed by a name. Convention is to make struct names capitalized. We then surround the individual fields with curly braces. The fields of the struct are created with key: value pairs separated by commas. The example here contains predominately string types, with a lone 32 bit unsigned integer. Struct fields can be of any type.&lt;&#x2F;p&gt;
+&lt;p&gt;I will highlight one side topic here. The majority of the fields in our struct are Strings, in this case we’ve made them owned strings, meaning our struct will have ownership of all its data. More on ownership will come in a future article.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;how-do-i-use-a-struct&quot;&gt;How Do I Use a Struct?&lt;&#x2F;h3&gt;
+&lt;p&gt;It’s important to remember that all we’ve done so far is create the template for a struct. The template has a name, Album, as well as several empty fields. This is a blueprint, if you will, of our data structure. To actually make it useful, we have to add flesh the bones.&lt;&#x2F;p&gt;
+&lt;p&gt;We do that like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;	let album1 = Album {
+&lt;&#x2F;span&gt;&lt;span&gt;		id: 1,
+&lt;&#x2F;span&gt;&lt;span&gt;		genre: String::from(&amp;quot;Heavy Metal&amp;quot;),
+&lt;&#x2F;span&gt;&lt;span&gt;		artist: String::from(&amp;quot;Iron Maiden&amp;quot;),
+&lt;&#x2F;span&gt;&lt;span&gt;		name: String::from(&amp;quot;Senjutsu&amp;quot;),
+&lt;&#x2F;span&gt;&lt;span&gt;		release_date: String::from(&amp;quot;September 3, 2021&amp;quot;),
+&lt;&#x2F;span&gt;&lt;span&gt;	};
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Let’s unpack this.&lt;&#x2F;p&gt;
+&lt;p&gt;We’ve started our program (with the main function) and immediately declare a variable called album1. This variable is our first “instance” of our Album struct. Inside the curly braces we assign specific values to the data fields that are unique to the album1 variable.&lt;&#x2F;p&gt;
+&lt;p&gt;It’s important to note that, as declared in this example, the fields cannot be modified. To modify one or more of them the mut keyword is needed as part of the variable declaration.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;	let mut album1 = Album {
+&lt;&#x2F;span&gt;&lt;span&gt;		id: 1,
+&lt;&#x2F;span&gt;&lt;span&gt;		genre: String::from(&amp;quot;Heavy Metal&amp;quot;),
+&lt;&#x2F;span&gt;&lt;span&gt;		artist: String::from(&amp;quot;Iron Maiden&amp;quot;),
+&lt;&#x2F;span&gt;&lt;span&gt;		name: String::from(&amp;quot;Senjutsu&amp;quot;),
+&lt;&#x2F;span&gt;&lt;span&gt;		release_date: String::from(&amp;quot;September 3, 2021&amp;quot;),
+&lt;&#x2F;span&gt;&lt;span&gt;	};
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	album1.name = String::from(&amp;quot;The Book of Souls&amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;	album1.release_date: String::from(&amp;quot;September 4, 2015&amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This change now lets us re-assign values to the fields of the struct, as illustrated by the reassignment of two of the fields immediately after the variable declaration.&lt;&#x2F;p&gt;
+&lt;p&gt;How do we access the fields inside a struct?&lt;&#x2F;p&gt;
+&lt;p&gt;Like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;println!(&amp;quot;The name of album1 is: {}&amp;quot;, album1.name);
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We call the name of the struct variable, then use dot notation and append the name of the field we want to work with. In this case, we’re outputting the album1 name field to the console using the println! macro.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
+&lt;p&gt;Structs are a powerful and often used data structure in Rust. They are a core part of the type system that makes Rust so flexible. In this article I’ve shown you how to create, populate, and use fields inside a struct. There are more things to talk about for structs, but I’ll save those for a future “advanced” article.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;references&quot;&gt;References&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch05-01-defining-structs.html&quot;&gt;The Rust Programming Language, Defining and Instantiating Structs&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

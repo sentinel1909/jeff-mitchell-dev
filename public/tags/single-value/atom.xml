@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>jeff-mitchell.dev - single value</title>
+    <subtitle>A blog mostly about Rust...mostly...</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://jeff-mitchell.dev/tags/single-value/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2022-04-14T00:00:00+00:00</updated>
+    <id>https://jeff-mitchell.dev/tags/single-value/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Pouring the Footings: Single Value Data Types</title>
+        <published>2022-04-14T00:00:00+00:00</published>
+        <updated>2022-04-14T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-04-14-pouring-the-footings-single/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-04-14-pouring-the-footings-single/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-04-14-pouring-the-footings-single/">&lt;p&gt;Today I continue my writing campaign about the Rust language. If you haven’t noticed, I’m roughly following the chapter layout of The Rust Programming Language, also known as “The Rust Book”. I’ve tried repeatedly to read The Book, but have concluded reading passively is useless. It’s a book that requires active reading.&lt;&#x2F;p&gt;
+&lt;p&gt;So, I will semi-blog my way through it here on my site.&lt;&#x2F;p&gt;
+&lt;p&gt;I’ve covered the following basics so far:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;creating a Hello, World&lt;&#x2F;li&gt;
+&lt;li&gt;use of constants&lt;&#x2F;li&gt;
+&lt;li&gt;variables, mutability, shadowing, and comments&lt;&#x2F;li&gt;
+&lt;li&gt;I’ll now turn to another basic language building block, data types. Data types are at the core of getting things done in Rust.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;There are two broad data types available, single value and compound value. This article will focus on single value types. Compound value types are on deck as they deserve attention on their own.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;scalar-types&quot;&gt;Scalar Types&lt;&#x2F;h3&gt;
+&lt;p&gt;Single value data types represent one value, be it a number, character, or boolean. They are the simplest data types to work with and can be used in lots of ways and in combination with more complex data structures. Grouping these simple data types into structures, vectors, or hashmaps are typical use cases.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Integers&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;An integer is a number without a fractional component and can be signed or unsigned. There are several different maximum lengths of integers, chosen depending on the size of the number you need to represent. Rust defaults to an i32 or 32-bit integer.&lt;&#x2F;p&gt;
+&lt;p&gt;Here’s an example of an integer variable:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;let life = 42;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We’ve created a variable named life and bound the integer value 42 to it.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Floating-Point&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;A floating-point number has a decimal component. Rust supports 32-bit (f32) and 64-bit (f64) floating-point numbers. The default is f64. All floating-point numbers can be signed, there is no unsigned option like with integers.&lt;&#x2F;p&gt;
+&lt;p&gt;Let’s create a floating-point variable:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;let pi = 3.14;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We’ve created a variable named pi and bound the floating-point value 3.14 to it.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Numeric Operations&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Rust supports all the basic mathematical operations that one would expect in a programming language. These are addition, subtraction, multiplication, and division. There is also a remainder operation, which provides the remainder when one number is not cleanly divisible by the other.&lt;&#x2F;p&gt;
+&lt;p&gt;The combined knowledge I’ve written about in my articles thus far allows us to write a tiny program to do math on integers or floating point numbers. Here’s one possiblity:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;     let x = 5;
+&lt;&#x2F;span&gt;&lt;span&gt;     let y = 6;
+&lt;&#x2F;span&gt;&lt;span&gt;     let sum = x + y;
+&lt;&#x2F;span&gt;&lt;span&gt;     println!(&amp;quot;The sum of {} and {} is: {}&amp;quot;, x, y, sum);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Let’s walk through that:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;declare a main function as the starting point of the program&lt;&#x2F;li&gt;
+&lt;li&gt;create a variable named x and bind the integer value 5 to it&lt;&#x2F;li&gt;
+&lt;li&gt;create a variable named y and bind the integer value 6 to it&lt;&#x2F;li&gt;
+&lt;li&gt;create a variable named sum and use the addition operator to add x and y together and bind the result to the sum variable&lt;&#x2F;li&gt;
+&lt;li&gt;use the println! macro to print out a message with our inputs and the sum&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;em&gt;Boolean&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;If you need a true or false value, a boolean is the data type of choice. Booleans are used a lot when controlling flow in a program. Here’s an example:&lt;&#x2F;p&gt;
+&lt;p&gt;let liar_liar = true;
+We’ve created a variable name liar_liar and bound the boolean value true to it.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Character&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The final simple single value is a character. Characters are bound to variable names like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;let char = &amp;#39;Z&amp;#39;;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The character data type can be used to hold emojis as well as traditional characters. It’s important to remember that character values represent a single character. You may be asking yourself about strings, what about them? Well, strings are a separate and distinct data type from characters. Strings carry many different quirks and just as The Book does, I’ll be treating them separately in the future.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
+&lt;p&gt;The basic building blocks in Rust are pretty close to my ancient coding knowledge of a language called Pascal. As such, I’ve found them pretty easy to get acquainted with. This article has provided you with an overview of the basic, single value data types in Rust. These basic types can be composed in many different ways and are the core building blocks of any Rust program. Even advanced, higher-order stuff will have some basic math in it somewhere.&lt;&#x2F;p&gt;
+&lt;p&gt;There are lots of subtleties to read about regarding the single value data types, I invite you to consult The Rust Book should you wish to learn more.&lt;&#x2F;p&gt;
+&lt;p&gt;References&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch03-02-data-types.html&quot;&gt;The Rust Programming Language, Chapter 3.2&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

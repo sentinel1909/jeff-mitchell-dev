@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>jeff-mitchell.dev - Back to Basics</title>
+    <subtitle>A blog mostly about Rust...mostly...</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://jeff-mitchell.dev/categories/back-to-basics/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-08-25T00:00:00+00:00</updated>
+    <id>https://jeff-mitchell.dev/categories/back-to-basics/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Back to Basics: How the Web Works</title>
+        <published>2024-08-25T00:00:00+00:00</published>
+        <updated>2024-08-25T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Jeff Mitchell
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2024/2024-08-25-back-to-basics-how-the-web-works/"/>
+        <id>https://jeff-mitchell.dev/blog/2024/2024-08-25-back-to-basics-how-the-web-works/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2024/2024-08-25-back-to-basics-how-the-web-works/">&lt;h2 id=&quot;back-to-basics&quot;&gt;Back to Basics&lt;&#x2F;h2&gt;
+&lt;p&gt;Carrying on from &lt;a href=&quot;https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2024&#x2F;2024-08-24-slow-down-to-speed-up&#x2F;&quot;&gt;yesterday&lt;&#x2F;a&gt;, I&#x27;m going to write a few pieces about the basics of how the web works. Much of my motivation for getting into Rust was WebAssembly, and wanting to take a different path to become a productive web developer. I haven&#x27;t spent near enough time just understanding how exactly the web functions. I&#x27;ve had a stubborn refusal to really dig into the basic building blocks. I&#x27;ll never be independent if I don&#x27;t understand these foundations.&lt;&#x2F;p&gt;
+&lt;p&gt;So, I&#x27;m going to rectify that.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;the-world-wide-web&quot;&gt;The World Wide Web&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;quot;We&#x27;ve learned Earth&#x27;s languages through the World Wide Web&amp;quot; - Optimus Prime&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;So what is the world web web anyway? Does anyone even call it that anymore?&lt;&#x2F;p&gt;
+&lt;p&gt;Imagine a city in which there are buildings that offer services. Every building has an address and when you visit there as a client, there are helpful staff who give back information which you can then take and assemble into something meaningful. The buildings are servers and they offer web sites. You, as client act as the web browser. When you visit an internet location, a server answers and gives you back a series of files which your browser takes and renders into something meaningful.&lt;&#x2F;p&gt;
+&lt;p&gt;This is overly simplistic, but there&#x27;s a lot to unpack at each step and having a high level view of what&#x27;s going on can help.&lt;&#x2F;p&gt;
+&lt;p&gt;Every web site, every last one, is built on this foundation of technologies:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;HTML&lt;&#x2F;li&gt;
+&lt;li&gt;CSS&lt;&#x2F;li&gt;
+&lt;li&gt;JavaScript&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;The methods and techniques may vary, but at the end of the day that&#x27;s what the browser needs to render information to you as the viewer.&lt;&#x2F;p&gt;
+&lt;p&gt;A web server gives back an HTML file (usually called index.html) which has links to styles (CSS) and scripts (JavaScript). When a browser makes requests for these resources, it does that via links available in the HTML file.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;structure-hyper-text-markup-language-html&quot;&gt;Structure (Hyper-Text Markup Language, HTML)&lt;&#x2F;h2&gt;
+&lt;p&gt;Every web site needs bones and a skeleton. It&#x27;s HTML&#x27;s job to express how a web site, including its content and structure, is to be represented. This is the first thing the browser loads. The browser constructs a model in memory, called the Document Object Model (DOM). I always feel slightly dirty when I say DOM...I digress...&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;styles-cascading-style-sheets-css&quot;&gt;Styles (Cascading Style Sheets, CSS)&lt;&#x2F;h2&gt;
+&lt;p&gt;It&#x27;s the job of CSS to express what a web site looks like. CSS rules allow you to selectively target HTML elements and apply a style to them. This is the second thing loaded by the browser. The browser also constructs a CSS Object Model (CSSOM) which can be targeted and manipulated dynamically with JavaScript. The style and structure are ultimately combined into a &amp;quot;render tree&amp;quot; which the browser uses to &amp;quot;paint&amp;quot; the final web site into view.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;functionality-javascript&quot;&gt;Functionality (JavaScript)&lt;&#x2F;h2&gt;
+&lt;p&gt;A web site can exist with only HTML and CSS, technically you don&#x27;t need anything else. However, it&#x27;s static and relatively boring. You can do a lot with these technologies now, more than 10 years ago, and depending on what you&#x27;re doing minimal interactivity might be fine. Generally speaking though, you&#x27;re going to need some JavaScript. It enables interactivity, the ability to manipulate state, and the ability to change the page content, structure, and style dynamically. JavaScript is the very last thing the browser loads.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;closing&quot;&gt;Closing&lt;&#x2F;h2&gt;
+&lt;p&gt;This has been a very basic overview of the fundamental web technologies and how individual web sites work. I&#x27;ll explore each one further and write about them over the next while. You can also read the resources I&#x27;ve linked below for more background!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;resources&quot;&gt;Resources&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;developer.mozilla.org&#x2F;en-US&#x2F;docs&#x2F;Learn&#x2F;Getting_started_with_the_web&#x2F;How_the_Web_works&quot;&gt;How the web works&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;web.dev&#x2F;articles&#x2F;critical-rendering-path&#x2F;constructing-the-object-model&quot;&gt;Constructing the Object Model&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;web.dev&#x2F;articles&#x2F;critical-rendering-path&#x2F;render-tree-construction&quot;&gt;Render-tree Construction, Layout and Paint&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+        
+    </entry>
+</feed>

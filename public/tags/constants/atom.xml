@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>jeff-mitchell.dev - constants</title>
+    <subtitle>A blog mostly about Rust...mostly...</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://jeff-mitchell.dev/tags/constants/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2022-04-09T00:00:00+00:00</updated>
+    <id>https://jeff-mitchell.dev/tags/constants/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Just Say No to Magic Values</title>
+        <published>2022-04-09T00:00:00+00:00</published>
+        <updated>2022-04-09T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-04-09-constants/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-04-09-constants/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-04-09-constants/">&lt;p&gt;The journey to proficiency in Rust continues. In a &lt;a href=&quot;https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2022&#x2F;2022-04-05-baby-steps-with-rust&#x2F;&quot;&gt;previous article&lt;&#x2F;a&gt;, I provided a brief overview of how to get started with Rust by creating a tiny cliche of a program that displays the message, “Hello, World!”.&lt;&#x2F;p&gt;
+&lt;p&gt;This article will focus on a specific language aspect, namely constants.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;what-is-a-constant&quot;&gt;What is a Constant?&lt;&#x2F;h3&gt;
+&lt;p&gt;A constant is a value that can be bound to a name, similar to a variable. By its nature, the value cannot change.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;what-is-the-purpose-of-a-constant&quot;&gt;What is the Purpose of a Constant?&lt;&#x2F;h3&gt;
+&lt;p&gt;Constants are useful in any programming language because they help you avoid so-called “magic values”. A magic value is something that is hardcoded into the code base…likely in a million different locations, by the time all is said and done, which makes it impossible (or at least nasty) to properly update and change the code.&lt;&#x2F;p&gt;
+&lt;p&gt;Instead of hardcoded values, a handful of constants declared upfront make it clear and easy to update them later, should their values need to change.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;declaring-constants&quot;&gt;Declaring Constants&lt;&#x2F;h3&gt;
+&lt;p&gt;Here’s how to declare the speed of light (in metric) as a constant in Rust:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;SPEED_OF_LIGHT&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;u32 &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;299792458
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;First, the const keyword is used, followed by a name. The convention is all caps. Next, the constant must receive a type annotation, I’ve used a 32-bit unsigned integer type. The last step is to bind the value to the new constant with the = operator.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;scope-of-validity&quot;&gt;Scope of Validity&lt;&#x2F;h3&gt;
+&lt;p&gt;Constants can be declared in any scope, including the global scope, as such, they can be made widely available.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;other-considerations&quot;&gt;Other Considerations&lt;&#x2F;h3&gt;
+&lt;p&gt;As one might expect, constants are immutable by default. Their values can’t be changed and you can’t use the mut keyword with them. A key concept in Rust is the notion that variables are immutable by default. One must expressly choose to make them mutable (changeable) by adding the keyword mut to the variable binding. Mut does not work with values that are constant.&lt;&#x2F;p&gt;
+&lt;p&gt;Thanks for reading my short but sweet thoughts on contants in Rust.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;resources&quot;&gt;Resources&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch03-01-variables-and-mutability.html&quot;&gt;Rust Programming Language: Common Programming Concepts, Constants&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

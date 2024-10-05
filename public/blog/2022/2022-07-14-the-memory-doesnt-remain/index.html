@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>The Memory Doesn&#x27;t Remain - Jeff Mitchell</title>
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"><meta name="description" content="A blog mostly about Rust...mostly... The Memory Doesn&#x27;t Remain An introduction of how memory is handled in Rust, including the concepts of ownership and borrowing."/><meta name="keywords" content="Intermediate Guides, rust, memory, ownership, borrowing" />
+    <meta property="og:title" content="jeff-mitchell.dev -&nbsp;The Memory Doesn&#x27;t Remain" />
+    <meta property="og:type" content="website"/><meta property="og:url" content="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2022&#x2F;2022-07-14-the-memory-doesnt-remain&#x2F;"/><meta property="og:description" content="An introduction of how memory is handled in Rust, including the concepts of ownership and borrowing."/>
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://jeff-mitchell.dev/style.css?h=97e262212a0704163528">
+    <link rel="stylesheet" href=" https://jeff-mitchell.dev/color/orange.css?h=a5a5d7faf9d4bc3e0b18">
+    
+<link rel="alternate" type="application/atom+xml" title="jeff-mitchell.dev RSS" href="https://jeff-mitchell.dev/atom.xml"></head>
+  <body>
+    <div class="container center">
+<header class="header">
+    <div class="header__inner">
+        <div class="header__logo">
+            <a href="&#x2F;">
+    <div class="logo">
+        jeff-mitchell.dev :: mis-adventures with the Rust programming language
+    </div>
+</a>
+        </div>
+        <div class="menu-trigger">menu</div>
+    </div>
+    
+    <nav class="menu">
+        <ul class="menu__inner menu__inner--desktop">
+            
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li></ul>
+
+        <ul class="menu__inner menu__inner--mobile">
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li>
+        </ul>
+    </nav>
+
+    </header>
+<div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </div>
+      <div class="content"><article class="post">
+        <header>
+            <h1 class="post-title">
+                <a href="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2022&#x2F;2022-07-14-the-memory-doesnt-remain&#x2F;">The Memory Doesn&#x27;t Remain</a>
+            </h1>
+            
+    <div class="post-meta">
+        <span class="post-date">2022.07.14
+                </span>
+
+        <span class="post-author">
+    ::
+    Jeff Mitchell</span>
+
+        
+
+    
+    :: {<a href="https://jeff-mitchell.dev/categories/intermediate-guides/">Intermediate Guides</a>} 
+
+            
+    ::
+    #<a href="https://jeff-mitchell.dev/tags/rust/">rust</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/memory/">memory</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/ownership/">ownership</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/borrowing/">borrowing</a>
+        
+    
+            
+        
+    </div>
+
+            
+    
+</header><blockquote>
+<p>&quot;Fortune, fame, mirror vain, gone insane...but the memory remains!&quot; - Metallica, The Memory Remains</p>
+</blockquote>
+<p>This is the article I’ve been needing to write for about a month (maybe two) but have fretted and procrastinated.</p>
+<p>Memory, ownership, borrowing…oh my!</p>
+<p>These concepts are probably the most difficult things in Rust. I worry that I’m not doing these topics justice. However, I’m going to shove this worry aside and just go for it. I intend on returning to this article periodically to update it as my understanding improves.</p>
+<p>If you never start, you never finish, so here we go…</p>
+<h3 id="dealing-with-garbage">Dealing with Garbage</h3>
+<p>In programming languages, there are two broad approaches to handling the use and cleanup of memory.</p>
+<p>The first is manual, as in it’s all on you the programmer. An example is the C language. The C compiler leaves memory use entirely up to you. If you forget to free memory after you’ve finished with it, an error may result because the C compiler is blissfully unaware. More than likely, you’ll be dealing with the consequences later.</p>
+<p>The second is so-called garbage collection. Languages such as JavaScript use a built-in memory manager, called a garbage collector, that follows along behind you to clean up memory. This brings overhead, which may be unacceptable for resource-constrained systems.</p>
+<p>Rust introduces a third way. The Rust compiler brings a set of rules that are checked at compile time. Code will not compile if any of the rules are broken. The rules do not impact the performance of your program because they are enforced at compile time.</p>
+<p>Before we get into the nitty gritty of this seemingly magical system, there are a couple of other general concepts to review.</p>
+<h3 id="the-stack-vs-the-heap">The Stack vs. The Heap</h3>
+<p>Like C, Rust works within the same two memory regions, the stack and the heap.</p>
+<h4 id="the-stack">The Stack</h4>
+<p>Anytime you create a variable using Rust’s simple types, like an integer, the variable is created on a region of memory known as the stack. Things that go on the stack have to be fixed in size and can’t change. Fresh data is always stored at the top of the stack. Storing on the stack is quick. I recommend the ownership chapter of the Rust Book, which provides a good overview of the stack.</p>
+<h4 id="the-heap">The Heap</h4>
+<p>The heap is a dynamic area of memory that can grow and shrink as needed. When data is placed in the heap, the memory allocator finds a contiguous block of space and returns a reference called a pointer. Accessing memory on the heap is slower than on the stack, because, in effect, it needs to be looked up first. I recommend the ownership chapter of the Rust Book, which serves as a good overview of the heap.</p>
+<h3 id="ownership-and-scope">Ownership and Scope</h3>
+<p>Rust has three rules of ownership:</p>
+<ol>
+<li>Each Rust value has a variable called its “owner”.</li>
+<li>Each value can have only one owner at a time.</li>
+<li>When the owner goes out of scope, the value will be dropped.</li>
+</ol>
+<p>To begin thinking about ownership, it’s essential to think about scope. A scope is denoted by curly braces. Here’s an example:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">let</span><span> fuel = &quot;</span><span style="color:#a3be8c;">Give me fuel, give me fire</span><span>&quot;;
+</span><span>}
+</span></code></pre>
+<p>We declare a string literal and bind it to a variable called fuel. Variable fuel comes into scope as it’s declared. We can do what we need with it right up until the closing curly brace. Past that point, Rust calls a special internal drop function to clean up the trash. The memory that our fuel variable used is freed up.</p>
+<p>Any variable in the Rust language is valid when it comes into scope and it remains valid until it goes out of scope. The compiler will throw an error if you attempt to access the value in a variable that has gone out of scope.</p>
+<p>A consequence of this notion of validity until the scope ends, where functions are concerned, is that we have to pass in AND pass back anything that we want to use later. If we don’t the values will be lost.</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>	</span><span style="color:#b48ead;">let</span><span> fuel = String::from(&quot;</span><span style="color:#a3be8c;">Give me fuel, give me fire</span><span>&quot;);
+</span><span>
+</span><span>	</span><span style="color:#b48ead;">let </span><span>(fuel2, len) = </span><span style="color:#96b5b4;">calculate_length</span><span>(fuel);
+</span><span>
+</span><span>	println!(&quot;</span><span style="color:#a3be8c;">The length of &#39;</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;">&#39; is </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;">.</span><span>&quot;, fuel2, len);
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">calculate_length</span><span>(</span><span style="color:#bf616a;">s</span><span>: String) -&gt; (String, </span><span style="color:#b48ead;">usize</span><span>) {
+</span><span>	</span><span style="color:#b48ead;">let</span><span> length = s.</span><span style="color:#96b5b4;">len</span><span>();
+</span><span>
+</span><span>	(s, length)
+</span><span>}
+</span></code></pre>
+<p>Here, we declare a variable called fuel and bind the same string literal as above to it. We then declare a tuple, consisting of a new string variable and an integer (to represent the string length that we’re going to determine) and we bind to the tuple returned by the function calculate length. We pass in our fuel variable to this function.</p>
+<p>The function takes our passed string and returns it along with its length. The len() method is used on our passed-in string to determine the length. We finally print the string and its length to the console.</p>
+<p>This is a lot of work. We need to do a lot of moving and passing around values to make sure we don’t lose them due to variables going out of scope. Fortunately, we’re saved by the notions of references and borrowing.</p>
+<h3 id="references-and-borrowing">References and Borrowing</h3>
+<p>The second pillar of Rust memory management is the notion of a reference. We can use values owned by other variables without claiming ownership. This is called borrowing.</p>
+<p>What if we could simply reference values in variables without taking ownership of them? Let’s revisit our previous example.</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>	</span><span style="color:#b48ead;">let</span><span> fuel = String::from(&quot;</span><span style="color:#a3be8c;">Give me fuel, give me fire</span><span>&quot;);
+</span><span>
+</span><span>	</span><span style="color:#b48ead;">let</span><span> len = </span><span style="color:#96b5b4;">calculate_length</span><span>(&amp;fuel);
+</span><span>
+</span><span>	println!(&quot;</span><span style="color:#a3be8c;">The length of &#39;</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;">&#39; is </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;">.</span><span>&quot;, fuel, len);
+</span><span>
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">calculate_length</span><span>(</span><span style="color:#bf616a;">s</span><span>: &amp;String) -&gt; </span><span style="color:#b48ead;">usize </span><span>{
+</span><span>	s.</span><span style="color:#96b5b4;">len</span><span>()
+</span><span>}
+</span></code></pre>
+<p>This code may not seem simpler, but it is. We declare a string variable and give it a value as before. Next, we call a function to get the string length, but this time we pass in a reference to our fuel variable. The &amp; represents a reference, allowing us to refer to a value without taking ownership of it.</p>
+<p>You’ll notice the function signature simplifies as it now takes a reference to a string and returns a usize, which is basically an integer. Inside the function, we again get the length of the string using the len() method.</p>
+<p>We have just borrowed the value of another variable to do something with it.</p>
+<p>You’ll note here that we don’t need to return the value from the function calculate_length, to give back ownership, because change never had ownership in the first place.</p>
+<h3 id="mutability-and-borrowing">Mutability and Borrowing</h3>
+<p>References are immutable by default. We can’t change the value of something we don’t own. To change the value referenced, we have to use a mutable borrow. Let’s look at an example:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>	</span><span style="color:#b48ead;">let mut</span><span> fuel = String::from(&quot;</span><span style="color:#a3be8c;">Give me fuel, give me fire</span><span>&quot;);
+</span><span>
+</span><span>	</span><span style="color:#96b5b4;">change</span><span>(&amp;</span><span style="color:#b48ead;">mut</span><span> fuel);
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">change</span><span>(</span><span style="color:#bf616a;">some_string</span><span>: &amp;</span><span style="color:#b48ead;">mut</span><span> String) {
+</span><span>	some_string.</span><span style="color:#96b5b4;">push_str</span><span>(&quot;</span><span style="color:#a3be8c;">, give me that which I desire</span><span>&quot;);
+</span><span>}
+</span></code></pre>
+<p>We declare a mutable variable called string and we bind our favourite song lyrics to it. The fuel variable can change because we made it mutable. Next, we call a function called to change and pass it a mutable reference to our fuel variable. Ownership will not be transferred, and the value of fuel will not be moved to the function, because we are simply borrowing this variable. The change function takes a string as a parameter, which is annotated as a reference to a mutable String. The function body appends some text to the string to complete our song lyrics. Once again, the function makes our change but does not have to pass anything back.</p>
+<h3 id="conclusion">Conclusion</h3>
+<p>The concepts of ownership and borrowing are difficult to get used to. There is a lot of so-called “fighting the borrow checker” which comes with the early days of learning in Rust. However, over time the concepts do become relatively intuitive. Rust’s rules of ownership combine to make Rust’s code inherently safe, performant and free of the issues that plague languages like C. The compiler checks for us, giving us confidence that our code is, out of the gate, safe and trustworthy.</p>
+<h3 id="references">References</h3>
+<p><a rel="noopener noreferrer" target="_blank" href="https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html">The Rust Programming Language, Chapter 4.1, What is Ownership?</a></p>
+<p><a rel="noopener noreferrer" target="_blank" href="https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html">The Rust Programming Language, Chapter 4.2, References and Borrowing</a></p>
+
+
+        
+    
+
+        
+        
+    </article></div>
+    <div class="pagination">
+        <div class="pagination__buttons">
+            </div>
+    </div>
+<footer class="footer">
+        <div class="footer__inner"><div class="copyright">
+            <span>© 2024 Jeffery D Mitchell :: Powered by <a href="https://www.getzola.org/">Zola</a>:: Zerm theme made by <a href="https://github.com/ejmg">ejmg</a> :: Hosted on <a href="https://shuttle.rs">Shuttle</a> :: Follow me (and ask questions or comment) on <a href="https://bsky.app/profile/jeff-mitchell-dev.bsky.social">Bluesky</a></span>
+        </div>
+    <script type="text/javascript" src="https://jeff-mitchell.dev/assets/js/main.js"></script>
+</div>
+        
+
+      </footer></div>
+    <!-- Default Statcounter code for Jeff Mitchell Dev https://jeff-mitchell.dev
+-->
+    <script type="text/javascript">
+      var sc_project = 13027926;
+      var sc_invisible = 1;
+      var sc_security = "1625b230";
+    </script>
+    <script
+      type="text/javascript"
+      src="https://www.statcounter.com/counter/counter.js"
+      async
+    ></script>
+    <noscript
+      ><div class="statcounter">
+        <a
+          title="Web Analytics Made Easy -
+Statcounter"
+          href="https://statcounter.com/"
+          target="_blank"
+          ><img
+            class="statcounter"
+            src="https://c.statcounter.com/13027926/0/1625b230/1/"
+            alt="Web Analytics Made Easy - Statcounter"
+            referrerpolicy="no-referrer-when-downgrade"
+        /></a></div
+    ></noscript>
+    <!-- End of Statcounter Code -->
+     <script type="text/javascript" src="https://jeff-mitchell.dev/elasticlunr.min.js"></script>
+     <script type="text/javascript" src="https://jeff-mitchell.dev/search.js"></script>
+  </body>
+</html>

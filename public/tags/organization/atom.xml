@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>jeff-mitchell.dev - organization</title>
+    <subtitle>A blog mostly about Rust...mostly...</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://jeff-mitchell.dev/tags/organization/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2023-07-31T00:00:00+00:00</updated>
+    <id>https://jeff-mitchell.dev/tags/organization/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Packages, Modules, and Crates..Oh My!</title>
+        <published>2023-07-31T00:00:00+00:00</published>
+        <updated>2023-07-31T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2023/2023-07-31-packages-modules-crates-oh-my/"/>
+        <id>https://jeff-mitchell.dev/blog/2023/2023-07-31-packages-modules-crates-oh-my/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2023/2023-07-31-packages-modules-crates-oh-my/">&lt;p&gt;Today, I will give you my take on crates, packages and modules. I&#x27;ve found the organization system for Rust programs to be difficult to master. However, time and practice are solidifying things for me.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s dive in...&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;crates&quot;&gt;Crates&lt;&#x2F;h2&gt;
+&lt;p&gt;A crate is the smallest possible Rust program. The Rust compiler considers this code sample to be a crate:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;Rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-Rust &quot;&gt;&lt;code class=&quot;language-Rust&quot; data-lang=&quot;Rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;  println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;I am a crate.&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;An important concept is the crate root. The root is the place the compiler starts from when building out a program. In the tiny example above, whatever we name the file, say &amp;quot;something.rs&amp;quot;, it is the crate root.&lt;&#x2F;p&gt;
+&lt;p&gt;There are two types of crates, &lt;em&gt;binary&lt;&#x2F;em&gt; crates and &lt;em&gt;library&lt;&#x2F;em&gt; cates. A &lt;em&gt;binary&lt;&#x2F;em&gt; crate is self contained in that it has an executable file, containing a main function, which can be run on its own without any further action. A &lt;em&gt;library&lt;&#x2F;em&gt; crate contains some piece of functionality meant to be depended on by other crates. It doesn&#x27;t have a main function and can&#x27;t run on its own.&lt;&#x2F;p&gt;
+&lt;p&gt;A common way to organize a Rust program is to split it into a binary crate and a library crate. The binary crate contains the executable file, named main.rs or something else you choose. The binary crate then pulls in added functionality from its library crate.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;packages&quot;&gt;Packages&lt;&#x2F;h2&gt;
+&lt;p&gt;A package is a bundle of one or more crates that combine to provide some piece of functionality. A package contains a &lt;em&gt;cargo.toml&lt;&#x2F;em&gt; file which explains to the Rust compiler how to build the crates contained within the package. Packages can contain one or more binary crates, but only one library crate. There must be at least one crate in the package, be it binary or library.&lt;&#x2F;p&gt;
+&lt;p&gt;The presence of a Cargo.toml file at the root of the project directory defines the package. By default, Cargo follows the convention that src&#x2F;main.rs is the root of a binary crate and src&#x2F;lib.rs is the root of a library crate. The name of the package is taken from the name of the binary or the name of the library, whichever one is present. You can adjust this if you wish and I&#x27;ll talk about it in the next issue.&lt;&#x2F;p&gt;
+&lt;p&gt;It&#x27;s totally up to you as to how to organize your Rust programs. I&#x27;ve found a useful way to organize is to have one binary crate, containing a main.rs file which has initialization and startup logic. The binary crate then calls into the library crate which contains the meat of the program. If your Rust program is small, then it&#x27;s overkill to organize in this way. However, for larger code bases, such as APIs, organizing like this helps keep the code modular and readable.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;modules&quot;&gt;Modules&lt;&#x2F;h2&gt;
+&lt;p&gt;Crates can be further divided with modules which can live either in one file or separate files. Modules serve as an organizational tool, allowing code to be grouped into units for easier re-use. A second purpose of modules is to control privacy of items. Code in a module is private by default, meaning it&#x27;s not visible to other code outside that module. Modules can be made public, meaning they are available to be made into dependencies within the program as a whole. You can put modules all into one file, but this can quickly become difficult to navigate. It&#x27;s usually preferable to setup a structure in which modules are organized into separate files.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;paths&quot;&gt;Paths&lt;&#x2F;h2&gt;
+&lt;p&gt;The Rust compiler needs to know where things are. A path can be used in a similar fashion to navigating file system on Windows, Linux, or macOS. Paths can take a couple of forms:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;absolute: the full path starting from the crate root (begins with the crate name for an external crate and begins with the literal crate for code from the current crate)&lt;&#x2F;li&gt;
+&lt;li&gt;relative: starts from the current module and uses the keywords self, super or an identifier in the current module (super, for example, will reference the next level up)&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;use-keyword&quot;&gt;Use Keyword&lt;&#x2F;h2&gt;
+&lt;p&gt;The use keyword brings a module into scope, allowing its contents to be accessible to other parts of a Rust program.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;namespace-operator&quot;&gt;Namespace Operator&lt;&#x2F;h2&gt;
+&lt;p&gt;The namespace operator in Rust is a double colon, :: The namespace operator is used in conjunction with the use keyword.&lt;&#x2F;p&gt;
+&lt;p&gt;Putting it all together...&lt;&#x2F;p&gt;
+&lt;p&gt;With all these concepts in mind, how do we put it all together? Stay tuned...in a future post I&#x27;ll show you how to start using these concepts to make your Rust programs more understandable.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

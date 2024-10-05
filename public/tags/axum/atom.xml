@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>jeff-mitchell.dev - axum</title>
+    <subtitle>A blog mostly about Rust...mostly...</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://jeff-mitchell.dev/tags/axum/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-08-21T00:00:00+00:00</updated>
+    <id>https://jeff-mitchell.dev/tags/axum/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Serving the Web with Axum</title>
+        <published>2024-08-21T00:00:00+00:00</published>
+        <updated>2024-08-21T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Jeff Mitchell
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2024/2024-08-21-serving-the-web-with-axum/"/>
+        <id>https://jeff-mitchell.dev/blog/2024/2024-08-21-serving-the-web-with-axum/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2024/2024-08-21-serving-the-web-with-axum/">&lt;p&gt;Today we dip a toe into the Axum web framework.&lt;&#x2F;p&gt;
+&lt;p&gt;Axum is an unopinionated web application framework, written and maintained by the &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;tokio.rs&#x2F;&quot;&gt;Tokio&lt;&#x2F;a&gt; team. It’s very light and is built on top of the &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;hyper.rs&#x2F;&quot;&gt;hyper&lt;&#x2F;a&gt; HTTP library. Hyper reached a major milestone in November 2023, with it’s version 1.0 release. Axum was bumped to version 0.7 shortly after. The Tokio team wrote a &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;tokio.rs&#x2F;blog&#x2F;2023-11-27-announcing-axum-0-7-0&quot;&gt;great blog post&lt;&#x2F;a&gt; explaining the major changes.&lt;&#x2F;p&gt;
+&lt;p&gt;Alright, let’s get into some code…&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; src&#x2F;main.rs
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; dependencies
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;axum::{
+&lt;&#x2F;span&gt;&lt;span&gt;    response::{Html, IntoResponse},
+&lt;&#x2F;span&gt;&lt;span&gt;    routing::get,
+&lt;&#x2F;span&gt;&lt;span&gt;    Router,
+&lt;&#x2F;span&gt;&lt;span&gt;};
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;std::net::SocketAddr;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;tokio::net::TcpListener;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; root endpoint handler, sends back a &amp;quot;Hello from Axum!&amp;quot; message in HTML
+&lt;&#x2F;span&gt;&lt;span&gt;async &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;hello_from_axum&lt;&#x2F;span&gt;&lt;span&gt;() -&amp;gt; impl IntoResponse {
+&lt;&#x2F;span&gt;&lt;span&gt;    Html(include_str!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;assets&#x2F;index.html&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;))
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; main function, creates a Router type, attaches our handler to the &amp;quot;&#x2F;&amp;quot; route
+&lt;&#x2F;span&gt;&lt;span&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;tokio&lt;&#x2F;span&gt;&lt;span&gt;::&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;]
+&lt;&#x2F;span&gt;&lt;span&gt;async &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; create an app, has the Router type, has one index route
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; app = Router::new().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;route&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;get&lt;&#x2F;span&gt;&lt;span&gt;(hello_from_axum));
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; create an address
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; addr = IpAddr::&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;V4&lt;&#x2F;span&gt;&lt;span&gt;(Ipv4Addr::new(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;127&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;));
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; create a port
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; port: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;u16 &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;8000&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; create a socket to listen on
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; socket = SocketAddr::new(addr, port);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; get a listener, use the socket we just created; the TcpListener::bind method could fail, so we use a match statement to handle that
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; we panic if we can&amp;#39;t get a listener, there&amp;#39;s no point in going any further
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; listener = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;match &lt;&#x2F;span&gt;&lt;span&gt;TcpListener::bind(&amp;amp;addr).await {
+&lt;&#x2F;span&gt;&lt;span&gt;        Ok(tcp_listener) =&amp;gt; tcp_listener,
+&lt;&#x2F;span&gt;&lt;span&gt;        Err(err) =&amp;gt; panic!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Could not get a TcpListener, {}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, err),
+&lt;&#x2F;span&gt;&lt;span&gt;    };
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; start up the server with our listener and the app; panics with an error message if the axum::serve function fails
+&lt;&#x2F;span&gt;&lt;span&gt;    axum::serve(listener, app)
+&lt;&#x2F;span&gt;&lt;span&gt;        .await
+&lt;&#x2F;span&gt;&lt;span&gt;        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;expect&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Could not start up the axum server&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;dependencies&quot;&gt;Dependencies&lt;&#x2F;h3&gt;
+&lt;p&gt;First, we bring into scope several things from the axum crate itself:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;the &lt;code&gt;Html&lt;&#x2F;code&gt; type and &lt;code&gt;IntoResponse&lt;&#x2F;code&gt; trait, both from the response module&lt;&#x2F;li&gt;
+&lt;li&gt;the &lt;code&gt;get&lt;&#x2F;code&gt; method from the routing module, used to handle get requests&lt;&#x2F;li&gt;
+&lt;li&gt;the &lt;code&gt;Router&lt;&#x2F;code&gt; type, used to compose handlers and services&lt;&#x2F;li&gt;
+&lt;li&gt;the &lt;code&gt;SocketAddr&lt;&#x2F;code&gt; type from the standard library&lt;&#x2F;li&gt;
+&lt;li&gt;the &lt;code&gt;TcpListener&lt;&#x2F;code&gt; type from the Tokio crate&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Axum relies on the Tokio crate for asyncronous operations, so be sure Tokio is added as a dependency in the Cargo.toml configuration file.&lt;&#x2F;p&gt;
+&lt;p&gt;Let’s look at the main function first, then we’ll talk about the single handler function as part of that.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;main-function&quot;&gt;Main Function&lt;&#x2F;h3&gt;
+&lt;p&gt;The general algorithm of our main function is:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;create an instance of our app; has one route at “&#x2F;”, which accepts a get request and calls our &lt;code&gt;hello_from_axum&lt;&#x2F;code&gt; handler function
+&lt;ul&gt;
+&lt;li&gt;the &lt;code&gt;hello_from_axum&lt;&#x2F;code&gt; function takes no parameters, it simply returns some HTML created by reading in an &lt;code&gt;index.html&lt;&#x2F;code&gt; file using the &lt;code&gt;include_str!&lt;&#x2F;code&gt; macro&lt;&#x2F;li&gt;
+&lt;li&gt;the &lt;code&gt;impl IntoResponse&lt;&#x2F;code&gt; return type indicates that we leverage the fact that Axum knows how to return an Html message without us writing any extra code, the IntoResponse trait is already implemented for the &lt;code&gt;Html&lt;&#x2F;code&gt; type&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;create an address&lt;&#x2F;li&gt;
+&lt;li&gt;create a port&lt;&#x2F;li&gt;
+&lt;li&gt;use the address and port to create a socket&lt;&#x2F;li&gt;
+&lt;li&gt;create a listener, using the socket we just created, to listen for requests; there is some basic error handling here with a match statement, we panic if the attempt to get an address fails&lt;&#x2F;li&gt;
+&lt;li&gt;start up the server, using the &lt;code&gt;axum::serve&lt;&#x2F;code&gt; method, passing in the listener and app variables&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Error handling is purposely left fairly basic. It’s generally not a good practice to panic and crash the program, but in this instance it makes sense. The application can’t run without an address to listen on or a listener to receive requests, so if these things fail there isn’t a lot of point in doing anything else.&lt;&#x2F;p&gt;
+&lt;p&gt;That’s it!&lt;&#x2F;p&gt;
+&lt;p&gt;If you typed everything in correctly, you can start up the basic server by typing:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cargo&lt;&#x2F;span&gt;&lt;span&gt; run
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;into your console. The server should start up and be listening on port 3000. If something happens error wise, you’ll see error messages returned at the console.&lt;&#x2F;p&gt;
+&lt;p&gt;Head over to your web browser and type:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;http:&#x2F;&#x2F;localhost:8000
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;You should be greeted with:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2024&#x2F;2024-08-21-serving-the-web-with-axum&#x2F;hello-from-axum.png&quot; alt=&quot;Hello from Axum&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Pretty cool hey?&lt;&#x2F;p&gt;
+&lt;p&gt;I know, not really. It’s pretty basic and not very interesting. Axum is terrific in its simplicity, but at the same time has much power and a great ecosystem. It really is garnering the mindshare of the Rust community and many projects appear to be standardizing around it. I bounced around between things for a long time, but have recently decided to just learn Axum properly.&lt;&#x2F;p&gt;
+&lt;p&gt;There are a few warts on this simple server, chief of which is it doesn’t shut down very gracefully. I’ll show you how to do that in a future post.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

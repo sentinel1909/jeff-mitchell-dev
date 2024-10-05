@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>jeff-mitchell.dev - static files</title>
+    <subtitle>A blog mostly about Rust...mostly...</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://jeff-mitchell.dev/tags/static-files/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-09-15T00:00:00+00:00</updated>
+    <id>https://jeff-mitchell.dev/tags/static-files/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Serving the Web with Rocket</title>
+        <published>2024-09-15T00:00:00+00:00</published>
+        <updated>2024-09-15T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Jeff Mitchell
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2024/2024-09-15-serving-the-web-with-rocket/"/>
+        <id>https://jeff-mitchell.dev/blog/2024/2024-09-15-serving-the-web-with-rocket/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2024/2024-09-15-serving-the-web-with-rocket/">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h2&gt;
+&lt;p&gt;I want to challenge the notion that it&#x27;s difficult to do things with Rust. Yes, you have to learn the language, and yes, the learning curve is steep. However, I maintain that you don&#x27;t have to be all the way up the learning curve to be productive.&lt;&#x2F;p&gt;
+&lt;p&gt;Thanks to &amp;quot;batteries included&amp;quot; web frameworks like &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;rocket.rs&quot;&gt;Rocket&lt;&#x2F;a&gt; it&#x27;s quick to get started. In 30 minutes, at worst an hour, you can have a minimal web server together which let&#x27;s you do server side rendering with templates. The served templates can be styled with CSS and livened with JavaScript, all with plain &#x27;ol vanilla web tech.&lt;&#x2F;p&gt;
+&lt;p&gt;Even better, you can host on &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;shuttle.rs&quot;&gt;Shuttle&#x27;s&lt;&#x2F;a&gt; Rust native development platform, which takes the heavy lifting away so you can focus on what you actually want to make.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s get this Rocket to the Vehicle Assembly Building.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;getting-started&quot;&gt;Getting Started&lt;&#x2F;h2&gt;
+&lt;p&gt;Head to where ever you save your coding projects on our own computer. First thing to do is install Shuttle. You can get the latest build for your operating system by following the &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;docs.shuttle.rs&#x2F;getting-started&#x2F;installation&quot;&gt;instructions&lt;&#x2F;a&gt; on the Shuttle website.&lt;&#x2F;p&gt;
+&lt;p&gt;At a command prompt, type:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cargo&lt;&#x2F;span&gt;&lt;span&gt; shuttle init
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Follow the prompts by entering a project name, choosing the location, and picking a starting framework. Those steps will look like this:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2024&#x2F;2024-09-15-serving-the-web-with-rocket&#x2F;rocket-shuttle-init.png&quot; alt=&quot;rocket shuttle init&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;m using the new beta Shuttle platform, but the steps are basically the same regardless. This will give you some basic boilerplate on which to build further.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;adding-a-health-check-route&quot;&gt;Adding a Health Check Route&lt;&#x2F;h2&gt;
+&lt;p&gt;Open your favourite code editor, and modify the code in &lt;code&gt;main.rs&lt;&#x2F;code&gt; to look like this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; src&#x2F;main.rs
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; dependencies
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;rocket::{get, routes, Build, Rocket};
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;rocket::http::Status;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; function which returns a 200 OK response with empty body
+&lt;&#x2F;span&gt;&lt;span&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;get&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;health&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;)]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;health&lt;&#x2F;span&gt;&lt;span&gt;() -&amp;gt; Status {
+&lt;&#x2F;span&gt;&lt;span&gt;    Status::Ok
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; function to create a rocket instance
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;create&lt;&#x2F;span&gt;&lt;span&gt;() -&amp;gt; Rocket&amp;lt;Build&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;    rocket::build()
+&lt;&#x2F;span&gt;&lt;span&gt;        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;mount&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;api&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, routes![health])
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; main function
+&lt;&#x2F;span&gt;&lt;span&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;shuttle_runtime&lt;&#x2F;span&gt;&lt;span&gt;::&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;]
+&lt;&#x2F;span&gt;&lt;span&gt;async &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() -&amp;gt; shuttle_rocket::ShuttleRocket {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; rocket = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;create&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    Ok(rocket.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;into&lt;&#x2F;span&gt;&lt;span&gt;())
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This code gives you a minimum Rocket server with one route at &lt;code&gt;&#x2F;api&#x2F;health&lt;&#x2F;code&gt;. This route has a handler function which responds with a 200 OK and empty body. This is a &amp;quot;health check&amp;quot; route that you can use in a basic way to poll if your server is running.&lt;&#x2F;p&gt;
+&lt;p&gt;One aside to point out here, we have the routes created with a separate function called &lt;code&gt;create()&lt;&#x2F;code&gt; which takes no arguments and returns a Rocket instance configured with routes. We then call this &lt;code&gt;create()&lt;&#x2F;code&gt; function from our &lt;code&gt;main()&lt;&#x2F;code&gt; function. Separation like this facilitates testing, which I&#x27;ll get into in the future.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;serving-static-files&quot;&gt;Serving Static Files&lt;&#x2F;h2&gt;
+&lt;p&gt;A web server needs to make assets available when routes are hit. With Rocket, an entire website can be served from the &lt;code&gt;&#x2F;&lt;&#x2F;code&gt; index route by modifying our &lt;code&gt;main.rs&lt;&#x2F;code&gt; like so:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; src&#x2F;main.rs
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; dependencies
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;rocket::{get, routes, Build, Rocket};
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;rocket::fs::{relative, FileServer};
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;rocket::http::Status;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;rocket_dyn_templates::{context, Template};
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; function which returns a 200 OK response with empty body
+&lt;&#x2F;span&gt;&lt;span&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;get&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;health&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;)]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;health&lt;&#x2F;span&gt;&lt;span&gt;() -&amp;gt; Status {
+&lt;&#x2F;span&gt;&lt;span&gt;    Status::Ok
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; function which returns the index page template
+&lt;&#x2F;span&gt;&lt;span&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;get&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;)]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;index&lt;&#x2F;span&gt;&lt;span&gt;() -&amp;gt; Template {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; message = &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Hello, World!&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;;
+&lt;&#x2F;span&gt;&lt;span&gt;    Template::render(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;index&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, context! { message })
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; function to create a rocket instance
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;create&lt;&#x2F;span&gt;&lt;span&gt;() -&amp;gt; Rocket&amp;lt;Build&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;    rocket::build()
+&lt;&#x2F;span&gt;&lt;span&gt;        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;attach&lt;&#x2F;span&gt;&lt;span&gt;(Template::fairing())
+&lt;&#x2F;span&gt;&lt;span&gt;        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;mount&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, routes![index])
+&lt;&#x2F;span&gt;&lt;span&gt;        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;mount&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;api&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, routes![health])
+&lt;&#x2F;span&gt;&lt;span&gt;        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;mount&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;static&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, FileServer::from(relative!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;static&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;)))
+&lt;&#x2F;span&gt;&lt;span&gt;        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;mount&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;assets&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, FileServer::from(relative!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;assets&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;)))
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; main function
+&lt;&#x2F;span&gt;&lt;span&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;shuttle_runtime&lt;&#x2F;span&gt;&lt;span&gt;::&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;]
+&lt;&#x2F;span&gt;&lt;span&gt;async &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() -&amp;gt; shuttle_rocket::ShuttleRocket {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; rocket = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;create&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    Ok(rocket.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;into&lt;&#x2F;span&gt;&lt;span&gt;())
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;I&#x27;ve gone ahead and added templating for Tera as well. You&#x27;ll need to do &lt;code&gt;cargo add tera&lt;&#x2F;code&gt; to add the dependency to your &lt;code&gt;Cargo.toml&lt;&#x2F;code&gt; configuration. We pull in Rocket&#x27;s &lt;code&gt;fs&lt;&#x2F;code&gt; module and leverage the &lt;code&gt;FileServer&lt;&#x2F;code&gt; method, passing it a relative path to the folder called &#x27;static&#x27; which will live in the root of your project and serve as home to static assets. While you&#x27;re at it, at the same level, create a folder called &#x27;templates&#x27;. When done, your project directory tree should look like:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2024&#x2F;2024-09-15-serving-the-web-with-rocket&#x2F;directory-structure-static-files.png&quot; alt=&quot;project directory tree&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;tera-templating&quot;&gt;Tera Templating&lt;&#x2F;h2&gt;
+&lt;p&gt;I sort of folded a couple of steps into one above, so let&#x27;s talk about the templating step a little more. Rocket has super easy support for the &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;keats.github.io&#x2F;tera&#x2F;&quot;&gt;Tera&lt;&#x2F;a&gt; templating engine, which is the one I&#x27;ve been focusing on lately. We add support for templating in general by pulling in &lt;code&gt;rocket_dyn_templates&lt;&#x2F;code&gt; as a dependency, specifically the &lt;code&gt;context!&lt;&#x2F;code&gt; macro and &lt;code&gt;Template&lt;&#x2F;code&gt; responder. In our &lt;code&gt;create()&lt;&#x2F;code&gt; function, we have to add a so-called &amp;quot;fairing&amp;quot;, which automatically registers all available templates saved in the &lt;code&gt;&#x2F;templates&lt;&#x2F;code&gt; folder in the project root.&lt;&#x2F;p&gt;
+&lt;p&gt;We add a route and handler function which serves back the equivalent of &lt;code&gt;index.html&lt;&#x2F;code&gt;. We pass a message variable, via the &lt;code&gt;context!&lt;&#x2F;code&gt; macro with the text &amp;quot;Hello, World!&amp;quot; which will be rendered into the template at the location of our choice.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;finishing-touches&quot;&gt;Finishing Touches&lt;&#x2F;h2&gt;
+&lt;p&gt;There are a couple of last things to do, we need to actually have some templates. Create &lt;code&gt;base.tera.html&lt;&#x2F;code&gt; and &lt;code&gt;index.tera.html&lt;&#x2F;code&gt; in the templates folder, and give them the following content:&lt;&#x2F;p&gt;
+&lt;p&gt;base.tera.html:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;&amp;lt;!&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;DOCTYPE &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;html &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;lang&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;en&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;head&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;meta &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;charset&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;UTF-8&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; &#x2F;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;meta &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;viewport&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;content&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;width=device-width, initial-scale=1.0&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; &#x2F;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;link &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;rel&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;preload&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;static&#x2F;screen.css&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;as&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;style&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; &#x2F;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;link &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;rel&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;preload&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;static&#x2F;scripts.js&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;as&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;script&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; &#x2F;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;Rocket Web Template | Home&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;link
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;rel&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;stylesheet&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;type&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;text&#x2F;css&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;static&#x2F;screen.css&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;media&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;screen&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;    &#x2F;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;link &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;rel&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;icon&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;type&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;image&#x2F;ico&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;static&#x2F;favicon.ico&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; &#x2F;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;head&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;header&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;      &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;Rocket Web Template&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;header&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;{% block content %}{% endblock %}&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;script &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;src&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;static&#x2F;scripts.js&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&amp;gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;script&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;index.tera.html:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;{% extends &amp;quot;base&amp;quot; %} {% block content %}
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;section&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;{{ message }}&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;section&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;{% endblock content %}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;the-moment-of-truth&quot;&gt;The Moment of Truth&lt;&#x2F;h3&gt;
+&lt;p&gt;With all these pieces in place:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cargo&lt;&#x2F;span&gt;&lt;span&gt; shuttle run
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Once the Rocket web server launches, open your browser and navigate to &lt;code&gt;http:&#x2F;&#x2F;localhost:8000&lt;&#x2F;code&gt; and you should see served up in your browser:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2024&#x2F;2024-09-15-serving-the-web-with-rocket&#x2F;rocket-hello-world.png&quot; alt=&quot;Rocket Hello World&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Easy peasy!&lt;&#x2F;p&gt;
+&lt;p&gt;From here, you can add more resources, routes, logic, whatever you need. Assets are served up from the &lt;code&gt;assets&lt;&#x2F;code&gt; folder and you can apply CSS styles and JavaScript as you traditionally would in a vanilla web tech site.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;closing-thoughts&quot;&gt;Closing Thoughts&lt;&#x2F;h2&gt;
+&lt;p&gt;I think it&#x27;s lazy to default to JavaScript for the backend when simple, easy to get started with solutions like Rocket exist. Yes, you have to know Rust, and that can be a blocker, but you don&#x27;t have to know &lt;em&gt;that&lt;&#x2F;em&gt; much Rust. You sure won&#x27;t be forced into dealing with lifetimes and all the higher order concepts alone. Rocket takes care of many things for you and quite simply just gets out of your way.&lt;&#x2F;p&gt;
+&lt;p&gt;Think about it, for your next project.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;references&quot;&gt;References&lt;&#x2F;h2&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;rocket.rs&#x2F;guide&#x2F;v0.5&#x2F;&quot;&gt;The Rocket Programming Guide&lt;&#x2F;a&gt;
+&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;keats.github.io&#x2F;tera&#x2F;&quot;&gt;Tera Template Engine for Rust&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Simple Website Hosting with Shuttle</title>
+        <published>2023-06-05T00:00:00+00:00</published>
+        <updated>2023-06-05T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2023/2023-06-05-simple-website-hosting-with-shuttle/"/>
+        <id>https://jeff-mitchell.dev/blog/2023/2023-06-05-simple-website-hosting-with-shuttle/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2023/2023-06-05-simple-website-hosting-with-shuttle/">&lt;h2 id=&quot;simple-website-hosting&quot;&gt;Simple Website Hosting&lt;&#x2F;h2&gt;
+&lt;p&gt;I discovered &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;shuttle.rs&quot;&gt;Shuttle&lt;&#x2F;a&gt; in mid-to-late 2022. I had &lt;em&gt;just&lt;&#x2F;em&gt; begun to develop the slightest notion of what I was doing with the Rust, since finishing Jayson Lennon&#x27;s Rust course earlier in the year on &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;zerotomastery.io&quot;&gt;Zero to Mastery&lt;&#x2F;a&gt;. My learning has always been through a cocktail of blog posts on Medium, random articles on the internet, and bits of Stack Overflow. Hosting my Rust projects was always a struggle for me. I had started Luca Palmieri&#x27;s &amp;quot;Zero to Production in Rust&amp;quot;, probably too early, and Chapter 5 of the book on deployment hadn&#x27;t really stuck. I wanted to crack the deployment bits, because building things and letting them languish on my hard drive was not something I was interested in. For better for worse, I like to build in public. In reality, given the noise on the internet, it&#x27;s unlikely anyone ever notices, but I enjoy the illusion that I am somehow helping others.&lt;&#x2F;p&gt;
+&lt;p&gt;There was an article I hit on Medium at one point about getting your Dockerized Rust app, whatever it was, up on fly.io. I followed that article, and began to understand what I had to do. I adapted the procedure for railway.app, which I also discovered and liked a lot. I managed to get a very early &amp;quot;developer profile&amp;quot; website together, serve it up with a Rocket backend and get the whole thing served up on railway.app. It was great! I remember feeling like so much had finally clicked...it was terrific feeling.&lt;&#x2F;p&gt;
+&lt;p&gt;Unfortunately, that first site was difficult to maintain, because my skills were still on the weak side, so I abandoned it.&lt;&#x2F;p&gt;
+&lt;p&gt;I still longed for a way to quickly and easily put my creations out into the world.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;enter-shuttle&quot;&gt;Enter Shuttle&lt;&#x2F;h3&gt;
+&lt;p&gt;In those early days of discovering the how&#x27;s of deployment with Rust, the thing I came away with most was how complex it was, even for my simple little static website. There was a lot of hacking around and trial and error getting that first Dockerfile together such that railway.app would actually accept and build it. Granted, once it was done it was done, but I didn&#x27;t enjoy the process of getting to a finished DockerFile. I had heard of Shuttle by this point, but when I first discovered this beautiful thing, static file hosting was not yet available. It eventually came along and somewhere early in 2023 I delightedly started to work with static files. I started contributing to the Shuttle documentation for the feature, helping flesh out the instructions and hopefully making the feature easier for others to read, understand, and implement. Shuttle neatly and tidyly takes the pain of Rust deployments away, and I wanted to do my part in showing that to the world in the clearest way I could.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;axum-with-static-files-on-shuttle&quot;&gt;Axum, with Static Files, on Shuttle&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;docs.rs&#x2F;axum&#x2F;latest&#x2F;axum&#x2F;index.html&quot;&gt;Axum&lt;&#x2F;a&gt; is a Rust web application framework. It is relatively simple to get up and running with and it&#x27;s become my go-to lately for doing things on the web with Rust. In February, I restarted Zero to Production in Rust, doing it in Axum instead of Actix. Unfortunately, I&#x27;ve had to halt that project because I&#x27;ve hit a patch that&#x27;s just out of reach skill wise. I do intend on returning, but am taking a little hiatus for the time being. That hasn&#x27;t stopped me from wanting to learn more about Axum.&lt;&#x2F;p&gt;
+&lt;p&gt;Unlike other Rust web frameworks like Actix, Axum doesn&#x27;t have a built in system of middleware. Instead, Axum relies on the Tower ecosystem for creation of support middleware. As far as hosting of static files is concerned, this used to the the territory of the axum-extra crate, which featured a router for single page applications (SPA). The static files example in the Shuttle Docs is based around use of SpaRouter to serve up the files in the static folder that you can provision by annotating your code with &lt;code&gt;#[shuttle_static_folder::StaticFolder] static_folder: PathBuf&lt;&#x2F;code&gt;. SpaRouter was deprecated in version 0.6.0 of axum-extra, in favour of the services available through the &lt;code&gt;tower-http&lt;&#x2F;code&gt; crate.&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;ve never liked the notion of relying on bits that are deprecated so I went on a journey, working out exactly how to replace the relative ease of SpaRouter with a similar one-liner. This &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;robert.kra.hn&#x2F;posts&#x2F;2022-04-03_rust-web-wasm&#x2F;&quot;&gt;article&lt;&#x2F;a&gt; by Robert Krahn, was an important find. Robert has kept it up to date, documenting how to get rid of SpaRouter using &lt;code&gt;ServeDir&lt;&#x2F;code&gt; from &lt;code&gt;tower-http::services&lt;&#x2F;code&gt;. The trouble is, I never understood his code. I set out with the intention of either explaining it (for all of you) or coming up with something simpler.&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;ve cracked it...at least for a folder of vanilla HTML&#x2F;CSS&#x2F;JS files saved into the static folder that Shuttle will provision for you. Let&#x27;s dig in...&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;servedir-with-tower-http&quot;&gt;ServeDir with tower-http&lt;&#x2F;h3&gt;
+&lt;p&gt;Let&#x27;s home right in on main.rs:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; src&#x2F;main.rs
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;axum::Router;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;std::path::PathBuf;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;tower_http::services::ServeDir;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;shuttle_runtime&lt;&#x2F;span&gt;&lt;span&gt;::&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;]
+&lt;&#x2F;span&gt;&lt;span&gt;async &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;axum&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;    #[shuttle_static_folder::StaticFolder] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;static_folder&lt;&#x2F;span&gt;&lt;span&gt;: PathBuf,
+&lt;&#x2F;span&gt;&lt;span&gt;) -&amp;gt; shuttle_axum::ShuttleAxum {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; build the router
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; router = Router::new()
+&lt;&#x2F;span&gt;&lt;span&gt;         .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;nest_service&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, ServeDir::new(static_folder));
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    Ok(router.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;into&lt;&#x2F;span&gt;&lt;span&gt;())
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This code is pretty much identical to the example you&#x27;ve likely already seen through the Shuttle Docs. The key is &lt;code&gt;use tower_http::services::ServeDir;&lt;&#x2F;code&gt; We bring ServeDir into scope, which gives use a service that serves files from a given directory and all it&#x27;s sub directories.&lt;&#x2F;p&gt;
+&lt;p&gt;Once this is in scope, we can use it to build a router with a single endpoint at &amp;quot;&#x2F;&amp;quot;, by using &lt;code&gt;.nest_service&lt;&#x2F;code&gt;. We pass in &lt;code&gt;ServeDir::new(static_folder)&lt;&#x2F;code&gt;, where &lt;code&gt;static_folder&lt;&#x2F;code&gt; is what Shuttle has provisioned for us. Be sure to put all the files you want to host into that static folder, then, deploy to Shuttle by creating a new project container and deploying the project. All the things work, CSS is called properly when linked from the &lt;code&gt;&amp;lt;head&amp;gt;&lt;&#x2F;code&gt; tag and JavaScript is called when linked from the &lt;code&gt;&amp;lt;script&amp;gt;&lt;&#x2F;code&gt; tag. Navigation works as well within the site.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;the-shuttle-advantage&quot;&gt;The Shuttle Advantage&lt;&#x2F;h3&gt;
+&lt;p&gt;If you&#x27;re a Rust afficionado, Shuttle is &lt;strong&gt;the&lt;&#x2F;strong&gt; way to build and showcase your work to the world. You can build and host your creations without twisting the fiddly dials and knobs of Docker. Leave that to the Shuttle folks. They do the hard work so we as developers don&#x27;t have to.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

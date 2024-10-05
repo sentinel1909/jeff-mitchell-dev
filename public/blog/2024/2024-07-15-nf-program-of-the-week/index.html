@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>nf - An Empty File Maker - Jeff Mitchell</title>
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"><meta name="description" content="A blog mostly about Rust...mostly... nf - An Empty File Maker Highlighting nf, a Rust program which makes an empty, new file."/><meta name="keywords" content="Projects, rust, CLI app, file IO" />
+    <meta property="og:title" content="jeff-mitchell.dev -&nbsp;nf - An Empty File Maker" />
+    <meta property="og:type" content="website"/><meta property="og:url" content="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2024&#x2F;2024-07-15-nf-program-of-the-week&#x2F;"/><meta property="og:description" content="Highlighting nf, a Rust program which makes an empty, new file."/>
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://jeff-mitchell.dev/style.css?h=97e262212a0704163528">
+    <link rel="stylesheet" href=" https://jeff-mitchell.dev/color/orange.css?h=a5a5d7faf9d4bc3e0b18">
+    
+<link rel="alternate" type="application/atom+xml" title="jeff-mitchell.dev RSS" href="https://jeff-mitchell.dev/atom.xml"></head>
+  <body>
+    <div class="container center">
+<header class="header">
+    <div class="header__inner">
+        <div class="header__logo">
+            <a href="&#x2F;">
+    <div class="logo">
+        jeff-mitchell.dev :: mis-adventures with the Rust programming language
+    </div>
+</a>
+        </div>
+        <div class="menu-trigger">menu</div>
+    </div>
+    
+    <nav class="menu">
+        <ul class="menu__inner menu__inner--desktop">
+            
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li></ul>
+
+        <ul class="menu__inner menu__inner--mobile">
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li>
+        </ul>
+    </nav>
+
+    </header>
+<div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </div>
+      <div class="content"><article class="post">
+        <header>
+            <h1 class="post-title">
+                <a href="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2024&#x2F;2024-07-15-nf-program-of-the-week&#x2F;">nf - An Empty File Maker</a>
+            </h1>
+            
+    <div class="post-meta">
+        <span class="post-date">2024.07.16
+                </span>
+
+        <span class="post-author">
+    ::
+    Jeff Mitchell</span>
+
+        
+
+    
+    :: {<a href="https://jeff-mitchell.dev/categories/projects/">Projects</a>} 
+
+            
+    ::
+    #<a href="https://jeff-mitchell.dev/tags/rust/">rust</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/cli-app/">CLI app</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/file-io/">file IO</a>
+        
+    
+            
+        
+    </div>
+
+            
+    
+</header><p>I'm going to try to start doing &quot;program of the week&quot; types of articles. Here is the first. It takes a command line argument (the desired file name) and makes that into an empty file.</p>
+<p>It uses the following community crates:</p>
+<ul>
+<li>command line argument parsing: <a rel="noopener noreferrer" target="_blank" href="https://crates.io/crates/clap">clap</a></li>
+<li>colourful, consistent error messages: <a rel="noopener noreferrer" target="_blank" href="https://crates.io/crates/color-eyre">color-eyre</a></li>
+</ul>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#65737e;">// nf main.rs
+</span><span>
+</span><span style="color:#65737e;">// dependencies
+</span><span style="color:#b48ead;">use </span><span>clap::Parser;
+</span><span style="color:#b48ead;">use </span><span>color_eyre::eyre::Result;
+</span><span style="color:#b48ead;">use </span><span>std::fs::File;
+</span><span style="color:#b48ead;">use </span><span>std::io::{</span><span style="color:#bf616a;">self</span><span>, Write};
+</span><span>
+</span><span style="color:#65737e;">// struct to represent command line arguments
+</span><span>#[</span><span style="color:#bf616a;">derive</span><span>(Parser, Debug)]
+</span><span>#[</span><span style="color:#bf616a;">command</span><span>(author, version, about, long_about = None)]
+</span><span style="color:#b48ead;">struct </span><span>Args {
+</span><span>    #[</span><span style="color:#bf616a;">arg</span><span>(short, long)]
+</span><span>    </span><span style="color:#bf616a;">file</span><span>: String,
+</span><span>}
+</span><span>
+</span><span style="color:#65737e;">// main function, program entry point
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() -&gt; Result&lt;()&gt; {
+</span><span>    </span><span style="color:#65737e;">// initialize color_eyre
+</span><span>    color_eyre::install()?;
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// get the command line arguments
+</span><span>    </span><span style="color:#b48ead;">let</span><span> args = Args::parse();
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// create a handle for writing output
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> stdout = io::stdout();
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// create the new file
+</span><span>    </span><span style="color:#b48ead;">let</span><span> new_file = File::create(args.file);
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// write a success message or an error if the file couldn&#39;t be created
+</span><span>    </span><span style="color:#b48ead;">match</span><span> new_file {
+</span><span>        Ok(file) =&gt; write!(stdout, &quot;</span><span style="color:#d08770;">{:#?}</span><span style="color:#a3be8c;"> successfully created</span><span>&quot;, file)?,
+</span><span>        Err(err) =&gt; write!(stdout, &quot;</span><span style="color:#d08770;">{:#?}</span><span>&quot;, err)?,
+</span><span>    }
+</span><span>
+</span><span>    Ok(())
+</span><span>}
+</span></code></pre>
+<p>The GitHub repo for this project is here: <a rel="noopener noreferrer" target="_blank" href="https://github.com/sentinel1909/nf.git">nf</a></p>
+
+
+        
+    
+
+        
+        
+    </article></div>
+    <div class="pagination">
+        <div class="pagination__buttons">
+            </div>
+    </div>
+<footer class="footer">
+        <div class="footer__inner"><div class="copyright">
+            <span>© 2024 Jeffery D Mitchell :: Powered by <a href="https://www.getzola.org/">Zola</a>:: Zerm theme made by <a href="https://github.com/ejmg">ejmg</a> :: Hosted on <a href="https://shuttle.rs">Shuttle</a> :: Follow me (and ask questions or comment) on <a href="https://bsky.app/profile/jeff-mitchell-dev.bsky.social">Bluesky</a></span>
+        </div>
+    <script type="text/javascript" src="https://jeff-mitchell.dev/assets/js/main.js"></script>
+</div>
+        
+
+      </footer></div>
+    <!-- Default Statcounter code for Jeff Mitchell Dev https://jeff-mitchell.dev
+-->
+    <script type="text/javascript">
+      var sc_project = 13027926;
+      var sc_invisible = 1;
+      var sc_security = "1625b230";
+    </script>
+    <script
+      type="text/javascript"
+      src="https://www.statcounter.com/counter/counter.js"
+      async
+    ></script>
+    <noscript
+      ><div class="statcounter">
+        <a
+          title="Web Analytics Made Easy -
+Statcounter"
+          href="https://statcounter.com/"
+          target="_blank"
+          ><img
+            class="statcounter"
+            src="https://c.statcounter.com/13027926/0/1625b230/1/"
+            alt="Web Analytics Made Easy - Statcounter"
+            referrerpolicy="no-referrer-when-downgrade"
+        /></a></div
+    ></noscript>
+    <!-- End of Statcounter Code -->
+     <script type="text/javascript" src="https://jeff-mitchell.dev/elasticlunr.min.js"></script>
+     <script type="text/javascript" src="https://jeff-mitchell.dev/search.js"></script>
+  </body>
+</html>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>jeff-mitchell.dev - frontend</title>
+    <subtitle>A blog mostly about Rust...mostly...</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://jeff-mitchell.dev/tags/frontend/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-10-05T00:00:00+00:00</updated>
+    <id>https://jeff-mitchell.dev/tags/frontend/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Yew: First Steps</title>
+        <published>2024-10-05T00:00:00+00:00</published>
+        <updated>2024-10-05T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Jeff Mitchell
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2024/2024-10-05-getting-started-with-yew/"/>
+        <id>https://jeff-mitchell.dev/blog/2024/2024-10-05-getting-started-with-yew/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2024/2024-10-05-getting-started-with-yew/">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
+&lt;p&gt;What if I said there was a different way to build for the web?&lt;&#x2F;p&gt;
+&lt;p&gt;There is, it&#x27;s called &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;webassembly.org&#x2F;&quot;&gt;WebAssembly&lt;&#x2F;a&gt;. The Rust programming language, of which this author is so fond, can target WebAssembly. This means you can leverage Rust&#x27;s type system and inherent memory safety to build for the web.&lt;&#x2F;p&gt;
+&lt;p&gt;WebAssembly is supported by all major browsers and is a completely viable way to build a web application. Two things are holding it back, a) the hegemony of the JavaScript libraries and frameworks, and b) the perceived difficulty of learning Rust. Frankly I&#x27;m not sure Rust front end web dev will truly ever be a thing, but for those of us that want to, it can be a happy and productive thing today. The main attraction, IMHO, is that you&#x27;re not cobbling together 600 tools like you have to in the JavaScript world.&lt;&#x2F;p&gt;
+&lt;p&gt;As soon as I found out Rust could be a viable choice for front end development, I said &amp;quot;I&#x27;m in&amp;quot;.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s take a closer look.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;enter-yew&quot;&gt;Enter Yew&lt;&#x2F;h2&gt;
+&lt;p&gt;There are several up and coming front end frameworks that are worth looking at. The oldest, and probably most stable (don&#x27;t let the 0.21 version number fool you) is &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;yew.rs&quot;&gt;Yew&lt;&#x2F;a&gt;. This is the one I started on and the one I&#x27;ve been focusing on the most. I enjoy it a lot, it&#x27;s very React like and retains the familiar notion of composing a web application out of re-usable components. It has state, hooks, a router, and is pretty much ready to go for whatever you want to do.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;setup&quot;&gt;Setup&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;em&gt;Install Rust&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;There is some setup to get off the ground. First thing, if you haven&#x27;t already, is install Rust. The official instructions are &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;www.rust-lang.org&#x2F;tools&#x2F;install&quot;&gt;here&lt;&#x2F;a&gt;. The minimum supported Rust version for Yew is 1.76.0. Older versions will not compile. If you have Rust installed already and just need to update your toolchain, do: &lt;code&gt;rustup update&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Install WebAssembly Target&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The compilation target for browser-based WebAssembly is called &lt;code&gt;wasm32-unknown-unknown&lt;&#x2F;code&gt;. Yes, I know it sounds wierd. The unknown-unknown thing bugged me for a long while, but I&#x27;m over that now. Install it:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;rustup&lt;&#x2F;span&gt;&lt;span&gt; target add wasm32-unknown-unknown
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;em&gt;Install Trunk&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The easiest build tool for managing and deploying your WebAssembly creations is called &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;trunkrs.dev&quot;&gt;trunk&lt;&#x2F;a&gt;. It&#x27;s really nice, and very straightforward to use. Install it via cargo:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cargo&lt;&#x2F;span&gt;&lt;span&gt; install&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --locked&lt;&#x2F;span&gt;&lt;span&gt; trunk
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Alright, setup is done. Let&#x27;s get on with a proverbial &amp;quot;Hello, World!&amp;quot;, but with a Yew flavour.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;create-the-project&quot;&gt;Create the Project&lt;&#x2F;h3&gt;
+&lt;p&gt;First thing is to navigate to wherever you save your development projects. Once there, do:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cargo&lt;&#x2F;span&gt;&lt;span&gt; new hello-yew-app
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;cd&lt;&#x2F;span&gt;&lt;span&gt; hello-yew-app
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This will start a new Rust project and change you into the freshly created directory that holds it. Replace the contents of the &lt;code&gt;Cargo.toml&lt;&#x2F;code&gt; file with this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;toml&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-toml &quot;&gt;&lt;code class=&quot;language-toml&quot; data-lang=&quot;toml&quot;&gt;&lt;span&gt;[package]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name &lt;&#x2F;span&gt;&lt;span&gt;= &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;hello-yew-app&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;version &lt;&#x2F;span&gt;&lt;span&gt;= &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;0.1.0&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;edition &lt;&#x2F;span&gt;&lt;span&gt;= &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;2021&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;[dependencies]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;yew &lt;&#x2F;span&gt;&lt;span&gt;= { &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;version &lt;&#x2F;span&gt;&lt;span&gt;= &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;0.21&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;features &lt;&#x2F;span&gt;&lt;span&gt;= [ &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;csr&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;] }
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This adds the latest stable version of Yew, hosted on &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;crates.io&quot;&gt;crates.io&lt;&#x2F;a&gt;, as a dependency to your project. It adds the &amp;quot;csr&amp;quot; feature, which enables client side rendering, meaning the application you create is rendered in the target browser. Yew does have server side rendering capability, but it&#x27;s on the experimental side at the moment. For now, the end result will be a single page application, exactly the same as you&#x27;d build with a JavaScript library or framework.&lt;&#x2F;p&gt;
+&lt;p&gt;Now, go into &lt;code&gt;src&#x2F;main.rs&lt;&#x2F;code&gt;, delete the boilerplate that&#x27;s there and swap out with this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; src&#x2F;main.rs
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; dependencies
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;yew::{function_component, html};
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; the root app component, it&amp;#39;s annotated with Yew&amp;#39;s function_component macro, which marks it as a 
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; function component. This function has no parameters and returns Yew&amp;#39;s Html type. We use Yew&amp;#39;s html! 
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; macro to build and return a simple piece of text marked up with HTML.
+&lt;&#x2F;span&gt;&lt;span&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;function_component&lt;&#x2F;span&gt;&lt;span&gt;(App)]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;app&lt;&#x2F;span&gt;&lt;span&gt;() -&amp;gt; Html {
+&lt;&#x2F;span&gt;&lt;span&gt;  html! {
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;div&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;      &amp;lt;h1&amp;gt;{ &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Hello, World!&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; }&amp;lt;&#x2F;h1&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&#x2F;div&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; main function, mounts the app component and renders it
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;  yew::Renderer::&amp;lt;App&amp;gt;::new().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;render&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The very last piece we need is an html file to target. Create &lt;code&gt;index.html&lt;&#x2F;code&gt; at the root of your project and add:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;&amp;lt;!&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;DOCTYPE &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;html &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;lang&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;en&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;head&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;meta &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;charset&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;UTF-8&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; &#x2F;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;meta &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;viewport&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;content&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;width=device-width, initial-scale=1.0&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; &#x2F;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;Hello Yew&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;head&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Trunk will use this &lt;code&gt;index.html&lt;&#x2F;code&gt; to build out the assets for deployment. That&#x27;s pretty much all that&#x27;s need to get started.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;moment-of-truth&quot;&gt;Moment of Truth&lt;&#x2F;h2&gt;
+&lt;p&gt;To see all the fine fruits of your labours, back at your command prompt, type:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;trunk&lt;&#x2F;span&gt;&lt;span&gt; serve
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This will start up trunk&#x27;s hot reloading development server. Now, open your default browser to display your handiwork. You should be greeted with a very boring &amp;quot;Hello, World&amp;quot; message in the main window of your browser. On the one hand yes, it&#x27;s boring. On the other, take a step back and think about what you just did.&lt;&#x2F;p&gt;
+&lt;p&gt;You built a web site...with Rust. Yes, there&#x27;s HTML there, because you have to have that, but otherwise, it&#x27;s all done in Rust, compiled to WebAssembly and run by your browser. There is just the tinest bit of JavaScript in there because it&#x27;s needed to load the WebAssembly file that Rust built.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
+&lt;p&gt;This is a quick taste, to get you off the ground. There are a lot of details here that I&#x27;ve glossed over, in an effort to introduce the notion of web dev with Rust. In the future, I&#x27;ll circle back on some of the inner workings. Also in a future article, I&#x27;ll dive more into how to flesh out this simple site with assets and styles to begin to make it more interesting.&lt;&#x2F;p&gt;
+&lt;p&gt;Thanks for reading!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;references&quot;&gt;References&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;yew.rs&#x2F;docs&#x2F;tutorial&quot;&gt;Yew Tutorial&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+        
+    </entry>
+</feed>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Serving the Web with Rocket - Jeff Mitchell</title>
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"><meta name="description" content="A blog mostly about Rust...mostly... Serving the Web with Rocket An article providing a starter for how to serve up templates and web content with Rocket."/><meta name="keywords" content="How To, rust, web, rocket, templates, static files" />
+    <meta property="og:title" content="jeff-mitchell.dev -&nbsp;Serving the Web with Rocket" />
+    <meta property="og:type" content="website"/><meta property="og:url" content="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2024&#x2F;2024-09-15-serving-the-web-with-rocket&#x2F;"/><meta property="og:description" content="An article providing a starter for how to serve up templates and web content with Rocket."/>
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://jeff-mitchell.dev/style.css?h=97e262212a0704163528">
+    <link rel="stylesheet" href=" https://jeff-mitchell.dev/color/orange.css?h=a5a5d7faf9d4bc3e0b18">
+    
+<link rel="alternate" type="application/atom+xml" title="jeff-mitchell.dev RSS" href="https://jeff-mitchell.dev/atom.xml"></head>
+  <body>
+    <div class="container center">
+<header class="header">
+    <div class="header__inner">
+        <div class="header__logo">
+            <a href="&#x2F;">
+    <div class="logo">
+        jeff-mitchell.dev :: mis-adventures with the Rust programming language
+    </div>
+</a>
+        </div>
+        <div class="menu-trigger">menu</div>
+    </div>
+    
+    <nav class="menu">
+        <ul class="menu__inner menu__inner--desktop">
+            
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li></ul>
+
+        <ul class="menu__inner menu__inner--mobile">
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li>
+        </ul>
+    </nav>
+
+    </header>
+<div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </div>
+      <div class="content"><article class="post">
+        <header>
+            <h1 class="post-title">
+                <a href="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2024&#x2F;2024-09-15-serving-the-web-with-rocket&#x2F;">Serving the Web with Rocket</a>
+            </h1>
+            
+    <div class="post-meta">
+        <span class="post-date">2024.09.15
+                </span>
+
+        <span class="post-author">
+    ::
+    Jeff Mitchell</span>
+
+        
+
+    
+    :: {<a href="https://jeff-mitchell.dev/categories/how-to/">How To</a>} 
+
+            
+    ::
+    #<a href="https://jeff-mitchell.dev/tags/rust/">rust</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/web/">web</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/rocket/">rocket</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/templates/">templates</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/static-files/">static files</a>
+        
+    
+            
+        
+    </div>
+
+            
+    
+</header><h2 id="introduction">Introduction</h2>
+<p>I want to challenge the notion that it's difficult to do things with Rust. Yes, you have to learn the language, and yes, the learning curve is steep. However, I maintain that you don't have to be all the way up the learning curve to be productive.</p>
+<p>Thanks to &quot;batteries included&quot; web frameworks like <a rel="noopener noreferrer" target="_blank" href="https://rocket.rs">Rocket</a> it's quick to get started. In 30 minutes, at worst an hour, you can have a minimal web server together which let's you do server side rendering with templates. The served templates can be styled with CSS and livened with JavaScript, all with plain 'ol vanilla web tech.</p>
+<p>Even better, you can host on <a rel="noopener noreferrer" target="_blank" href="https://shuttle.rs">Shuttle's</a> Rust native development platform, which takes the heavy lifting away so you can focus on what you actually want to make.</p>
+<p>Let's get this Rocket to the Vehicle Assembly Building.</p>
+<h2 id="getting-started">Getting Started</h2>
+<p>Head to where ever you save your coding projects on our own computer. First thing to do is install Shuttle. You can get the latest build for your operating system by following the <a rel="noopener noreferrer" target="_blank" href="https://docs.shuttle.rs/getting-started/installation">instructions</a> on the Shuttle website.</p>
+<p>At a command prompt, type:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">cargo</span><span> shuttle init
+</span></code></pre>
+<p>Follow the prompts by entering a project name, choosing the location, and picking a starting framework. Those steps will look like this:</p>
+<p><img src="https://jeff-mitchell.dev/blog/2024/2024-09-15-serving-the-web-with-rocket/rocket-shuttle-init.png" alt="rocket shuttle init" /></p>
+<p>I'm using the new beta Shuttle platform, but the steps are basically the same regardless. This will give you some basic boilerplate on which to build further.</p>
+<h2 id="adding-a-health-check-route">Adding a Health Check Route</h2>
+<p>Open your favourite code editor, and modify the code in <code>main.rs</code> to look like this:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#65737e;">// src/main.rs
+</span><span>
+</span><span style="color:#65737e;">// dependencies
+</span><span style="color:#b48ead;">use </span><span>rocket::{get, routes, Build, Rocket};
+</span><span style="color:#b48ead;">use </span><span>rocket::http::Status;
+</span><span>
+</span><span style="color:#65737e;">// function which returns a 200 OK response with empty body
+</span><span>#[</span><span style="color:#bf616a;">get</span><span>(&quot;</span><span style="color:#a3be8c;">/health</span><span>&quot;)]
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">health</span><span>() -&gt; Status {
+</span><span>    Status::Ok
+</span><span>}
+</span><span>
+</span><span style="color:#65737e;">// function to create a rocket instance
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">create</span><span>() -&gt; Rocket&lt;Build&gt; {
+</span><span>    rocket::build()
+</span><span>        .</span><span style="color:#96b5b4;">mount</span><span>(&quot;</span><span style="color:#a3be8c;">/api</span><span>&quot;, routes![health])
+</span><span>}
+</span><span>
+</span><span style="color:#65737e;">// main function
+</span><span>#[</span><span style="color:#bf616a;">shuttle_runtime</span><span>::</span><span style="color:#bf616a;">main</span><span>]
+</span><span>async </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() -&gt; shuttle_rocket::ShuttleRocket {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> rocket = </span><span style="color:#96b5b4;">create</span><span>();
+</span><span>
+</span><span>    Ok(rocket.</span><span style="color:#96b5b4;">into</span><span>())
+</span><span>}
+</span></code></pre>
+<p>This code gives you a minimum Rocket server with one route at <code>/api/health</code>. This route has a handler function which responds with a 200 OK and empty body. This is a &quot;health check&quot; route that you can use in a basic way to poll if your server is running.</p>
+<p>One aside to point out here, we have the routes created with a separate function called <code>create()</code> which takes no arguments and returns a Rocket instance configured with routes. We then call this <code>create()</code> function from our <code>main()</code> function. Separation like this facilitates testing, which I'll get into in the future.</p>
+<h2 id="serving-static-files">Serving Static Files</h2>
+<p>A web server needs to make assets available when routes are hit. With Rocket, an entire website can be served from the <code>/</code> index route by modifying our <code>main.rs</code> like so:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#65737e;">// src/main.rs
+</span><span>
+</span><span style="color:#65737e;">// dependencies
+</span><span style="color:#b48ead;">use </span><span>rocket::{get, routes, Build, Rocket};
+</span><span style="color:#b48ead;">use </span><span>rocket::fs::{relative, FileServer};
+</span><span style="color:#b48ead;">use </span><span>rocket::http::Status;
+</span><span style="color:#b48ead;">use </span><span>rocket_dyn_templates::{context, Template};
+</span><span>
+</span><span style="color:#65737e;">// function which returns a 200 OK response with empty body
+</span><span>#[</span><span style="color:#bf616a;">get</span><span>(&quot;</span><span style="color:#a3be8c;">/health</span><span>&quot;)]
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">health</span><span>() -&gt; Status {
+</span><span>    Status::Ok
+</span><span>}
+</span><span>
+</span><span style="color:#65737e;">// function which returns the index page template
+</span><span>#[</span><span style="color:#bf616a;">get</span><span>(&quot;</span><span style="color:#a3be8c;">/</span><span>&quot;)]
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">index</span><span>() -&gt; Template {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> message = &quot;</span><span style="color:#a3be8c;">Hello, World!</span><span>&quot;;
+</span><span>    Template::render(&quot;</span><span style="color:#a3be8c;">index</span><span>&quot;, context! { message })
+</span><span>}
+</span><span>
+</span><span style="color:#65737e;">// function to create a rocket instance
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">create</span><span>() -&gt; Rocket&lt;Build&gt; {
+</span><span>    rocket::build()
+</span><span>        .</span><span style="color:#96b5b4;">attach</span><span>(Template::fairing())
+</span><span>        .</span><span style="color:#96b5b4;">mount</span><span>(&quot;</span><span style="color:#a3be8c;">/</span><span>&quot;, routes![index])
+</span><span>        .</span><span style="color:#96b5b4;">mount</span><span>(&quot;</span><span style="color:#a3be8c;">/api</span><span>&quot;, routes![health])
+</span><span>        .</span><span style="color:#96b5b4;">mount</span><span>(&quot;</span><span style="color:#a3be8c;">/static</span><span>&quot;, FileServer::from(relative!(&quot;</span><span style="color:#a3be8c;">static</span><span>&quot;)))
+</span><span>        .</span><span style="color:#96b5b4;">mount</span><span>(&quot;</span><span style="color:#a3be8c;">/assets</span><span>&quot;, FileServer::from(relative!(&quot;</span><span style="color:#a3be8c;">assets</span><span>&quot;)))
+</span><span>}
+</span><span>
+</span><span style="color:#65737e;">// main function
+</span><span>#[</span><span style="color:#bf616a;">shuttle_runtime</span><span>::</span><span style="color:#bf616a;">main</span><span>]
+</span><span>async </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() -&gt; shuttle_rocket::ShuttleRocket {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> rocket = </span><span style="color:#96b5b4;">create</span><span>();
+</span><span>
+</span><span>    Ok(rocket.</span><span style="color:#96b5b4;">into</span><span>())
+</span><span>}
+</span></code></pre>
+<p>I've gone ahead and added templating for Tera as well. You'll need to do <code>cargo add tera</code> to add the dependency to your <code>Cargo.toml</code> configuration. We pull in Rocket's <code>fs</code> module and leverage the <code>FileServer</code> method, passing it a relative path to the folder called 'static' which will live in the root of your project and serve as home to static assets. While you're at it, at the same level, create a folder called 'templates'. When done, your project directory tree should look like:</p>
+<p><img src="https://jeff-mitchell.dev/blog/2024/2024-09-15-serving-the-web-with-rocket/directory-structure-static-files.png" alt="project directory tree" /></p>
+<h2 id="tera-templating">Tera Templating</h2>
+<p>I sort of folded a couple of steps into one above, so let's talk about the templating step a little more. Rocket has super easy support for the <a rel="noopener noreferrer" target="_blank" href="https://keats.github.io/tera/">Tera</a> templating engine, which is the one I've been focusing on lately. We add support for templating in general by pulling in <code>rocket_dyn_templates</code> as a dependency, specifically the <code>context!</code> macro and <code>Template</code> responder. In our <code>create()</code> function, we have to add a so-called &quot;fairing&quot;, which automatically registers all available templates saved in the <code>/templates</code> folder in the project root.</p>
+<p>We add a route and handler function which serves back the equivalent of <code>index.html</code>. We pass a message variable, via the <code>context!</code> macro with the text &quot;Hello, World!&quot; which will be rendered into the template at the location of our choice.</p>
+<h2 id="finishing-touches">Finishing Touches</h2>
+<p>There are a couple of last things to do, we need to actually have some templates. Create <code>base.tera.html</code> and <code>index.tera.html</code> in the templates folder, and give them the following content:</p>
+<p>base.tera.html:</p>
+<pre data-lang="html" style="background-color:#2b303b;color:#c0c5ce;" class="language-html "><code class="language-html" data-lang="html"><span>&lt;!</span><span style="color:#b48ead;">DOCTYPE </span><span style="color:#d08770;">html</span><span>&gt;
+</span><span>&lt;</span><span style="color:#bf616a;">html </span><span style="color:#d08770;">lang</span><span>=&quot;</span><span style="color:#a3be8c;">en</span><span>&quot;&gt;
+</span><span>  &lt;</span><span style="color:#bf616a;">head</span><span>&gt;
+</span><span>    &lt;</span><span style="color:#bf616a;">meta </span><span style="color:#d08770;">charset</span><span>=&quot;</span><span style="color:#a3be8c;">UTF-8</span><span>&quot; /&gt;
+</span><span>    &lt;</span><span style="color:#bf616a;">meta </span><span style="color:#d08770;">name</span><span>=&quot;</span><span style="color:#a3be8c;">viewport</span><span>&quot; </span><span style="color:#d08770;">content</span><span>=&quot;</span><span style="color:#a3be8c;">width=device-width, initial-scale=1.0</span><span>&quot; /&gt;
+</span><span>    &lt;</span><span style="color:#bf616a;">link </span><span style="color:#d08770;">rel</span><span>=&quot;</span><span style="color:#a3be8c;">preload</span><span>&quot; </span><span style="color:#d08770;">href</span><span>=&quot;</span><span style="color:#a3be8c;">static/screen.css</span><span>&quot; </span><span style="color:#d08770;">as</span><span>=&quot;</span><span style="color:#a3be8c;">style</span><span>&quot; /&gt;
+</span><span>    &lt;</span><span style="color:#bf616a;">link </span><span style="color:#d08770;">rel</span><span>=&quot;</span><span style="color:#a3be8c;">preload</span><span>&quot; </span><span style="color:#d08770;">href</span><span>=&quot;</span><span style="color:#a3be8c;">static/scripts.js</span><span>&quot; </span><span style="color:#d08770;">as</span><span>=&quot;</span><span style="color:#a3be8c;">script</span><span>&quot; /&gt;
+</span><span>    &lt;</span><span style="color:#bf616a;">title</span><span>&gt;Rocket Web Template | Home&lt;/</span><span style="color:#bf616a;">title</span><span>&gt;
+</span><span>    &lt;</span><span style="color:#bf616a;">link
+</span><span>      </span><span style="color:#d08770;">rel</span><span>=&quot;</span><span style="color:#a3be8c;">stylesheet</span><span>&quot;
+</span><span>      </span><span style="color:#d08770;">type</span><span>=&quot;</span><span style="color:#a3be8c;">text/css</span><span>&quot;
+</span><span>      </span><span style="color:#d08770;">href</span><span>=&quot;</span><span style="color:#a3be8c;">static/screen.css</span><span>&quot;
+</span><span>      </span><span style="color:#d08770;">media</span><span>=&quot;</span><span style="color:#a3be8c;">screen</span><span>&quot;
+</span><span>    /&gt;
+</span><span>    &lt;</span><span style="color:#bf616a;">link </span><span style="color:#d08770;">rel</span><span>=&quot;</span><span style="color:#a3be8c;">icon</span><span>&quot; </span><span style="color:#d08770;">type</span><span>=&quot;</span><span style="color:#a3be8c;">image/ico</span><span>&quot; </span><span style="color:#d08770;">href</span><span>=&quot;</span><span style="color:#a3be8c;">static/favicon.ico</span><span>&quot; /&gt;
+</span><span>  &lt;/</span><span style="color:#bf616a;">head</span><span>&gt;
+</span><span>  &lt;</span><span style="color:#bf616a;">body</span><span>&gt;
+</span><span>    &lt;</span><span style="color:#bf616a;">header</span><span>&gt;
+</span><span>      &lt;</span><span style="color:#bf616a;">h1</span><span>&gt;Rocket Web Template&lt;/</span><span style="color:#bf616a;">h1</span><span>&gt;
+</span><span>    &lt;/</span><span style="color:#bf616a;">header</span><span>&gt;
+</span><span>    &lt;</span><span style="color:#bf616a;">main</span><span>&gt;{% block content %}{% endblock %}&lt;/</span><span style="color:#bf616a;">main</span><span>&gt;
+</span><span>    &lt;</span><span style="color:#bf616a;">script </span><span style="color:#d08770;">src</span><span>=&quot;</span><span style="color:#a3be8c;">static/scripts.js</span><span>&quot;&gt;&lt;/</span><span style="color:#bf616a;">script</span><span>&gt;
+</span><span>  &lt;/</span><span style="color:#bf616a;">body</span><span>&gt;
+</span><span>&lt;/</span><span style="color:#bf616a;">html</span><span>&gt;
+</span></code></pre>
+<p>index.tera.html:</p>
+<pre data-lang="html" style="background-color:#2b303b;color:#c0c5ce;" class="language-html "><code class="language-html" data-lang="html"><span>{% extends &quot;base&quot; %} {% block content %}
+</span><span>&lt;</span><span style="color:#bf616a;">section</span><span>&gt;{{ message }}&lt;/</span><span style="color:#bf616a;">section</span><span>&gt;
+</span><span>{% endblock content %}
+</span></code></pre>
+<h3 id="the-moment-of-truth">The Moment of Truth</h3>
+<p>With all these pieces in place:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">cargo</span><span> shuttle run
+</span></code></pre>
+<p>Once the Rocket web server launches, open your browser and navigate to <code>http://localhost:8000</code> and you should see served up in your browser:</p>
+<p><img src="https://jeff-mitchell.dev/blog/2024/2024-09-15-serving-the-web-with-rocket/rocket-hello-world.png" alt="Rocket Hello World" /></p>
+<p>Easy peasy!</p>
+<p>From here, you can add more resources, routes, logic, whatever you need. Assets are served up from the <code>assets</code> folder and you can apply CSS styles and JavaScript as you traditionally would in a vanilla web tech site.</p>
+<h2 id="closing-thoughts">Closing Thoughts</h2>
+<p>I think it's lazy to default to JavaScript for the backend when simple, easy to get started with solutions like Rocket exist. Yes, you have to know Rust, and that can be a blocker, but you don't have to know <em>that</em> much Rust. You sure won't be forced into dealing with lifetimes and all the higher order concepts alone. Rocket takes care of many things for you and quite simply just gets out of your way.</p>
+<p>Think about it, for your next project.</p>
+<h2 id="references">References</h2>
+<p><a rel="noopener noreferrer" target="_blank" href="https://rocket.rs/guide/v0.5/">The Rocket Programming Guide</a>
+<a rel="noopener noreferrer" target="_blank" href="https://keats.github.io/tera/">Tera Template Engine for Rust</a></p>
+
+
+        
+    
+
+        
+        
+    </article></div>
+    <div class="pagination">
+        <div class="pagination__buttons">
+            </div>
+    </div>
+<footer class="footer">
+        <div class="footer__inner"><div class="copyright">
+            <span>© 2024 Jeffery D Mitchell :: Powered by <a href="https://www.getzola.org/">Zola</a>:: Zerm theme made by <a href="https://github.com/ejmg">ejmg</a> :: Hosted on <a href="https://shuttle.rs">Shuttle</a> :: Follow me (and ask questions or comment) on <a href="https://bsky.app/profile/jeff-mitchell-dev.bsky.social">Bluesky</a></span>
+        </div>
+    <script type="text/javascript" src="https://jeff-mitchell.dev/assets/js/main.js"></script>
+</div>
+        
+
+      </footer></div>
+    <!-- Default Statcounter code for Jeff Mitchell Dev https://jeff-mitchell.dev
+-->
+    <script type="text/javascript">
+      var sc_project = 13027926;
+      var sc_invisible = 1;
+      var sc_security = "1625b230";
+    </script>
+    <script
+      type="text/javascript"
+      src="https://www.statcounter.com/counter/counter.js"
+      async
+    ></script>
+    <noscript
+      ><div class="statcounter">
+        <a
+          title="Web Analytics Made Easy -
+Statcounter"
+          href="https://statcounter.com/"
+          target="_blank"
+          ><img
+            class="statcounter"
+            src="https://c.statcounter.com/13027926/0/1625b230/1/"
+            alt="Web Analytics Made Easy - Statcounter"
+            referrerpolicy="no-referrer-when-downgrade"
+        /></a></div
+    ></noscript>
+    <!-- End of Statcounter Code -->
+     <script type="text/javascript" src="https://jeff-mitchell.dev/elasticlunr.min.js"></script>
+     <script type="text/javascript" src="https://jeff-mitchell.dev/search.js"></script>
+  </body>
+</html>

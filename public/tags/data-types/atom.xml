@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>jeff-mitchell.dev - data types</title>
+    <subtitle>A blog mostly about Rust...mostly...</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://jeff-mitchell.dev/tags/data-types/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2022-04-18T00:00:00+00:00</updated>
+    <id>https://jeff-mitchell.dev/tags/data-types/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Pouring the Footings: Compound Data Types</title>
+        <published>2022-04-18T00:00:00+00:00</published>
+        <updated>2022-04-18T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-04-18-pouring-the-footings-compound/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-04-18-pouring-the-footings-compound/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-04-18-pouring-the-footings-compound/">&lt;p&gt;Selecting a data structure model is a key step in software development. Previously, I showed the very basic single data types in Rust. This article covers compound data types. Compound types can incorporate multiple building blocks in one overall type.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;tuples&quot;&gt;Tuples&lt;&#x2F;h3&gt;
+&lt;p&gt;A tuple can contain multiple values, each with their own type, into one single entity. Tuples have a fixed length, they cannot grow or shrink later on. Tuples are stored on the stack in memory. Care is needed up front with creation because a tuples size can’t be modified later. You can modify the values inside the tuple, but new values can’t be added to it.&lt;&#x2F;p&gt;
+&lt;p&gt;We can declare a tuple like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;let survey_result: (&amp;amp;str, u8, bool) = (&amp;quot;John&amp;quot;, 36, true);
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We’ve created a variable name called survey_result and bound a string slice (haven’t talked about strings yet, don’t worry for now), an integer, and a boolean together into a tuple. This variable could represent the data received after submission of a survey form. There are type annotations immediately following the variable name. These are optional. In most cases, Rust can “infer” (figure out) the types needed.&lt;&#x2F;p&gt;
+&lt;p&gt;There are a couple of different ways to access the values inside a tuple.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Via Indicies&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Individual values inside a tuple are indexed from 0, 1, 2… similar to arrays or vectors. Values can be accessed with a (.) followed by the value index, like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;    let survey_result: (&amp;amp;str, u8, bool) = (&amp;quot;John&amp;quot;, 36, true);
+&lt;&#x2F;span&gt;&lt;span&gt;    let name = survey_result.0;
+&lt;&#x2F;span&gt;&lt;span&gt;    let age = survey_result.1;
+&lt;&#x2F;span&gt;&lt;span&gt;    let answer = survey_result.2;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;em&gt;Via Destructuring&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The index method is a little verbose and it can be difficult to track the indicies if the tuple is large. It’s more elegant (and efficient) to use the destructuring method, like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;     let survey_result: (&amp;amp;str, u8, bool) = (&amp;quot;John&amp;quot;, 36, true);
+&lt;&#x2F;span&gt;&lt;span&gt;     let (name, age, answer) = survey_result;
+&lt;&#x2F;span&gt;&lt;span&gt;     println!(&amp;quot;{}, aged {}, answered {} on the survey form.&amp;quot;, name,    age, answer);
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We’ve created the same tuple named survey_result and bound the same three values as the previous example. Next, we bind the individual values within the tuple to three new variables named name, age, and answer. We’ve used the destructuring pattern instead of three separate let statements. Finally, we print out the result to the console.&lt;&#x2F;p&gt;
+&lt;p&gt;Tuples are useful for small data structures, but they become unwieldy for more complex needs. The better choice is a struct, which will be the topic of a future article.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;arrays&quot;&gt;Arrays&lt;&#x2F;h3&gt;
+&lt;p&gt;The next compound data type is an array. Similar to tuples, arrays are fixed length and cannot grow or shrink. Unlike tuples, arrays can only contain the same type of basic values. Arrays are useful in situations where a fixed number of elements is desired. An example array of the names of the days of the week can be created like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;let days = [&amp;quot;Monday&amp;quot;, &amp;quot;Tuesday&amp;quot;, &amp;quot;Wednesday&amp;quot;, &amp;quot;Thursday&amp;quot;, &amp;quot;Friday&amp;quot;, &amp;quot;Saturday&amp;quot;, &amp;quot;Sunday&amp;quot;];
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;I haven’t discussed memory yet as it relates to Rust, but similar to tuples, arrays are held in memory on the stack. This is because they are a known, fixed length, similar to the basic data types. Rust knows how much memory to allocate for them at compile time.&lt;&#x2F;p&gt;
+&lt;p&gt;Arrays are declared with square brackets and can receive an optional type declaration, like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;let numbers: [i32; 6] = [1, 2, 3, 4, 5, 6];
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We’ve created an array of six integers and bound it to the variable named numbers. The type declaration is enclosed in square brackets and contains the type followed by a semicolon and the number of elements in the array.&lt;&#x2F;p&gt;
+&lt;p&gt;If for some reason an array is needed that initially has all the same elements, a short form can be used to declare it, like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;let initial_values = [3; 3];
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This creates an array with three elements, all having the integer value 3.&lt;&#x2F;p&gt;
+&lt;p&gt;Elements within an array are accessed by referencing the variable name and appending an index surrounded with square brackets, like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;     let weekdays = [&amp;quot;Monday&amp;quot;, &amp;quot;Tuesday&amp;quot;, &amp;quot;Wednesday&amp;quot;, &amp;quot;Thursday&amp;quot;, &amp;quot;Friday&amp;quot;]
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;     let midweek = weekdays[2];
+&lt;&#x2F;span&gt;&lt;span&gt;     let endofweek = weekdays[4];
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here we declare an array variable that contains the five days of the week. Individual elements are indexed from 0 to 4. We then assign Wednesday to a new variable called midweek and Friday to a new variable called endofweek.&lt;&#x2F;p&gt;
+&lt;p&gt;It’s important to remember the 0 start index of an array. I messed up while writing this 🙂 I think whoever decided to start indexing at zero should have their head examined, but it is what it is.&lt;&#x2F;p&gt;
+&lt;p&gt;To conclude the discussion on arrays, Rust will help you when accessing array elements by automatically checking that the specified index is less than the array’s length. A runtime error will be received in the event the program tries to access an array index that is beyond the end of the array.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
+&lt;p&gt;This article has covered Rust’s compound data types, tuples and arrays. I haven’t seen or written giant amounts of Rust code yet, but I’ve not seen these data structures used particularly often. The go-to seems to be vectors, particularly vectors of structs. The potential unwieldiness of tuples and the inability of arrays to grow or shrink I think limits their use cases. They both have the advantage of being stored on the stack in memory, so they are cheap to make and quick to access. At the end of the day, both are an available tool and you the programmer must choose what works best for your particular problem.&lt;&#x2F;p&gt;
+&lt;p&gt;References&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch03-02-data-types.html&quot;&gt;The Rust Programming Language, Chapter 3.2&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Pouring the Footings: Single Value Data Types</title>
+        <published>2022-04-14T00:00:00+00:00</published>
+        <updated>2022-04-14T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-04-14-pouring-the-footings-single/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-04-14-pouring-the-footings-single/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-04-14-pouring-the-footings-single/">&lt;p&gt;Today I continue my writing campaign about the Rust language. If you haven’t noticed, I’m roughly following the chapter layout of The Rust Programming Language, also known as “The Rust Book”. I’ve tried repeatedly to read The Book, but have concluded reading passively is useless. It’s a book that requires active reading.&lt;&#x2F;p&gt;
+&lt;p&gt;So, I will semi-blog my way through it here on my site.&lt;&#x2F;p&gt;
+&lt;p&gt;I’ve covered the following basics so far:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;creating a Hello, World&lt;&#x2F;li&gt;
+&lt;li&gt;use of constants&lt;&#x2F;li&gt;
+&lt;li&gt;variables, mutability, shadowing, and comments&lt;&#x2F;li&gt;
+&lt;li&gt;I’ll now turn to another basic language building block, data types. Data types are at the core of getting things done in Rust.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;There are two broad data types available, single value and compound value. This article will focus on single value types. Compound value types are on deck as they deserve attention on their own.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;scalar-types&quot;&gt;Scalar Types&lt;&#x2F;h3&gt;
+&lt;p&gt;Single value data types represent one value, be it a number, character, or boolean. They are the simplest data types to work with and can be used in lots of ways and in combination with more complex data structures. Grouping these simple data types into structures, vectors, or hashmaps are typical use cases.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Integers&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;An integer is a number without a fractional component and can be signed or unsigned. There are several different maximum lengths of integers, chosen depending on the size of the number you need to represent. Rust defaults to an i32 or 32-bit integer.&lt;&#x2F;p&gt;
+&lt;p&gt;Here’s an example of an integer variable:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;let life = 42;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We’ve created a variable named life and bound the integer value 42 to it.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Floating-Point&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;A floating-point number has a decimal component. Rust supports 32-bit (f32) and 64-bit (f64) floating-point numbers. The default is f64. All floating-point numbers can be signed, there is no unsigned option like with integers.&lt;&#x2F;p&gt;
+&lt;p&gt;Let’s create a floating-point variable:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;let pi = 3.14;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We’ve created a variable named pi and bound the floating-point value 3.14 to it.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Numeric Operations&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Rust supports all the basic mathematical operations that one would expect in a programming language. These are addition, subtraction, multiplication, and division. There is also a remainder operation, which provides the remainder when one number is not cleanly divisible by the other.&lt;&#x2F;p&gt;
+&lt;p&gt;The combined knowledge I’ve written about in my articles thus far allows us to write a tiny program to do math on integers or floating point numbers. Here’s one possiblity:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;     let x = 5;
+&lt;&#x2F;span&gt;&lt;span&gt;     let y = 6;
+&lt;&#x2F;span&gt;&lt;span&gt;     let sum = x + y;
+&lt;&#x2F;span&gt;&lt;span&gt;     println!(&amp;quot;The sum of {} and {} is: {}&amp;quot;, x, y, sum);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Let’s walk through that:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;declare a main function as the starting point of the program&lt;&#x2F;li&gt;
+&lt;li&gt;create a variable named x and bind the integer value 5 to it&lt;&#x2F;li&gt;
+&lt;li&gt;create a variable named y and bind the integer value 6 to it&lt;&#x2F;li&gt;
+&lt;li&gt;create a variable named sum and use the addition operator to add x and y together and bind the result to the sum variable&lt;&#x2F;li&gt;
+&lt;li&gt;use the println! macro to print out a message with our inputs and the sum&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;em&gt;Boolean&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;If you need a true or false value, a boolean is the data type of choice. Booleans are used a lot when controlling flow in a program. Here’s an example:&lt;&#x2F;p&gt;
+&lt;p&gt;let liar_liar = true;
+We’ve created a variable name liar_liar and bound the boolean value true to it.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Character&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The final simple single value is a character. Characters are bound to variable names like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;let char = &amp;#39;Z&amp;#39;;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The character data type can be used to hold emojis as well as traditional characters. It’s important to remember that character values represent a single character. You may be asking yourself about strings, what about them? Well, strings are a separate and distinct data type from characters. Strings carry many different quirks and just as The Book does, I’ll be treating them separately in the future.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
+&lt;p&gt;The basic building blocks in Rust are pretty close to my ancient coding knowledge of a language called Pascal. As such, I’ve found them pretty easy to get acquainted with. This article has provided you with an overview of the basic, single value data types in Rust. These basic types can be composed in many different ways and are the core building blocks of any Rust program. Even advanced, higher-order stuff will have some basic math in it somewhere.&lt;&#x2F;p&gt;
+&lt;p&gt;There are lots of subtleties to read about regarding the single value data types, I invite you to consult The Rust Book should you wish to learn more.&lt;&#x2F;p&gt;
+&lt;p&gt;References&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch03-02-data-types.html&quot;&gt;The Rust Programming Language, Chapter 3.2&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

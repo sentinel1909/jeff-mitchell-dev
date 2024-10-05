@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Serving the Web with Axum - Jeff Mitchell</title>
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"><meta name="description" content="A blog mostly about Rust...mostly... Serving the Web with Axum An overview of how to get started with the Axum web framework"/><meta name="keywords" content="How To, server, axum" />
+    <meta property="og:title" content="jeff-mitchell.dev -&nbsp;Serving the Web with Axum" />
+    <meta property="og:type" content="website"/><meta property="og:url" content="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2024&#x2F;2024-08-21-serving-the-web-with-axum&#x2F;"/><meta property="og:description" content="An overview of how to get started with the Axum web framework"/>
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://jeff-mitchell.dev/style.css?h=97e262212a0704163528">
+    <link rel="stylesheet" href=" https://jeff-mitchell.dev/color/orange.css?h=a5a5d7faf9d4bc3e0b18">
+    
+<link rel="alternate" type="application/atom+xml" title="jeff-mitchell.dev RSS" href="https://jeff-mitchell.dev/atom.xml"></head>
+  <body>
+    <div class="container center">
+<header class="header">
+    <div class="header__inner">
+        <div class="header__logo">
+            <a href="&#x2F;">
+    <div class="logo">
+        jeff-mitchell.dev :: mis-adventures with the Rust programming language
+    </div>
+</a>
+        </div>
+        <div class="menu-trigger">menu</div>
+    </div>
+    
+    <nav class="menu">
+        <ul class="menu__inner menu__inner--desktop">
+            
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li></ul>
+
+        <ul class="menu__inner menu__inner--mobile">
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li>
+        </ul>
+    </nav>
+
+    </header>
+<div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </div>
+      <div class="content"><article class="post">
+        <header>
+            <h1 class="post-title">
+                <a href="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2024&#x2F;2024-08-21-serving-the-web-with-axum&#x2F;">Serving the Web with Axum</a>
+            </h1>
+            
+    <div class="post-meta">
+        <span class="post-date">2024.08.21
+                </span>
+
+        <span class="post-author">
+    ::
+    Jeff Mitchell</span>
+
+        
+
+    
+    :: {<a href="https://jeff-mitchell.dev/categories/how-to/">How To</a>} 
+
+            
+    ::
+    #<a href="https://jeff-mitchell.dev/tags/server/">server</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/axum/">axum</a>
+        
+    
+            
+        
+    </div>
+
+            
+    
+</header><p>Today we dip a toe into the Axum web framework.</p>
+<p>Axum is an unopinionated web application framework, written and maintained by the <a rel="noopener noreferrer" target="_blank" href="https://tokio.rs/">Tokio</a> team. It’s very light and is built on top of the <a rel="noopener noreferrer" target="_blank" href="https://hyper.rs/">hyper</a> HTTP library. Hyper reached a major milestone in November 2023, with it’s version 1.0 release. Axum was bumped to version 0.7 shortly after. The Tokio team wrote a <a rel="noopener noreferrer" target="_blank" href="https://tokio.rs/blog/2023-11-27-announcing-axum-0-7-0">great blog post</a> explaining the major changes.</p>
+<p>Alright, let’s get into some code…</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#65737e;">// src/main.rs
+</span><span>
+</span><span style="color:#65737e;">// dependencies
+</span><span style="color:#b48ead;">use </span><span>axum::{
+</span><span>    response::{Html, IntoResponse},
+</span><span>    routing::get,
+</span><span>    Router,
+</span><span>};
+</span><span style="color:#b48ead;">use </span><span>std::net::SocketAddr;
+</span><span>&gt;</span><span style="color:#b48ead;">use </span><span>tokio::net::TcpListener;
+</span><span>
+</span><span style="color:#65737e;">// root endpoint handler, sends back a &quot;Hello from Axum!&quot; message in HTML
+</span><span>async </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">hello_from_axum</span><span>() -&gt; impl IntoResponse {
+</span><span>    Html(include_str!(&quot;</span><span style="color:#a3be8c;">assets/index.html</span><span>&quot;))
+</span><span>}
+</span><span>
+</span><span style="color:#65737e;">// main function, creates a Router type, attaches our handler to the &quot;/&quot; route
+</span><span>#[</span><span style="color:#bf616a;">tokio</span><span>::</span><span style="color:#bf616a;">main</span><span>]
+</span><span>async </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>    </span><span style="color:#65737e;">// create an app, has the Router type, has one index route
+</span><span>    </span><span style="color:#b48ead;">let</span><span> app = Router::new().</span><span style="color:#96b5b4;">route</span><span>(&quot;</span><span style="color:#a3be8c;">/</span><span>&quot;, </span><span style="color:#96b5b4;">get</span><span>(hello_from_axum));
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// create an address
+</span><span>    </span><span style="color:#b48ead;">let</span><span> addr = IpAddr::</span><span style="color:#d08770;">V4</span><span>(Ipv4Addr::new(</span><span style="color:#d08770;">127</span><span>, </span><span style="color:#d08770;">0</span><span>, </span><span style="color:#d08770;">0</span><span>, </span><span style="color:#d08770;">1</span><span>));
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// create a port
+</span><span>    </span><span style="color:#b48ead;">let</span><span> port: </span><span style="color:#b48ead;">u16 </span><span>= </span><span style="color:#d08770;">8000</span><span>;
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// create a socket to listen on
+</span><span>    </span><span style="color:#b48ead;">let</span><span> socket = SocketAddr::new(addr, port);
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// get a listener, use the socket we just created; the TcpListener::bind method could fail, so we use a match statement to handle that
+</span><span>   </span><span style="color:#65737e;">// we panic if we can&#39;t get a listener, there&#39;s no point in going any further
+</span><span>    </span><span style="color:#b48ead;">let</span><span> listener = </span><span style="color:#b48ead;">match </span><span>TcpListener::bind(&amp;addr).await {
+</span><span>        Ok(tcp_listener) =&gt; tcp_listener,
+</span><span>        Err(err) =&gt; panic!(&quot;</span><span style="color:#a3be8c;">Could not get a TcpListener, {}</span><span>&quot;, err),
+</span><span>    };
+</span><span>
+</span><span>   </span><span style="color:#65737e;">// start up the server with our listener and the app; panics with an error message if the axum::serve function fails
+</span><span>    axum::serve(listener, app)
+</span><span>        .await
+</span><span>        .</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">Could not start up the axum server</span><span>&quot;);
+</span><span>}
+</span><span>
+</span></code></pre>
+<h3 id="dependencies">Dependencies</h3>
+<p>First, we bring into scope several things from the axum crate itself:</p>
+<ul>
+<li>the <code>Html</code> type and <code>IntoResponse</code> trait, both from the response module</li>
+<li>the <code>get</code> method from the routing module, used to handle get requests</li>
+<li>the <code>Router</code> type, used to compose handlers and services</li>
+<li>the <code>SocketAddr</code> type from the standard library</li>
+<li>the <code>TcpListener</code> type from the Tokio crate</li>
+</ul>
+<p>Axum relies on the Tokio crate for asyncronous operations, so be sure Tokio is added as a dependency in the Cargo.toml configuration file.</p>
+<p>Let’s look at the main function first, then we’ll talk about the single handler function as part of that.</p>
+<h3 id="main-function">Main Function</h3>
+<p>The general algorithm of our main function is:</p>
+<ul>
+<li>create an instance of our app; has one route at “/”, which accepts a get request and calls our <code>hello_from_axum</code> handler function
+<ul>
+<li>the <code>hello_from_axum</code> function takes no parameters, it simply returns some HTML created by reading in an <code>index.html</code> file using the <code>include_str!</code> macro</li>
+<li>the <code>impl IntoResponse</code> return type indicates that we leverage the fact that Axum knows how to return an Html message without us writing any extra code, the IntoResponse trait is already implemented for the <code>Html</code> type</li>
+</ul>
+</li>
+<li>create an address</li>
+<li>create a port</li>
+<li>use the address and port to create a socket</li>
+<li>create a listener, using the socket we just created, to listen for requests; there is some basic error handling here with a match statement, we panic if the attempt to get an address fails</li>
+<li>start up the server, using the <code>axum::serve</code> method, passing in the listener and app variables</li>
+</ul>
+<p>Error handling is purposely left fairly basic. It’s generally not a good practice to panic and crash the program, but in this instance it makes sense. The application can’t run without an address to listen on or a listener to receive requests, so if these things fail there isn’t a lot of point in doing anything else.</p>
+<p>That’s it!</p>
+<p>If you typed everything in correctly, you can start up the basic server by typing:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">cargo</span><span> run
+</span></code></pre>
+<p>into your console. The server should start up and be listening on port 3000. If something happens error wise, you’ll see error messages returned at the console.</p>
+<p>Head over to your web browser and type:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">http://localhost:8000
+</span></code></pre>
+<p>You should be greeted with:</p>
+<p><img src="https://jeff-mitchell.dev/blog/2024/2024-08-21-serving-the-web-with-axum/hello-from-axum.png" alt="Hello from Axum" /></p>
+<p>Pretty cool hey?</p>
+<p>I know, not really. It’s pretty basic and not very interesting. Axum is terrific in its simplicity, but at the same time has much power and a great ecosystem. It really is garnering the mindshare of the Rust community and many projects appear to be standardizing around it. I bounced around between things for a long time, but have recently decided to just learn Axum properly.</p>
+<p>There are a few warts on this simple server, chief of which is it doesn’t shut down very gracefully. I’ll show you how to do that in a future post.</p>
+
+
+        
+    
+
+        
+        
+    </article></div>
+    <div class="pagination">
+        <div class="pagination__buttons">
+            </div>
+    </div>
+<footer class="footer">
+        <div class="footer__inner"><div class="copyright">
+            <span>© 2024 Jeffery D Mitchell :: Powered by <a href="https://www.getzola.org/">Zola</a>:: Zerm theme made by <a href="https://github.com/ejmg">ejmg</a> :: Hosted on <a href="https://shuttle.rs">Shuttle</a> :: Follow me (and ask questions or comment) on <a href="https://bsky.app/profile/jeff-mitchell-dev.bsky.social">Bluesky</a></span>
+        </div>
+    <script type="text/javascript" src="https://jeff-mitchell.dev/assets/js/main.js"></script>
+</div>
+        
+
+      </footer></div>
+    <!-- Default Statcounter code for Jeff Mitchell Dev https://jeff-mitchell.dev
+-->
+    <script type="text/javascript">
+      var sc_project = 13027926;
+      var sc_invisible = 1;
+      var sc_security = "1625b230";
+    </script>
+    <script
+      type="text/javascript"
+      src="https://www.statcounter.com/counter/counter.js"
+      async
+    ></script>
+    <noscript
+      ><div class="statcounter">
+        <a
+          title="Web Analytics Made Easy -
+Statcounter"
+          href="https://statcounter.com/"
+          target="_blank"
+          ><img
+            class="statcounter"
+            src="https://c.statcounter.com/13027926/0/1625b230/1/"
+            alt="Web Analytics Made Easy - Statcounter"
+            referrerpolicy="no-referrer-when-downgrade"
+        /></a></div
+    ></noscript>
+    <!-- End of Statcounter Code -->
+     <script type="text/javascript" src="https://jeff-mitchell.dev/elasticlunr.min.js"></script>
+     <script type="text/javascript" src="https://jeff-mitchell.dev/search.js"></script>
+  </body>
+</html>

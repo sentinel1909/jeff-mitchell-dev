@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Pouring the Footings: Single Value Data Types - Jeff Mitchell</title>
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"><meta name="description" content="A blog mostly about Rust...mostly... Pouring the Footings: Single Value Data Types A continued study of the basics in Rust, focusing on the single value data types."/><meta name="keywords" content="Beginner Guides, rust, data types, single value" />
+    <meta property="og:title" content="jeff-mitchell.dev -&nbsp;Pouring the Footings: Single Value Data Types" />
+    <meta property="og:type" content="website"/><meta property="og:url" content="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2022&#x2F;2022-04-14-pouring-the-footings-single&#x2F;"/><meta property="og:description" content="A continued study of the basics in Rust, focusing on the single value data types."/>
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://jeff-mitchell.dev/style.css?h=97e262212a0704163528">
+    <link rel="stylesheet" href=" https://jeff-mitchell.dev/color/orange.css?h=a5a5d7faf9d4bc3e0b18">
+    
+<link rel="alternate" type="application/atom+xml" title="jeff-mitchell.dev RSS" href="https://jeff-mitchell.dev/atom.xml"></head>
+  <body>
+    <div class="container center">
+<header class="header">
+    <div class="header__inner">
+        <div class="header__logo">
+            <a href="&#x2F;">
+    <div class="logo">
+        jeff-mitchell.dev :: mis-adventures with the Rust programming language
+    </div>
+</a>
+        </div>
+        <div class="menu-trigger">menu</div>
+    </div>
+    
+    <nav class="menu">
+        <ul class="menu__inner menu__inner--desktop">
+            
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li></ul>
+
+        <ul class="menu__inner menu__inner--mobile">
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li>
+        </ul>
+    </nav>
+
+    </header>
+<div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </div>
+      <div class="content"><article class="post">
+        <header>
+            <h1 class="post-title">
+                <a href="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2022&#x2F;2022-04-14-pouring-the-footings-single&#x2F;">Pouring the Footings: Single Value Data Types</a>
+            </h1>
+            
+    <div class="post-meta">
+        <span class="post-date">2022.04.14
+                </span>
+
+        <span class="post-author">
+    ::
+    Jeff Mitchell</span>
+
+        
+
+    
+    :: {<a href="https://jeff-mitchell.dev/categories/beginner-guides/">Beginner Guides</a>} 
+
+            
+    ::
+    #<a href="https://jeff-mitchell.dev/tags/rust/">rust</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/data-types/">data types</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/single-value/">single value</a>
+        
+    
+            
+        
+    </div>
+
+            
+    
+</header><p>Today I continue my writing campaign about the Rust language. If you haven’t noticed, I’m roughly following the chapter layout of The Rust Programming Language, also known as “The Rust Book”. I’ve tried repeatedly to read The Book, but have concluded reading passively is useless. It’s a book that requires active reading.</p>
+<p>So, I will semi-blog my way through it here on my site.</p>
+<p>I’ve covered the following basics so far:</p>
+<ul>
+<li>creating a Hello, World</li>
+<li>use of constants</li>
+<li>variables, mutability, shadowing, and comments</li>
+<li>I’ll now turn to another basic language building block, data types. Data types are at the core of getting things done in Rust.</li>
+</ul>
+<p>There are two broad data types available, single value and compound value. This article will focus on single value types. Compound value types are on deck as they deserve attention on their own.</p>
+<h3 id="scalar-types">Scalar Types</h3>
+<p>Single value data types represent one value, be it a number, character, or boolean. They are the simplest data types to work with and can be used in lots of ways and in combination with more complex data structures. Grouping these simple data types into structures, vectors, or hashmaps are typical use cases.</p>
+<p><em>Integers</em></p>
+<p>An integer is a number without a fractional component and can be signed or unsigned. There are several different maximum lengths of integers, chosen depending on the size of the number you need to represent. Rust defaults to an i32 or 32-bit integer.</p>
+<p>Here’s an example of an integer variable:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>let life = 42;
+</span></code></pre>
+<p>We’ve created a variable named life and bound the integer value 42 to it.</p>
+<p><em>Floating-Point</em></p>
+<p>A floating-point number has a decimal component. Rust supports 32-bit (f32) and 64-bit (f64) floating-point numbers. The default is f64. All floating-point numbers can be signed, there is no unsigned option like with integers.</p>
+<p>Let’s create a floating-point variable:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>let pi = 3.14;
+</span></code></pre>
+<p>We’ve created a variable named pi and bound the floating-point value 3.14 to it.</p>
+<p><em>Numeric Operations</em></p>
+<p>Rust supports all the basic mathematical operations that one would expect in a programming language. These are addition, subtraction, multiplication, and division. There is also a remainder operation, which provides the remainder when one number is not cleanly divisible by the other.</p>
+<p>The combined knowledge I’ve written about in my articles thus far allows us to write a tiny program to do math on integers or floating point numbers. Here’s one possiblity:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>fn main() {
+</span><span>     let x = 5;
+</span><span>     let y = 6;
+</span><span>     let sum = x + y;
+</span><span>     println!(&quot;The sum of {} and {} is: {}&quot;, x, y, sum);
+</span><span>}
+</span></code></pre>
+<p>Let’s walk through that:</p>
+<ul>
+<li>declare a main function as the starting point of the program</li>
+<li>create a variable named x and bind the integer value 5 to it</li>
+<li>create a variable named y and bind the integer value 6 to it</li>
+<li>create a variable named sum and use the addition operator to add x and y together and bind the result to the sum variable</li>
+<li>use the println! macro to print out a message with our inputs and the sum</li>
+</ul>
+<p><em>Boolean</em></p>
+<p>If you need a true or false value, a boolean is the data type of choice. Booleans are used a lot when controlling flow in a program. Here’s an example:</p>
+<p>let liar_liar = true;
+We’ve created a variable name liar_liar and bound the boolean value true to it.</p>
+<p><em>Character</em></p>
+<p>The final simple single value is a character. Characters are bound to variable names like so:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>let char = &#39;Z&#39;;
+</span></code></pre>
+<p>The character data type can be used to hold emojis as well as traditional characters. It’s important to remember that character values represent a single character. You may be asking yourself about strings, what about them? Well, strings are a separate and distinct data type from characters. Strings carry many different quirks and just as The Book does, I’ll be treating them separately in the future.</p>
+<h3 id="conclusion">Conclusion</h3>
+<p>The basic building blocks in Rust are pretty close to my ancient coding knowledge of a language called Pascal. As such, I’ve found them pretty easy to get acquainted with. This article has provided you with an overview of the basic, single value data types in Rust. These basic types can be composed in many different ways and are the core building blocks of any Rust program. Even advanced, higher-order stuff will have some basic math in it somewhere.</p>
+<p>There are lots of subtleties to read about regarding the single value data types, I invite you to consult The Rust Book should you wish to learn more.</p>
+<p>References</p>
+<p><a rel="noopener noreferrer" target="_blank" href="https://doc.rust-lang.org/book/ch03-02-data-types.html">The Rust Programming Language, Chapter 3.2</a></p>
+
+
+        
+    
+
+        
+        
+    </article></div>
+    <div class="pagination">
+        <div class="pagination__buttons">
+            </div>
+    </div>
+<footer class="footer">
+        <div class="footer__inner"><div class="copyright">
+            <span>© 2024 Jeffery D Mitchell :: Powered by <a href="https://www.getzola.org/">Zola</a>:: Zerm theme made by <a href="https://github.com/ejmg">ejmg</a> :: Hosted on <a href="https://shuttle.rs">Shuttle</a> :: Follow me (and ask questions or comment) on <a href="https://bsky.app/profile/jeff-mitchell-dev.bsky.social">Bluesky</a></span>
+        </div>
+    <script type="text/javascript" src="https://jeff-mitchell.dev/assets/js/main.js"></script>
+</div>
+        
+
+      </footer></div>
+    <!-- Default Statcounter code for Jeff Mitchell Dev https://jeff-mitchell.dev
+-->
+    <script type="text/javascript">
+      var sc_project = 13027926;
+      var sc_invisible = 1;
+      var sc_security = "1625b230";
+    </script>
+    <script
+      type="text/javascript"
+      src="https://www.statcounter.com/counter/counter.js"
+      async
+    ></script>
+    <noscript
+      ><div class="statcounter">
+        <a
+          title="Web Analytics Made Easy -
+Statcounter"
+          href="https://statcounter.com/"
+          target="_blank"
+          ><img
+            class="statcounter"
+            src="https://c.statcounter.com/13027926/0/1625b230/1/"
+            alt="Web Analytics Made Easy - Statcounter"
+            referrerpolicy="no-referrer-when-downgrade"
+        /></a></div
+    ></noscript>
+    <!-- End of Statcounter Code -->
+     <script type="text/javascript" src="https://jeff-mitchell.dev/elasticlunr.min.js"></script>
+     <script type="text/javascript" src="https://jeff-mitchell.dev/search.js"></script>
+  </body>
+</html>

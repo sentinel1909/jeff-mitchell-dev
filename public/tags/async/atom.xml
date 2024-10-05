@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>jeff-mitchell.dev - async</title>
+    <subtitle>A blog mostly about Rust...mostly...</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://jeff-mitchell.dev/tags/async/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-09-04T00:00:00+00:00</updated>
+    <id>https://jeff-mitchell.dev/tags/async/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Other Blogs Highlight: Async Rust can be a pleasure to work with</title>
+        <published>2024-09-04T00:00:00+00:00</published>
+        <updated>2024-09-04T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Jeff Mitchell
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2024/2024-09-04-other-blogs-highlight-async-rust-can-be-a-pleasure/"/>
+        <id>https://jeff-mitchell.dev/blog/2024/2024-09-04-other-blogs-highlight-async-rust-can-be-a-pleasure/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2024/2024-09-04-other-blogs-highlight-async-rust-can-be-a-pleasure/">&lt;p&gt;I&#x27;ve yet to find out for myself, because I don&#x27;t use async Rust beyond the bounds of frameworks such as Axum. I hear there is eventual agony around the use of async Rust.&lt;&#x2F;p&gt;
+&lt;p&gt;Thanks to &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;daily.dev&quot;&gt;daily.dev&lt;&#x2F;a&gt;, this article came to my attention:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;emschwartz.me&#x2F;async-rust-can-be-a-pleasure-to-work-with-without-send-sync-static&#x2F;&quot;&gt;Async Rust can be a pleasure to work with (without &lt;code&gt;Send + Sync + &#x27;static&lt;&#x2F;code&gt;)&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;I loved this particular quote:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Some of the pain we feel when writing async Rust today comes from the fact that we&#x27;re circumventing one of the core parts of Rust (using lifetimes and the drop checker for automatic cleanup) and going against the natural &amp;quot;grain&amp;quot; of the language. It&#x27;s not the same as unsafe, but with &#x27;static we are turning off a core part of the language -- and the result is painful.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;Until I read this, I didn&#x27;t realize just &lt;em&gt;where&lt;&#x2F;em&gt; the pain comes from.&lt;&#x2F;p&gt;
+&lt;p&gt;Give the piece a read, it might just open your eyes.&lt;&#x2F;p&gt;
+&lt;p&gt;There are other ways and other choices. I hope to explore more as my experience grows.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

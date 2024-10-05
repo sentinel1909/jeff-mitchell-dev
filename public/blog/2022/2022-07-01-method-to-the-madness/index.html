@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Method to the Madness - Jeff Mitchell</title>
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"><meta name="description" content="A blog mostly about Rust...mostly... Method to the Madness An introduction to the method syntax."/><meta name="keywords" content="Intermediate Guides, rust, methods" />
+    <meta property="og:title" content="jeff-mitchell.dev -&nbsp;Method to the Madness" />
+    <meta property="og:type" content="website"/><meta property="og:url" content="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2022&#x2F;2022-07-01-method-to-the-madness&#x2F;"/><meta property="og:description" content="An introduction to the method syntax."/>
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://jeff-mitchell.dev/style.css?h=97e262212a0704163528">
+    <link rel="stylesheet" href=" https://jeff-mitchell.dev/color/orange.css?h=a5a5d7faf9d4bc3e0b18">
+    
+<link rel="alternate" type="application/atom+xml" title="jeff-mitchell.dev RSS" href="https://jeff-mitchell.dev/atom.xml"></head>
+  <body>
+    <div class="container center">
+<header class="header">
+    <div class="header__inner">
+        <div class="header__logo">
+            <a href="&#x2F;">
+    <div class="logo">
+        jeff-mitchell.dev :: mis-adventures with the Rust programming language
+    </div>
+</a>
+        </div>
+        <div class="menu-trigger">menu</div>
+    </div>
+    
+    <nav class="menu">
+        <ul class="menu__inner menu__inner--desktop">
+            
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li></ul>
+
+        <ul class="menu__inner menu__inner--mobile">
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li>
+        </ul>
+    </nav>
+
+    </header>
+<div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </div>
+      <div class="content"><article class="post">
+        <header>
+            <h1 class="post-title">
+                <a href="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2022&#x2F;2022-07-01-method-to-the-madness&#x2F;">Method to the Madness</a>
+            </h1>
+            
+    <div class="post-meta">
+        <span class="post-date">2022.07.01
+                </span>
+
+        <span class="post-author">
+    ::
+    Jeff Mitchell</span>
+
+        
+
+    
+    :: {<a href="https://jeff-mitchell.dev/categories/intermediate-guides/">Intermediate Guides</a>} 
+
+            
+    ::
+    #<a href="https://jeff-mitchell.dev/tags/rust/">rust</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/methods/">methods</a>
+        
+    
+            
+        
+    </div>
+
+            
+    
+</header><h3 id="the-method-syntax">The Method Syntax</h3>
+<p>I’m going to turn my attention now to something called the method syntax. It’s common to structs and enums, which I’ve covered in previous outings.</p>
+<p>Structs and enums can have methods associated with them. This enables custom functionality to be implemented.</p>
+<p>Let’s do this discussion with the help of an example.</p>
+<h3 id="a-circle-calculator">A Circle Calculator</h3>
+<p>Here is a Rust program which will help us calculate the key characteristics of a circle, namely its area, diameter, and circumference. Respectively, these characteristics are:</p>
+<ul>
+<li>area: the amount of space inside the circle, the equation for calculating the area is: A = pi x r²</li>
+<li>diameter: the “width” of the circle, the equation for calculating the diameter is: D = 2 x r</li>
+<li>circumference: the distance around the circle, the equation for calculating the circumference is: C = 2 x pi x r</li>
+<li>r is the radius of the circle and pi is the Archimedes’ constant which is 3.14</li>
+</ul>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">use </span><span>std::f32:consts::</span><span style="color:#d08770;">PI</span><span>;
+</span><span style="color:#b48ead;">struct </span><span>Circle(</span><span style="color:#b48ead;">f32</span><span>);
+</span><span>
+</span><span style="color:#b48ead;">impl </span><span>Circle {
+</span><span>	</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">area</span><span>(&amp;</span><span style="color:#bf616a;">self</span><span>) -&gt; </span><span style="color:#b48ead;">f32 </span><span>{
+</span><span>		</span><span style="color:#d08770;">PI </span><span>* (</span><span style="color:#bf616a;">self</span><span>.</span><span style="color:#d08770;">0 </span><span>* </span><span style="color:#bf616a;">self</span><span>.</span><span style="color:#d08770;">0</span><span>)
+</span><span>	}
+</span><span>
+</span><span>	</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">diameter</span><span>(&amp;</span><span style="color:#bf616a;">self</span><span>) -&gt; </span><span style="color:#b48ead;">f32 </span><span>{
+</span><span>		</span><span style="color:#d08770;">2.0 </span><span>* </span><span style="color:#bf616a;">self</span><span>.</span><span style="color:#d08770;">0
+</span><span>	}
+</span><span>
+</span><span>	</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">circumference</span><span>(&amp;</span><span style="color:#bf616a;">self</span><span>) -&gt; </span><span style="color:#b48ead;">f32 </span><span>{
+</span><span>		</span><span style="color:#d08770;">2.0 </span><span>* </span><span style="color:#d08770;">PI </span><span>* </span><span style="color:#bf616a;">self</span><span>.</span><span style="color:#d08770;">0
+</span><span>	}
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>	</span><span style="color:#b48ead;">let</span><span> circle1 = Circle(</span><span style="color:#d08770;">15.0</span><span>);
+</span><span>	println!(&quot;</span><span style="color:#a3be8c;">The area of the circle is: </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> metres</span><span>&quot;, circle1.</span><span style="color:#96b5b4;">area</span><span>());
+</span><span>	println!(&quot;</span><span style="color:#a3be8c;">The diameter of the circle is: </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> metres</span><span>&quot;, circle1.</span><span style="color:#96b5b4;">diameter</span><span>());
+</span><span>	println!(&quot;</span><span style="color:#a3be8c;">The circumference of the circle is: </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> metres</span><span>&quot;, circle1.</span><span style="color:#96b5b4;">circumference</span><span>());
+</span><span>}
+</span></code></pre>
+<p>We need the constant pi, which is available to us in Rust’s standard library, so we pull this in as a dependency with a use statement. Next, we declare a typle struct called Circle. This tuple struct contains one value, a 32-bit floating-point number which represents the radius. Next, we get to the meat of the matter. Structs can have methods defined for them, which allow you to write code to do something with the struct. Methods are started with the impl keyword, followed by a name which must match the name of the struct. Inside the curly braces, we define one or more functions which comprise our “implementation block” for the Circle struct. Everything inside this block is associated with the Circle struct.</p>
+<p>The first function, called area, takes a reference to the struct itself as a parameter (still haven’t talked about references and borrowing yet…I will get there, I promise) and returns the area of the circle. The equation I gave above for area is used. To access the radius value contained within our struct, we use self.0 to reference it. It’s important to note that Methods must take self as their first parameter. The can have other parameters, but self is always the first.</p>
+<p>The diameter and circumference functions perform a similar task, taking the radius provided as part of the struct, using the equations I noted earlier, and returning the diameter and circumference.</p>
+<p>The main function ends up being very lean, given we’ve implemented most of the program through the methods on the Circle struct. We declare an instance of our Circle struct, called circle1, and give it a radius value of 15.0 metres. Then, we calculate and output our results by calling, in turn, each of the methods we created. Methods are called by simply appending the method’s name to the struct variable, using dot notation.</p>
+<p>The output from this program will be:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span>The area of the circle is: </span><span style="color:#d08770;">706.5</span><span> metres
+</span><span>The diameter of the circle is: </span><span style="color:#d08770;">30</span><span> metres
+</span><span>The circumference of the circle is: </span><span style="color:#d08770;">94.2</span><span> metres
+</span></code></pre>
+<p>I’ll leave you to embellish this program with things like user input, maybe from command line arguments using the clap crate or whatever other way you choose. You could also fancy up the output if you like.</p>
+<h3 id="conclusion">Conclusion</h3>
+<p>I’ve presented the method syntax to you with a simple, practical example. Methods are a means of providing encapsulation and organization to your Rust programs. They enable the selective exposure of functionality to users as well as other parts of the program. Everything related to Circles is in one place, making it straightforward to know how to interact with the program.</p>
+<h3 id="references">References</h3>
+<p><a rel="noopener noreferrer" target="_blank" href="https://doc.rust-lang.org/book/ch05-03-method-syntax.html">The Rust Programming Language, Chapter 5.3, Method Syntax</a></p>
+
+
+        
+    
+
+        
+        
+    </article></div>
+    <div class="pagination">
+        <div class="pagination__buttons">
+            </div>
+    </div>
+<footer class="footer">
+        <div class="footer__inner"><div class="copyright">
+            <span>© 2024 Jeffery D Mitchell :: Powered by <a href="https://www.getzola.org/">Zola</a>:: Zerm theme made by <a href="https://github.com/ejmg">ejmg</a> :: Hosted on <a href="https://shuttle.rs">Shuttle</a> :: Follow me (and ask questions or comment) on <a href="https://bsky.app/profile/jeff-mitchell-dev.bsky.social">Bluesky</a></span>
+        </div>
+    <script type="text/javascript" src="https://jeff-mitchell.dev/assets/js/main.js"></script>
+</div>
+        
+
+      </footer></div>
+    <!-- Default Statcounter code for Jeff Mitchell Dev https://jeff-mitchell.dev
+-->
+    <script type="text/javascript">
+      var sc_project = 13027926;
+      var sc_invisible = 1;
+      var sc_security = "1625b230";
+    </script>
+    <script
+      type="text/javascript"
+      src="https://www.statcounter.com/counter/counter.js"
+      async
+    ></script>
+    <noscript
+      ><div class="statcounter">
+        <a
+          title="Web Analytics Made Easy -
+Statcounter"
+          href="https://statcounter.com/"
+          target="_blank"
+          ><img
+            class="statcounter"
+            src="https://c.statcounter.com/13027926/0/1625b230/1/"
+            alt="Web Analytics Made Easy - Statcounter"
+            referrerpolicy="no-referrer-when-downgrade"
+        /></a></div
+    ></noscript>
+    <!-- End of Statcounter Code -->
+     <script type="text/javascript" src="https://jeff-mitchell.dev/elasticlunr.min.js"></script>
+     <script type="text/javascript" src="https://jeff-mitchell.dev/search.js"></script>
+  </body>
+</html>

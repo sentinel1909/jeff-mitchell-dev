@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>jeff-mitchell.dev - coding principles</title>
+    <subtitle>A blog mostly about Rust...mostly...</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://jeff-mitchell.dev/tags/coding-principles/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2022-04-23T00:00:00+00:00</updated>
+    <id>https://jeff-mitchell.dev/tags/coding-principles/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Pillars</title>
+        <published>2022-04-23T00:00:00+00:00</published>
+        <updated>2022-04-23T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-04-23-pillars/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-04-23-pillars/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-04-23-pillars/">&lt;p&gt;There is so much pressure to build and develop faster, faster, faster. The result of the rush is a creation that can’t carry its own weight and buckles under pressure. It’s important to master the pillars of web development. Effort to master the pillars will reward you with skills that stand the test of time as well as creations that users will enjoy.&lt;&#x2F;p&gt;
+&lt;p&gt;I’m an engineer and I work in the construction industry. I see many parallels between constructing a building and constructing a website. On my own journey to learn web development, I’ve flitted between shiny frameworks, but have come to see there are four pillars…foundation, structure, form, and power. Not being intimate with each of them puts any skills with a framework on shaky ground.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;foundation-separation-of-concerns&quot;&gt;Foundation — Separation of Concerns&lt;&#x2F;h3&gt;
+&lt;p&gt;Every building needs to rest on stable soil, have solid footings, and sound structure to support itself and its occupants. A website is no different. Set up a clean folder structure and have separate files. HTML should be on its own, CSS should be on its own and properly referenced from your HTML files. JavaScript should be on its own and properly reference from your HTML files. Separating things out serves three purposes, it makes code easier to debug and maintain, it makes it understandable by others, and it makes the web site function efficiently. Attention spans are ever shorter, long load times will cause readers to move on to the next thing. The choices made in laying out the site will have a significant impact on performance.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;structure-html&quot;&gt;Structure — HTML&lt;&#x2F;h3&gt;
+&lt;p&gt;Solid HTML is the next important piece. HTML is the skeleton, keeping everything upright. It’s the floors and shear walls. If you do it right, your site will function and be useful to someone on an enormous range of devices, some of which may not have a screen. A key point is that HTML should explain what the elements of the site ARE (or should be), not what they should look like…that’s the job of CSS. Spend some time laying out your information and give it good structure. You’ll have a solid fallback.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;form-css&quot;&gt;Form — CSS&lt;&#x2F;h3&gt;
+&lt;p&gt;CSS breathes life into the HTML skeleton. Like the exterior envelope of a building, it gives form, colour and shape. Responsive design principles are brought in through CSS. There’s a lot of beauty that can be brought to bear with CSS on its own. Take some time to learn its nuances thoroughly and gain appreciation for its capabilities. Don’t use HTML where you should be leveraging CSS to create the look and feel you want.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;power-javascript&quot;&gt;Power — Javascript&lt;&#x2F;h3&gt;
+&lt;p&gt;The addition of some JavaScript gives a site functionality and juices it with power which enables users to get things done. If you’ve setup the structure and form correctly, JavaScript adds spice and that little “something” that puts the site over the top. JavaScript should be used sparingly. Most of the functionality of a site should come from proper design of the layout with HTML and design of styling with CSS.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
+&lt;p&gt;There’s a rush today that makes everything frantic and borderline unsustainable. The rush, when applied to web design, can result in products which are difficult to maintain and perform poorly for their intended audience. Take your time, smell the flowers, and make sure your creation has a solid footing with the pillars of web technology.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

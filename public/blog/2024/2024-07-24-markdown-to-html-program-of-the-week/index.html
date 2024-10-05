@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>markdown-html-rs - Converting Markdown Content to HTML - Jeff Mitchell</title>
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"><meta name="description" content="A blog mostly about Rust...mostly... markdown-html-rs - Converting Markdown Content to HTML Highlighting markdown-to-html, a Rust CLI program which helps you convert markdown content to HTML."/><meta name="keywords" content="Projects, rust, CLI app, markdown" />
+    <meta property="og:title" content="jeff-mitchell.dev -&nbsp;markdown-html-rs - Converting Markdown Content to HTML" />
+    <meta property="og:type" content="website"/><meta property="og:url" content="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2024&#x2F;2024-07-24-markdown-to-html-program-of-the-week&#x2F;"/><meta property="og:description" content="Highlighting markdown-to-html, a Rust CLI program which helps you convert markdown content to HTML."/>
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://jeff-mitchell.dev/style.css?h=97e262212a0704163528">
+    <link rel="stylesheet" href=" https://jeff-mitchell.dev/color/orange.css?h=a5a5d7faf9d4bc3e0b18">
+    
+<link rel="alternate" type="application/atom+xml" title="jeff-mitchell.dev RSS" href="https://jeff-mitchell.dev/atom.xml"></head>
+  <body>
+    <div class="container center">
+<header class="header">
+    <div class="header__inner">
+        <div class="header__logo">
+            <a href="&#x2F;">
+    <div class="logo">
+        jeff-mitchell.dev :: mis-adventures with the Rust programming language
+    </div>
+</a>
+        </div>
+        <div class="menu-trigger">menu</div>
+    </div>
+    
+    <nav class="menu">
+        <ul class="menu__inner menu__inner--desktop">
+            
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li></ul>
+
+        <ul class="menu__inner menu__inner--mobile">
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li>
+        </ul>
+    </nav>
+
+    </header>
+<div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </div>
+      <div class="content"><article class="post">
+        <header>
+            <h1 class="post-title">
+                <a href="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2024&#x2F;2024-07-24-markdown-to-html-program-of-the-week&#x2F;">markdown-html-rs - Converting Markdown Content to HTML</a>
+            </h1>
+            
+    <div class="post-meta">
+        <span class="post-date">2024.07.24
+                </span>
+
+        <span class="post-author">
+    ::
+    Jeff Mitchell</span>
+
+        
+
+    
+    :: {<a href="https://jeff-mitchell.dev/categories/projects/">Projects</a>} 
+
+            
+    ::
+    #<a href="https://jeff-mitchell.dev/tags/rust/">rust</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/cli-app/">CLI app</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/markdown/">markdown</a>
+        
+    
+            
+        
+    </div>
+
+            
+    
+</header><p>Alright folks, here it is...your Rust program of the week. I call it &quot;markdown-html-rs&quot;. It takes in a file with markdown content, including frontmatter, and outputs said markdown content to html.</p>
+<p>This project leverages the following community crates:</p>
+<ul>
+<li>clap (for CLI input)</li>
+<li>gray-matter (for parsing YAML style front matter)</li>
+<li>regex (to help identify front matter)</li>
+<li>thiserror (to reduce boilerplate in error handling)</li>
+<li>serde (for deserializing the incoming data)</li>
+</ul>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#65737e;">// main.rs
+</span><span style="color:#65737e;">// A command line program which takes a markdown file as input, converts to HTML, and outputs the HTML file
+</span><span>
+</span><span style="color:#65737e;">// dependencies
+</span><span style="color:#b48ead;">use </span><span>clap::Parser;
+</span><span style="color:#b48ead;">use </span><span>gray_matter::engine::</span><span style="color:#d08770;">YAML</span><span>;
+</span><span style="color:#b48ead;">use </span><span>gray_matter::Matter;
+</span><span style="color:#b48ead;">use </span><span>regex::Regex;
+</span><span style="color:#b48ead;">use </span><span>serde::Deserialize;
+</span><span style="color:#b48ead;">use </span><span>std::fs;
+</span><span style="color:#b48ead;">use </span><span>std::io::{</span><span style="color:#bf616a;">self</span><span>, Write};
+</span><span style="color:#b48ead;">use </span><span>std::string::FromUtf8Error;
+</span><span style="color:#b48ead;">use </span><span>thiserror::Error;
+</span><span>
+</span><span style="color:#65737e;">// enum to represent error types
+</span><span>#[</span><span style="color:#bf616a;">derive</span><span>(Error, Debug)]
+</span><span style="color:#b48ead;">enum </span><span>ConversionError {
+</span><span>    #[</span><span style="color:#bf616a;">error</span><span>(&quot;</span><span style="color:#a3be8c;">File read error: {0}</span><span>&quot;)]
+</span><span>    FileRead(std::io::Error),
+</span><span>    #[</span><span style="color:#bf616a;">error</span><span>(&quot;</span><span style="color:#a3be8c;">Deserialization error: {0}</span><span>&quot;)]
+</span><span>    Deserialization(serde_json::error::Error),
+</span><span>    #[</span><span style="color:#bf616a;">error</span><span>(&quot;</span><span style="color:#a3be8c;">File write error: {0}</span><span>&quot;)]
+</span><span>    FileWrite(std::io::Error),
+</span><span>    #[</span><span style="color:#bf616a;">error</span><span>(&quot;</span><span style="color:#a3be8c;">HTML write error: {0}</span><span>&quot;)]
+</span><span>    HTMLWrite(std::io::Error),
+</span><span>    #[</span><span style="color:#bf616a;">error</span><span>(&quot;</span><span style="color:#a3be8c;">Markdown conversion error: {0}</span><span>&quot;)]
+</span><span>    MarkdownConversion(FromUtf8Error),
+</span><span>    #[</span><span style="color:#bf616a;">error</span><span>(&quot;</span><span style="color:#a3be8c;">Regex error: {0}</span><span>&quot;)]
+</span><span>    Regex(regex::Error),
+</span><span>}
+</span><span>
+</span><span style="color:#65737e;">// struct to represent command line arguments
+</span><span>#[</span><span style="color:#bf616a;">derive</span><span>(Parser, Debug)]
+</span><span>#[</span><span style="color:#bf616a;">command</span><span>(author, version, about, long_about = None)]
+</span><span style="color:#b48ead;">struct </span><span>Args {
+</span><span>    #[</span><span style="color:#bf616a;">arg</span><span>(short, long)]
+</span><span>    </span><span style="color:#bf616a;">filename</span><span>: String,
+</span><span>}
+</span><span>
+</span><span style="color:#65737e;">// struct to represent the front matter of the markdown document
+</span><span>#[</span><span style="color:#bf616a;">allow</span><span>(dead_code)]
+</span><span>#[</span><span style="color:#bf616a;">derive</span><span>(Debug, Deserialize)]
+</span><span style="color:#b48ead;">struct </span><span>FrontMatter {
+</span><span>    </span><span style="color:#bf616a;">title</span><span>: String,
+</span><span>    </span><span style="color:#bf616a;">date</span><span>: String,
+</span><span>    </span><span style="color:#bf616a;">tags</span><span>: Vec&lt;String&gt;,
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">impl </span><span>Default </span><span style="color:#b48ead;">for </span><span>FrontMatter {
+</span><span>    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">default</span><span>() -&gt; </span><span style="color:#b48ead;">Self </span><span>{
+</span><span>        FrontMatter {
+</span><span>            title: &quot;&quot;.</span><span style="color:#96b5b4;">to_string</span><span>(),
+</span><span>            date: &quot;&quot;.</span><span style="color:#96b5b4;">to_string</span><span>(),
+</span><span>            tags: Vec::new(),
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() -&gt; Result&lt;(), ConversionError&gt; {
+</span><span>    </span><span style="color:#65737e;">// create an output buffer
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> stdout = io::stdout();
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// get the file name from the command line input
+</span><span>    </span><span style="color:#b48ead;">let</span><span> args = Args::parse();
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// read the file contents and save it as a vector of u8
+</span><span>    </span><span style="color:#65737e;">// convert the file contents into a markdown string
+</span><span>    </span><span style="color:#b48ead;">let</span><span> file_contents = fs::read(args.filename).</span><span style="color:#96b5b4;">map_err</span><span>(ConversionError::FileRead)?;
+</span><span>    </span><span style="color:#b48ead;">let</span><span> markdown_input =
+</span><span>        String::from_utf8(file_contents).</span><span style="color:#96b5b4;">map_err</span><span>(ConversionError::MarkdownConversion)?;
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// parse the front matter in the input string and deserialize it into a FrontMatter struct
+</span><span>    </span><span style="color:#65737e;">// remove the front matter, leaving on the body content of the markdown file
+</span><span>    </span><span style="color:#b48ead;">let</span><span> matter = Matter::&lt;YAML&gt;::new().</span><span style="color:#96b5b4;">parse</span><span>(&amp;markdown_input);
+</span><span>    </span><span style="color:#b48ead;">let</span><span> front_matter: FrontMatter = matter
+</span><span>        .data
+</span><span>        .</span><span style="color:#96b5b4;">as_ref</span><span>()
+</span><span>        .</span><span style="color:#96b5b4;">map</span><span>(|</span><span style="color:#bf616a;">data</span><span>| data.</span><span style="color:#96b5b4;">deserialize</span><span>())
+</span><span>        .</span><span style="color:#96b5b4;">transpose</span><span>()
+</span><span>        .</span><span style="color:#96b5b4;">map_err</span><span>(ConversionError::Deserialization)?
+</span><span>        .</span><span style="color:#96b5b4;">unwrap_or_default</span><span>();
+</span><span>
+</span><span>    writeln!(stdout, &quot;</span><span style="color:#d08770;">{:?}</span><span>&quot;, front_matter).</span><span style="color:#96b5b4;">map_err</span><span>(ConversionError::FileWrite)?;
+</span><span>    </span><span style="color:#b48ead;">let</span><span> frontmatter_regex =
+</span><span>        Regex::new(</span><span style="color:#b48ead;">r</span><span>&quot;</span><span style="color:#a3be8c;">---\s*\n(?s:.+?)\n---\s*\n</span><span>&quot;).</span><span style="color:#96b5b4;">map_err</span><span>(ConversionError::Regex)?;
+</span><span>    </span><span style="color:#b48ead;">let</span><span> markdown_body = frontmatter_regex.</span><span style="color:#96b5b4;">replace</span><span>(&amp;markdown_input, &quot;&quot;);
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// parse the markdown body and convert it to html, any html tags in the markdown file are passed through
+</span><span>    </span><span style="color:#b48ead;">let</span><span> parser = pulldown_cmark::Parser::new(&amp;markdown_body);
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> html_output = String::new();
+</span><span>    pulldown_cmark::html::push_html(&amp;</span><span style="color:#b48ead;">mut</span><span> html_output, parser);
+</span><span>
+</span><span>    </span><span style="color:#65737e;">// write the html output file
+</span><span>    fs::write(&quot;</span><span style="color:#a3be8c;">output.html</span><span>&quot;, html_output).</span><span style="color:#96b5b4;">map_err</span><span>(ConversionError::HTMLWrite)?;
+</span><span>    writeln!(stdout, &quot;</span><span style="color:#a3be8c;">Markdown converted and saved to output.html</span><span>&quot;)
+</span><span>        .</span><span style="color:#96b5b4;">map_err</span><span>(ConversionError::FileWrite)?;
+</span><span>
+</span><span>    Ok(())
+</span><span>}
+</span></code></pre>
+<p>The GitHub repo lives <a rel="noopener noreferrer" target="_blank" href="https://github.com/sentinel1909/markdown-html-rs">here</a>.</p>
+
+
+        
+    
+
+        
+        
+    </article></div>
+    <div class="pagination">
+        <div class="pagination__buttons">
+            </div>
+    </div>
+<footer class="footer">
+        <div class="footer__inner"><div class="copyright">
+            <span>© 2024 Jeffery D Mitchell :: Powered by <a href="https://www.getzola.org/">Zola</a>:: Zerm theme made by <a href="https://github.com/ejmg">ejmg</a> :: Hosted on <a href="https://shuttle.rs">Shuttle</a> :: Follow me (and ask questions or comment) on <a href="https://bsky.app/profile/jeff-mitchell-dev.bsky.social">Bluesky</a></span>
+        </div>
+    <script type="text/javascript" src="https://jeff-mitchell.dev/assets/js/main.js"></script>
+</div>
+        
+
+      </footer></div>
+    <!-- Default Statcounter code for Jeff Mitchell Dev https://jeff-mitchell.dev
+-->
+    <script type="text/javascript">
+      var sc_project = 13027926;
+      var sc_invisible = 1;
+      var sc_security = "1625b230";
+    </script>
+    <script
+      type="text/javascript"
+      src="https://www.statcounter.com/counter/counter.js"
+      async
+    ></script>
+    <noscript
+      ><div class="statcounter">
+        <a
+          title="Web Analytics Made Easy -
+Statcounter"
+          href="https://statcounter.com/"
+          target="_blank"
+          ><img
+            class="statcounter"
+            src="https://c.statcounter.com/13027926/0/1625b230/1/"
+            alt="Web Analytics Made Easy - Statcounter"
+            referrerpolicy="no-referrer-when-downgrade"
+        /></a></div
+    ></noscript>
+    <!-- End of Statcounter Code -->
+     <script type="text/javascript" src="https://jeff-mitchell.dev/elasticlunr.min.js"></script>
+     <script type="text/javascript" src="https://jeff-mitchell.dev/search.js"></script>
+  </body>
+</html>

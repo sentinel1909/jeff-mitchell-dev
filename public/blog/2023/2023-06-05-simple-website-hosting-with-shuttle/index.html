@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Simple Website Hosting with Shuttle - Jeff Mitchell</title>
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"><meta name="description" content="A blog mostly about Rust...mostly... Simple Website Hosting with Shuttle A brief article on how to host static web site files on Shuttle."/><meta name="keywords" content="How-To, rust, static files, shuttle" />
+    <meta property="og:title" content="jeff-mitchell.dev -&nbsp;Simple Website Hosting with Shuttle" />
+    <meta property="og:type" content="website"/><meta property="og:url" content="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2023&#x2F;2023-06-05-simple-website-hosting-with-shuttle&#x2F;"/><meta property="og:description" content="A brief article on how to host static web site files on Shuttle."/>
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="https://jeff-mitchell.dev/assets/fonts/FiraCode-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://jeff-mitchell.dev/style.css?h=97e262212a0704163528">
+    <link rel="stylesheet" href=" https://jeff-mitchell.dev/color/orange.css?h=a5a5d7faf9d4bc3e0b18">
+    
+<link rel="alternate" type="application/atom+xml" title="jeff-mitchell.dev RSS" href="https://jeff-mitchell.dev/atom.xml"></head>
+  <body>
+    <div class="container center">
+<header class="header">
+    <div class="header__inner">
+        <div class="header__logo">
+            <a href="&#x2F;">
+    <div class="logo">
+        jeff-mitchell.dev :: mis-adventures with the Rust programming language
+    </div>
+</a>
+        </div>
+        <div class="menu-trigger">menu</div>
+    </div>
+    
+    <nav class="menu">
+        <ul class="menu__inner menu__inner--desktop">
+            
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li></ul>
+
+        <ul class="menu__inner menu__inner--mobile">
+            
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/
+    
+">home</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/about/
+    
+">about</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/categories
+    
+">categories</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/tags
+    
+">tags</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/projects
+    
+">projects</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/resources
+    
+">resources</a>
+        </li>
+        <li>
+            <a href="
+    
+        https://jeff-mitchell.dev/atom.xml
+    
+">RSS</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;github.com&#x2F;sentinel1909
+    
+">GitHub</a>
+        </li>
+        <li>
+            <a href="
+    
+        https:&#x2F;&#x2F;query.rs
+    
+">query.rs</a>
+        </li>
+        </ul>
+    </nav>
+
+    </header>
+<div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </div>
+      <div class="content"><article class="post">
+        <header>
+            <h1 class="post-title">
+                <a href="https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2023&#x2F;2023-06-05-simple-website-hosting-with-shuttle&#x2F;">Simple Website Hosting with Shuttle</a>
+            </h1>
+            
+    <div class="post-meta">
+        <span class="post-date">2023.06.05
+                </span>
+
+        <span class="post-author">
+    ::
+    Jeff Mitchell</span>
+
+        
+
+    
+    :: {<a href="https://jeff-mitchell.dev/categories/how-to/">How-To</a>} 
+
+            
+    ::
+    #<a href="https://jeff-mitchell.dev/tags/rust/">rust</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/static-files/">static files</a>
+        
+    #<a href="https://jeff-mitchell.dev/tags/shuttle/">shuttle</a>
+        
+    
+            
+        
+    </div>
+
+            
+    
+</header><h2 id="simple-website-hosting">Simple Website Hosting</h2>
+<p>I discovered <a rel="noopener noreferrer" target="_blank" href="https://shuttle.rs">Shuttle</a> in mid-to-late 2022. I had <em>just</em> begun to develop the slightest notion of what I was doing with the Rust, since finishing Jayson Lennon's Rust course earlier in the year on <a rel="noopener noreferrer" target="_blank" href="https://zerotomastery.io">Zero to Mastery</a>. My learning has always been through a cocktail of blog posts on Medium, random articles on the internet, and bits of Stack Overflow. Hosting my Rust projects was always a struggle for me. I had started Luca Palmieri's &quot;Zero to Production in Rust&quot;, probably too early, and Chapter 5 of the book on deployment hadn't really stuck. I wanted to crack the deployment bits, because building things and letting them languish on my hard drive was not something I was interested in. For better for worse, I like to build in public. In reality, given the noise on the internet, it's unlikely anyone ever notices, but I enjoy the illusion that I am somehow helping others.</p>
+<p>There was an article I hit on Medium at one point about getting your Dockerized Rust app, whatever it was, up on fly.io. I followed that article, and began to understand what I had to do. I adapted the procedure for railway.app, which I also discovered and liked a lot. I managed to get a very early &quot;developer profile&quot; website together, serve it up with a Rocket backend and get the whole thing served up on railway.app. It was great! I remember feeling like so much had finally clicked...it was terrific feeling.</p>
+<p>Unfortunately, that first site was difficult to maintain, because my skills were still on the weak side, so I abandoned it.</p>
+<p>I still longed for a way to quickly and easily put my creations out into the world.</p>
+<h3 id="enter-shuttle">Enter Shuttle</h3>
+<p>In those early days of discovering the how's of deployment with Rust, the thing I came away with most was how complex it was, even for my simple little static website. There was a lot of hacking around and trial and error getting that first Dockerfile together such that railway.app would actually accept and build it. Granted, once it was done it was done, but I didn't enjoy the process of getting to a finished DockerFile. I had heard of Shuttle by this point, but when I first discovered this beautiful thing, static file hosting was not yet available. It eventually came along and somewhere early in 2023 I delightedly started to work with static files. I started contributing to the Shuttle documentation for the feature, helping flesh out the instructions and hopefully making the feature easier for others to read, understand, and implement. Shuttle neatly and tidyly takes the pain of Rust deployments away, and I wanted to do my part in showing that to the world in the clearest way I could.</p>
+<h3 id="axum-with-static-files-on-shuttle">Axum, with Static Files, on Shuttle</h3>
+<p><a rel="noopener noreferrer" target="_blank" href="https://docs.rs/axum/latest/axum/index.html">Axum</a> is a Rust web application framework. It is relatively simple to get up and running with and it's become my go-to lately for doing things on the web with Rust. In February, I restarted Zero to Production in Rust, doing it in Axum instead of Actix. Unfortunately, I've had to halt that project because I've hit a patch that's just out of reach skill wise. I do intend on returning, but am taking a little hiatus for the time being. That hasn't stopped me from wanting to learn more about Axum.</p>
+<p>Unlike other Rust web frameworks like Actix, Axum doesn't have a built in system of middleware. Instead, Axum relies on the Tower ecosystem for creation of support middleware. As far as hosting of static files is concerned, this used to the the territory of the axum-extra crate, which featured a router for single page applications (SPA). The static files example in the Shuttle Docs is based around use of SpaRouter to serve up the files in the static folder that you can provision by annotating your code with <code>#[shuttle_static_folder::StaticFolder] static_folder: PathBuf</code>. SpaRouter was deprecated in version 0.6.0 of axum-extra, in favour of the services available through the <code>tower-http</code> crate.</p>
+<p>I've never liked the notion of relying on bits that are deprecated so I went on a journey, working out exactly how to replace the relative ease of SpaRouter with a similar one-liner. This <a rel="noopener noreferrer" target="_blank" href="https://robert.kra.hn/posts/2022-04-03_rust-web-wasm/">article</a> by Robert Krahn, was an important find. Robert has kept it up to date, documenting how to get rid of SpaRouter using <code>ServeDir</code> from <code>tower-http::services</code>. The trouble is, I never understood his code. I set out with the intention of either explaining it (for all of you) or coming up with something simpler.</p>
+<p>I've cracked it...at least for a folder of vanilla HTML/CSS/JS files saved into the static folder that Shuttle will provision for you. Let's dig in...</p>
+<h3 id="servedir-with-tower-http">ServeDir with tower-http</h3>
+<p>Let's home right in on main.rs:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#65737e;">// src/main.rs
+</span><span>
+</span><span style="color:#b48ead;">use </span><span>axum::Router;
+</span><span style="color:#b48ead;">use </span><span>std::path::PathBuf;
+</span><span style="color:#b48ead;">use </span><span>tower_http::services::ServeDir;
+</span><span>
+</span><span>#[</span><span style="color:#bf616a;">shuttle_runtime</span><span>::</span><span style="color:#bf616a;">main</span><span>]
+</span><span>async </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">axum</span><span>(
+</span><span>    #[shuttle_static_folder::StaticFolder] </span><span style="color:#bf616a;">static_folder</span><span>: PathBuf,
+</span><span>) -&gt; shuttle_axum::ShuttleAxum {
+</span><span>    </span><span style="color:#65737e;">// build the router
+</span><span>    </span><span style="color:#b48ead;">let</span><span> router = Router::new()
+</span><span>         .</span><span style="color:#96b5b4;">nest_service</span><span>(&quot;</span><span style="color:#a3be8c;">/</span><span>&quot;, ServeDir::new(static_folder));
+</span><span>
+</span><span>    Ok(router.</span><span style="color:#96b5b4;">into</span><span>())
+</span><span>}
+</span></code></pre>
+<p>This code is pretty much identical to the example you've likely already seen through the Shuttle Docs. The key is <code>use tower_http::services::ServeDir;</code> We bring ServeDir into scope, which gives use a service that serves files from a given directory and all it's sub directories.</p>
+<p>Once this is in scope, we can use it to build a router with a single endpoint at &quot;/&quot;, by using <code>.nest_service</code>. We pass in <code>ServeDir::new(static_folder)</code>, where <code>static_folder</code> is what Shuttle has provisioned for us. Be sure to put all the files you want to host into that static folder, then, deploy to Shuttle by creating a new project container and deploying the project. All the things work, CSS is called properly when linked from the <code>&lt;head&gt;</code> tag and JavaScript is called when linked from the <code>&lt;script&gt;</code> tag. Navigation works as well within the site.</p>
+<h3 id="the-shuttle-advantage">The Shuttle Advantage</h3>
+<p>If you're a Rust afficionado, Shuttle is <strong>the</strong> way to build and showcase your work to the world. You can build and host your creations without twisting the fiddly dials and knobs of Docker. Leave that to the Shuttle folks. They do the hard work so we as developers don't have to.</p>
+
+
+        
+    
+
+        
+        
+    </article></div>
+    <div class="pagination">
+        <div class="pagination__buttons">
+            </div>
+    </div>
+<footer class="footer">
+        <div class="footer__inner"><div class="copyright">
+            <span>© 2024 Jeffery D Mitchell :: Powered by <a href="https://www.getzola.org/">Zola</a>:: Zerm theme made by <a href="https://github.com/ejmg">ejmg</a> :: Hosted on <a href="https://shuttle.rs">Shuttle</a> :: Follow me (and ask questions or comment) on <a href="https://bsky.app/profile/jeff-mitchell-dev.bsky.social">Bluesky</a></span>
+        </div>
+    <script type="text/javascript" src="https://jeff-mitchell.dev/assets/js/main.js"></script>
+</div>
+        
+
+      </footer></div>
+    <!-- Default Statcounter code for Jeff Mitchell Dev https://jeff-mitchell.dev
+-->
+    <script type="text/javascript">
+      var sc_project = 13027926;
+      var sc_invisible = 1;
+      var sc_security = "1625b230";
+    </script>
+    <script
+      type="text/javascript"
+      src="https://www.statcounter.com/counter/counter.js"
+      async
+    ></script>
+    <noscript
+      ><div class="statcounter">
+        <a
+          title="Web Analytics Made Easy -
+Statcounter"
+          href="https://statcounter.com/"
+          target="_blank"
+          ><img
+            class="statcounter"
+            src="https://c.statcounter.com/13027926/0/1625b230/1/"
+            alt="Web Analytics Made Easy - Statcounter"
+            referrerpolicy="no-referrer-when-downgrade"
+        /></a></div
+    ></noscript>
+    <!-- End of Statcounter Code -->
+     <script type="text/javascript" src="https://jeff-mitchell.dev/elasticlunr.min.js"></script>
+     <script type="text/javascript" src="https://jeff-mitchell.dev/search.js"></script>
+  </body>
+</html>

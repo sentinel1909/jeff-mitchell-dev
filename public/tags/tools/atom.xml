@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>jeff-mitchell.dev - tools</title>
+    <subtitle>A blog mostly about Rust...mostly...</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://jeff-mitchell.dev/tags/tools/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-08-23T00:00:00+00:00</updated>
+    <id>https://jeff-mitchell.dev/tags/tools/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Git - The Bare Bones</title>
+        <published>2024-08-23T00:00:00+00:00</published>
+        <updated>2024-08-23T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Jeff Mitchell
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2024/2024-08-23-git-bare-bones/"/>
+        <id>https://jeff-mitchell.dev/blog/2024/2024-08-23-git-bare-bones/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2024/2024-08-23-git-bare-bones/">&lt;p&gt;Early in my &amp;quot;learn to code&amp;quot; journey, I discovered the work of &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;www.taniarascia.com&quot;&gt;Tania Rascia&lt;&#x2F;a&gt;. I found her fresh and inspiring. Her clean and clear explanation style helped me gain insight into important concepts.&lt;&#x2F;p&gt;
+&lt;p&gt;This article today is inspired by some of her work. I&#x27;m going to write a little about git.&lt;&#x2F;p&gt;
+&lt;p&gt;Git is a version control system, mostly aimed at software development, but you can use it for anything where you want to track changes and undo any foot wounds inflicted on yourself. Git was built by Linus Torvalds in 2005. You can read a short history of it &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;git-scm.com&#x2F;book&#x2F;en&#x2F;v2&#x2F;Getting-Started-A-Short-History-of-Git&quot;&gt;here&lt;&#x2F;a&gt;. I&#x27;m not going to cover GitHub in this article. Git is the system for version control, whereas GitHub is an online hosted repository for hosting and sharing code &amp;quot;pushed&amp;quot; to it from a local project on your computer.&lt;&#x2F;p&gt;
+&lt;p&gt;Alright, let&#x27;s git into it and give you the bare bones...haha, see what I did there? I know...terrible...&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;what-is-git&quot;&gt;What is Git?&lt;&#x2F;h2&gt;
+&lt;p&gt;As I said above, Git is a version control system. Teams benefit most from using it. A group can collaborate on a code base, and by building on &amp;quot;branches&amp;quot;, individuals can work together without stepping on each others toes. Git does the heavy lifting of tracking changes and history of coding projects. While teams benefit most, anyone can add it to their coding workflow.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;installing&quot;&gt;Installing&lt;&#x2F;h2&gt;
+&lt;p&gt;I&#x27;ll refer you to Tania&#x27;s article on Git, linked in the references.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;initial-steps&quot;&gt;Initial Steps&lt;&#x2F;h2&gt;
+&lt;p&gt;Let&#x27;s start a Rust program, initially with no support from Git, then we&#x27;ll add it. In fairness, the &lt;code&gt;cargo&lt;&#x2F;code&gt; build tool configures a project for you automatically with git support, but frequently I like to ignore that and git going (yes, I need to stop) after the initial setup is complete. Do this wherever you want to work on your code:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cargo&lt;&#x2F;span&gt;&lt;span&gt; new&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --bin --vcs&lt;&#x2F;span&gt;&lt;span&gt; none project-with-git
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;A new Rust project that contains a skeleton &amp;quot;Hello World&amp;quot; executable program will be created for you. The &lt;code&gt;--vcs none&lt;&#x2F;code&gt; flag tells Cargo not to do any git setup.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;initialization&quot;&gt;Initialization&lt;&#x2F;h2&gt;
+&lt;p&gt;Change into the directory of the project you just created, &lt;code&gt;cd project-with-git&lt;&#x2F;code&gt; and type: &lt;code&gt;git init&lt;&#x2F;code&gt;. This will initialize a repository &amp;quot;repo&amp;quot; for you and create a &lt;code&gt;.git&lt;&#x2F;code&gt; directory which holds the configuration and instructions for how the git will manage the repo.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;what-to-ignore&quot;&gt;What to Ignore&lt;&#x2F;h2&gt;
+&lt;p&gt;Next, type: &lt;code&gt;touch .gitignore&lt;&#x2F;code&gt;. Open the project in your editor of choice, for me that&#x27;s VS Code, and you should see the freshly created &lt;code&gt;.gitignore&lt;&#x2F;code&gt; along with the other project files. Git will track everything in your project if you let it. That&#x27;s great mostly, but you don&#x27;t need to track anything in the &lt;code&gt;&#x2F;target&lt;&#x2F;code&gt; directory, which contains build artifacts and other internals generated by the Rust compiler. Edit your &lt;code&gt;.gitignore&lt;&#x2F;code&gt; to look like:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# gitignore for project-with-get
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;&#x2F;target
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The syntax of a &lt;code&gt;.gitignore&lt;&#x2F;code&gt; is pretty straightforward:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;anything preceded by &lt;code&gt;#&lt;&#x2F;code&gt; is a comment&lt;&#x2F;li&gt;
+&lt;li&gt;exclude directories by doing &lt;code&gt;&amp;lt;&#x2F;directory_name&amp;gt;&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;you can use wildcards, i.e. &lt;code&gt;Shuttle*.toml&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;adding-files-to-track&quot;&gt;Adding Files to Track&lt;&#x2F;h2&gt;
+&lt;p&gt;To add the files you do want to track, type: &lt;code&gt;git add .&lt;&#x2F;code&gt; This will add everything not excluded by &lt;code&gt;.gitignore&lt;&#x2F;code&gt; into git&#x27;s list of what to officially keep track of.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;committing&quot;&gt;Committing&lt;&#x2F;h2&gt;
+&lt;p&gt;Once you&#x27;ve added the files, changes aren&#x27;t tracked until you actually &amp;quot;commit&amp;quot; them. To do that type: &lt;code&gt;git commit -m &amp;quot;Initial commit&amp;quot;&lt;&#x2F;code&gt; This will create your first commit into the history with the message &amp;quot;Initial Commit&amp;quot;. Well done! You&#x27;ve offically begun tracking the history of this project. You&#x27;re project lives locally on your computer at this point, it&#x27;s not connected to the internet and you are the only one who can work on it.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;branching&quot;&gt;Branching&lt;&#x2F;h2&gt;
+&lt;p&gt;After the above, youi&#x27;ll be on the &amp;quot;main&amp;quot; branch of your project. Let&#x27;s say you&#x27;ve worked awhile, but change your mind and want to explore another direction, without losing what you just started. You can make a branch.&lt;&#x2F;p&gt;
+&lt;p&gt;To create a branch, type: &lt;code&gt;git branch &amp;lt;new-branch-name&amp;gt;&lt;&#x2F;code&gt;. This will create a branch in which you can work on a new feature, a bug fix, or just explore a different direction, but not lose your original work. Branches have to be &amp;quot;checked out&amp;quot; when you make them, by doing: &lt;code&gt;git checkout &amp;lt;new-branch-name&amp;gt;&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Follow the sames steps as above to commit your branch into the tracking sytem. You can go back to &lt;code&gt;main&lt;&#x2F;code&gt; by: &lt;code&gt;git checkout main&lt;&#x2F;code&gt;. This will switch you back to your main branch. If you look, you&#x27;ll see that any changes you just made are not in this main branch.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;merging&quot;&gt;Merging&lt;&#x2F;h2&gt;
+&lt;p&gt;Let&#x27;s say you end up liking the approach you took in the fresh branch you just created. When it comes time to unite the two branches do this: &lt;code&gt;git merge &amp;lt;new-branch-name&amp;gt;&lt;&#x2F;code&gt; this will &amp;quot;merge&amp;quot; the new code into the old and unite it under the &lt;code&gt;main&lt;&#x2F;code&gt; branch. You can then push out to production and the new feature or bug fix will be incorporated.&lt;&#x2F;p&gt;
+&lt;p&gt;Pretty nifty hey?!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
+&lt;p&gt;There&#x27;s really no reason not to use git. It makes your software development life much easier. If you make a mistake or what to start over, by leveraging the branching system you can simply &amp;quot;switch back&amp;quot; to an earlier point in time. It&#x27;s really a no-brainer.&lt;&#x2F;p&gt;
+&lt;p&gt;In this short piece I&#x27;ve given you the basics to get started. From here, you can practice on your own and explore the links I&#x27;ve provided below to learn more. Remember, &lt;code&gt;cargo&lt;&#x2F;code&gt; initializes a git repo for you, you don&#x27;t need to go through the steps above every time.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;references&quot;&gt;References&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;git-scm.com&#x2F;&quot;&gt;Git&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;www.taniarascia.com&#x2F;getting-started-with-git&#x2F;&quot;&gt;Getting Started with Git for Version Control&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;firemodels&#x2F;fds&#x2F;wiki&#x2F;Git-Notes-Getting-Started&quot;&gt;Git Notes Getting Started&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+        
+    </entry>
+</feed>

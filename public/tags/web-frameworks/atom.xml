@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>jeff-mitchell.dev - web frameworks</title>
+    <subtitle>A blog mostly about Rust...mostly...</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://jeff-mitchell.dev/tags/web-frameworks/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-10-05T00:00:00+00:00</updated>
+    <id>https://jeff-mitchell.dev/tags/web-frameworks/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Yew: First Steps</title>
+        <published>2024-10-05T00:00:00+00:00</published>
+        <updated>2024-10-05T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Jeff Mitchell
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2024/2024-10-05-getting-started-with-yew/"/>
+        <id>https://jeff-mitchell.dev/blog/2024/2024-10-05-getting-started-with-yew/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2024/2024-10-05-getting-started-with-yew/">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
+&lt;p&gt;What if I said there was a different way to build for the web?&lt;&#x2F;p&gt;
+&lt;p&gt;There is, it&#x27;s called &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;webassembly.org&#x2F;&quot;&gt;WebAssembly&lt;&#x2F;a&gt;. The Rust programming language, of which this author is so fond, can target WebAssembly. This means you can leverage Rust&#x27;s type system and inherent memory safety to build for the web.&lt;&#x2F;p&gt;
+&lt;p&gt;WebAssembly is supported by all major browsers and is a completely viable way to build a web application. Two things are holding it back, a) the hegemony of the JavaScript libraries and frameworks, and b) the perceived difficulty of learning Rust. Frankly I&#x27;m not sure Rust front end web dev will truly ever be a thing, but for those of us that want to, it can be a happy and productive thing today. The main attraction, IMHO, is that you&#x27;re not cobbling together 600 tools like you have to in the JavaScript world.&lt;&#x2F;p&gt;
+&lt;p&gt;As soon as I found out Rust could be a viable choice for front end development, I said &amp;quot;I&#x27;m in&amp;quot;.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s take a closer look.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;enter-yew&quot;&gt;Enter Yew&lt;&#x2F;h2&gt;
+&lt;p&gt;There are several up and coming front end frameworks that are worth looking at. The oldest, and probably most stable (don&#x27;t let the 0.21 version number fool you) is &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;yew.rs&quot;&gt;Yew&lt;&#x2F;a&gt;. This is the one I started on and the one I&#x27;ve been focusing on the most. I enjoy it a lot, it&#x27;s very React like and retains the familiar notion of composing a web application out of re-usable components. It has state, hooks, a router, and is pretty much ready to go for whatever you want to do.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;setup&quot;&gt;Setup&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;em&gt;Install Rust&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;There is some setup to get off the ground. First thing, if you haven&#x27;t already, is install Rust. The official instructions are &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;www.rust-lang.org&#x2F;tools&#x2F;install&quot;&gt;here&lt;&#x2F;a&gt;. The minimum supported Rust version for Yew is 1.76.0. Older versions will not compile. If you have Rust installed already and just need to update your toolchain, do: &lt;code&gt;rustup update&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Install WebAssembly Target&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The compilation target for browser-based WebAssembly is called &lt;code&gt;wasm32-unknown-unknown&lt;&#x2F;code&gt;. Yes, I know it sounds wierd. The unknown-unknown thing bugged me for a long while, but I&#x27;m over that now. Install it:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;rustup&lt;&#x2F;span&gt;&lt;span&gt; target add wasm32-unknown-unknown
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;em&gt;Install Trunk&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The easiest build tool for managing and deploying your WebAssembly creations is called &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;trunkrs.dev&quot;&gt;trunk&lt;&#x2F;a&gt;. It&#x27;s really nice, and very straightforward to use. Install it via cargo:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cargo&lt;&#x2F;span&gt;&lt;span&gt; install&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --locked&lt;&#x2F;span&gt;&lt;span&gt; trunk
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Alright, setup is done. Let&#x27;s get on with a proverbial &amp;quot;Hello, World!&amp;quot;, but with a Yew flavour.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;create-the-project&quot;&gt;Create the Project&lt;&#x2F;h3&gt;
+&lt;p&gt;First thing is to navigate to wherever you save your development projects. Once there, do:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cargo&lt;&#x2F;span&gt;&lt;span&gt; new hello-yew-app
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;cd&lt;&#x2F;span&gt;&lt;span&gt; hello-yew-app
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This will start a new Rust project and change you into the freshly created directory that holds it. Replace the contents of the &lt;code&gt;Cargo.toml&lt;&#x2F;code&gt; file with this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;toml&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-toml &quot;&gt;&lt;code class=&quot;language-toml&quot; data-lang=&quot;toml&quot;&gt;&lt;span&gt;[package]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name &lt;&#x2F;span&gt;&lt;span&gt;= &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;hello-yew-app&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;version &lt;&#x2F;span&gt;&lt;span&gt;= &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;0.1.0&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;edition &lt;&#x2F;span&gt;&lt;span&gt;= &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;2021&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;[dependencies]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;yew &lt;&#x2F;span&gt;&lt;span&gt;= { &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;version &lt;&#x2F;span&gt;&lt;span&gt;= &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;0.21&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;features &lt;&#x2F;span&gt;&lt;span&gt;= [ &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;csr&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;] }
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This adds the latest stable version of Yew, hosted on &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;crates.io&quot;&gt;crates.io&lt;&#x2F;a&gt;, as a dependency to your project. It adds the &amp;quot;csr&amp;quot; feature, which enables client side rendering, meaning the application you create is rendered in the target browser. Yew does have server side rendering capability, but it&#x27;s on the experimental side at the moment. For now, the end result will be a single page application, exactly the same as you&#x27;d build with a JavaScript library or framework.&lt;&#x2F;p&gt;
+&lt;p&gt;Now, go into &lt;code&gt;src&#x2F;main.rs&lt;&#x2F;code&gt;, delete the boilerplate that&#x27;s there and swap out with this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; src&#x2F;main.rs
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; dependencies
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;yew::{function_component, html};
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; the root app component, it&amp;#39;s annotated with Yew&amp;#39;s function_component macro, which marks it as a 
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; function component. This function has no parameters and returns Yew&amp;#39;s Html type. We use Yew&amp;#39;s html! 
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; macro to build and return a simple piece of text marked up with HTML.
+&lt;&#x2F;span&gt;&lt;span&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;function_component&lt;&#x2F;span&gt;&lt;span&gt;(App)]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;app&lt;&#x2F;span&gt;&lt;span&gt;() -&amp;gt; Html {
+&lt;&#x2F;span&gt;&lt;span&gt;  html! {
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;div&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;      &amp;lt;h1&amp;gt;{ &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Hello, World!&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; }&amp;lt;&#x2F;h1&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&#x2F;div&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; main function, mounts the app component and renders it
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;  yew::Renderer::&amp;lt;App&amp;gt;::new().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;render&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The very last piece we need is an html file to target. Create &lt;code&gt;index.html&lt;&#x2F;code&gt; at the root of your project and add:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;&amp;lt;!&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;DOCTYPE &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;html &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;lang&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;en&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;head&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;meta &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;charset&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;UTF-8&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; &#x2F;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;meta &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;viewport&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;content&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;width=device-width, initial-scale=1.0&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; &#x2F;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;Hello Yew&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;head&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Trunk will use this &lt;code&gt;index.html&lt;&#x2F;code&gt; to build out the assets for deployment. That&#x27;s pretty much all that&#x27;s need to get started.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;moment-of-truth&quot;&gt;Moment of Truth&lt;&#x2F;h2&gt;
+&lt;p&gt;To see all the fine fruits of your labours, back at your command prompt, type:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;trunk&lt;&#x2F;span&gt;&lt;span&gt; serve
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This will start up trunk&#x27;s hot reloading development server. Now, open your default browser to display your handiwork. You should be greeted with a very boring &amp;quot;Hello, World&amp;quot; message in the main window of your browser. On the one hand yes, it&#x27;s boring. On the other, take a step back and think about what you just did.&lt;&#x2F;p&gt;
+&lt;p&gt;You built a web site...with Rust. Yes, there&#x27;s HTML there, because you have to have that, but otherwise, it&#x27;s all done in Rust, compiled to WebAssembly and run by your browser. There is just the tinest bit of JavaScript in there because it&#x27;s needed to load the WebAssembly file that Rust built.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
+&lt;p&gt;This is a quick taste, to get you off the ground. There are a lot of details here that I&#x27;ve glossed over, in an effort to introduce the notion of web dev with Rust. In the future, I&#x27;ll circle back on some of the inner workings. Also in a future article, I&#x27;ll dive more into how to flesh out this simple site with assets and styles to begin to make it more interesting.&lt;&#x2F;p&gt;
+&lt;p&gt;Thanks for reading!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;references&quot;&gt;References&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;yew.rs&#x2F;docs&#x2F;tutorial&quot;&gt;Yew Tutorial&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Demystifying Middlware in Actix Web</title>
+        <published>2023-10-11T00:00:00+00:00</published>
+        <updated>2023-10-11T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2023/2023-10-11-demystifying-middleware-in-actix-web/"/>
+        <id>https://jeff-mitchell.dev/blog/2023/2023-10-11-demystifying-middleware-in-actix-web/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2023/2023-10-11-demystifying-middleware-in-actix-web/">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h2&gt;
+&lt;p&gt;Earlier this year, I worked through &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;www.zero2prod.com&quot;&gt;Zero to Production in Rust&lt;&#x2F;a&gt; by &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;lpalmieri.com&quot;&gt;Luca Palmieri&lt;&#x2F;a&gt; using the Axum web framework. This a) forced me to learn that framework and b) force me to think when overcoming the differences.&lt;&#x2F;p&gt;
+&lt;p&gt;As I moved through the book, I felt that Actix Web seemed the superior choice for someone of my skill level, as it had more hand holding. Axum, for the most part, leaves you to your own devices, which is great if you know what you&#x27;re doing, but not so great if you&#x27;re really just a beginner.&lt;&#x2F;p&gt;
+&lt;p&gt;In late September I decided to return to Actix Web and make an API to allow me to track my daily music listening habits. I&#x27;m not going into the details of that project in this post, instead I&#x27;m going to focus on one corner that I found challenging, middleware. Per usual for me, I need to see a purpose or example, which helps me attach meaning to the abstract and enables me to understand how to use a particular language feature. Middleware in Actix Web is not well explained for newcomers. I find the docs do a decent job of explaining the high level theory, but like with the majority of Rust documentation, they lack context and simple examples.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;a-primer-on-traits&quot;&gt;A Primer on Traits&lt;&#x2F;h2&gt;
+&lt;p&gt;Actix Web&#x27;s middleware system is based on the Service and Transform traits. We can&#x27;t talk about these until we brush up a little on traits in Rust. Per the Rust Book:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A &lt;em&gt;trait&lt;&#x2F;em&gt; defines functionality a particular type has and can share with other types. We can use traits to define shared behavior in an abstract way. We can use &lt;em&gt;trait bounds&lt;&#x2F;em&gt; to specify that generic type can be any type that has a certain behavior.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;Traits are a means of providing your own types with functionality, without having to write all that functionality from scratch yourself. They are like a contract that provide a blueprint to implement functionality.&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;m not going to go super in depth beyond this, I&#x27;ve linked in the references below to the in-depth chapters in The Rust Book.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;what-is-middleware&quot;&gt;What is Middleware?&lt;&#x2F;h2&gt;
+&lt;p&gt;The term &amp;quot;middleware&amp;quot; identifies a type of software that sits in the middle between one thing and the next. It can be thought of as a bridge, facilitating communications between parts of a software system. Another good analogy is plumbing. Middleware connects one or more applications so that data came move through them like water through a pipe network.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;why-use-middleware&quot;&gt;Why use Middleware?&lt;&#x2F;h2&gt;
+&lt;p&gt;The main advantage of middleware is it reduces complexity. In the context of a server API, middleware can combine functionality into one block, rather than each endpoint implementing its own version of that functionality. The result is reduced complexity and fewer places to introduce bugs. We&#x27;ll see this in action further on in the example I&#x27;ve created.&lt;&#x2F;p&gt;
+&lt;p&gt;Authentication is an area where middleware is often used. Authentication services can be implemented as middleware and &amp;quot;gatekeep&amp;quot; the rest of the application such that the middleware intercepts all incoming requests before passing properly authenticated users to the lands beyond. Handling authentication via middleware saves each endpoint from having to do it. The middleware authenticates the user and either lets them pass on to the endpoint they wanted, or rejects the attempt.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;how-to-use-middleware-in-actix-web&quot;&gt;How to use Middleware in Actix Web&lt;&#x2F;h2&gt;
+&lt;p&gt;Middleware in Actix Web centers around implementing the Service and Transform traits. &lt;em&gt;Both&lt;&#x2F;em&gt; these traits must be implemented on a type. The Transform trait initializes the middleware and acts like a factory. The factory builds the particular service defined by the Service trait. One difficulty I had is separating boiler plate code from the &#x27;real&#x27; code that you write to implement functionality. Let&#x27;s take a look at the bare minimum boiler plate to get off the ground. We&#x27;ll make a simple middleware to process an API key.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; dependencies
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use crate&lt;&#x2F;span&gt;&lt;span&gt;::domain::appstate::AppState;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;actix_web::{
+&lt;&#x2F;span&gt;&lt;span&gt;    body::EitherBody,
+&lt;&#x2F;span&gt;&lt;span&gt;    dev::{forward_ready, Service, ServiceRequest, ServiceResponse, Transform},
+&lt;&#x2F;span&gt;&lt;span&gt;    web::Data,
+&lt;&#x2F;span&gt;&lt;span&gt;    Error, HttpResponse,
+&lt;&#x2F;span&gt;&lt;span&gt;};
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;futures_util::future::LocalBoxFuture;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;std::future::{ready, Ready};
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; struct to represent the API key
+&lt;&#x2F;span&gt;&lt;span&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;derive&lt;&#x2F;span&gt;&lt;span&gt;(Debug, Clone)]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;pub struct &lt;&#x2F;span&gt;&lt;span&gt;ApiKey;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; implement the transform trait for the ApiKey struct
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;impl&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;S, B&amp;gt; Transform&amp;lt;S, ServiceRequest&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;ApiKey
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;where
+&lt;&#x2F;span&gt;&lt;span&gt;    S: Service&amp;lt;ServiceRequest, Response = ServiceResponse&amp;lt;B&amp;gt;, Error = Error&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;S::&lt;&#x2F;span&gt;&lt;span&gt;Future: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;&amp;#39;static&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    B: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;&amp;#39;static&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;type &lt;&#x2F;span&gt;&lt;span&gt;Response = ServiceResponse&amp;lt;EitherBody&amp;lt;B&amp;gt;&amp;gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;type &lt;&#x2F;span&gt;&lt;span&gt;Error = Error;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;type &lt;&#x2F;span&gt;&lt;span&gt;Transform = ApiKeyMiddleware&amp;lt;S&amp;gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;type &lt;&#x2F;span&gt;&lt;span&gt;InitError = ();
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;type &lt;&#x2F;span&gt;&lt;span&gt;Future = Ready&amp;lt;Result&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;Self::&lt;&#x2F;span&gt;&lt;span&gt;Transform, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;Self::&lt;&#x2F;span&gt;&lt;span&gt;InitError&amp;gt;&amp;gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; create a new instance of the ApiKeyMiddleware struct
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;new_transform&lt;&#x2F;span&gt;&lt;span&gt;(&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;service&lt;&#x2F;span&gt;&lt;span&gt;: S) -&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;Self::&lt;&#x2F;span&gt;&lt;span&gt;Future {
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;ready&lt;&#x2F;span&gt;&lt;span&gt;(Ok(ApiKeyMiddleware { service }))
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; struct to represent the ApiKeyMiddleware
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;pub struct &lt;&#x2F;span&gt;&lt;span&gt;ApiKeyMiddleware&amp;lt;S&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;service&lt;&#x2F;span&gt;&lt;span&gt;: S,
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; implement the service trait for the ApiKeyMiddleware struct
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;impl&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;S, B&amp;gt; Service&amp;lt;ServiceRequest&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;ApiKeyMiddleware&amp;lt;S&amp;gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;where
+&lt;&#x2F;span&gt;&lt;span&gt;    S: Service&amp;lt;ServiceRequest, Response = ServiceResponse&amp;lt;B&amp;gt;, Error = Error&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;S::&lt;&#x2F;span&gt;&lt;span&gt;Future: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;&amp;#39;static&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    B: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;&amp;#39;static&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;type &lt;&#x2F;span&gt;&lt;span&gt;Response = ServiceResponse&amp;lt;EitherBody&amp;lt;B&amp;gt;&amp;gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;type &lt;&#x2F;span&gt;&lt;span&gt;Error = Error;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;type &lt;&#x2F;span&gt;&lt;span&gt;Future = LocalBoxFuture&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;&amp;#39;static&lt;&#x2F;span&gt;&lt;span&gt;, Result&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;Self::&lt;&#x2F;span&gt;&lt;span&gt;Response, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;Self::&lt;&#x2F;span&gt;&lt;span&gt;Error&amp;gt;&amp;gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    forward_ready!(service);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;call&lt;&#x2F;span&gt;&lt;span&gt;(&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;req&lt;&#x2F;span&gt;&lt;span&gt;: ServiceRequest) -&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;Self::&lt;&#x2F;span&gt;&lt;span&gt;Future {
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; bind a call to our service as the variable &amp;#39;fut&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; we have to box a future, so that its size is known at compile time.
+&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; we also need to pin it in memory, because of the async operation
+&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; fut = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;.service.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;call&lt;&#x2F;span&gt;&lt;span&gt;(req);
+&lt;&#x2F;span&gt;&lt;span&gt;		Box::pin(async &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;move &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;			&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; response = fut.await?;
+&lt;&#x2F;span&gt;&lt;span&gt;			Ok(response)
+&lt;&#x2F;span&gt;&lt;span&gt;		})
+&lt;&#x2F;span&gt;&lt;span&gt;	}
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Whew! I don&#x27;t know about you but I&#x27;m kind of exhausted. That&#x27;s a lot of code! The trait implementations give us a lot to think about and follow. This middleware will essentially do nothing. All the hard work above just sets it up so that you can wrap your endpoints with it. As it stands above, the boiler plate will pass an unmodified request straight on to the endpoint, whatever that may be.&lt;&#x2F;p&gt;
+&lt;p&gt;Alright, let&#x27;s break all this down:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Dependencies&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;we need tools from actix_web and the actix_web::dev module&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;foward_ready is a macro which, as the docs say, is an implementation of the function poll_ready which returns Ready which is a type of future that is immediately ready with a value&lt;&#x2F;li&gt;
+&lt;li&gt;Service
+&lt;ul&gt;
+&lt;li&gt;a trait, for implementing an asynchronous operation from a Request to a Response&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;ServiceRequest
+&lt;ul&gt;
+&lt;li&gt;a service level request wrapper&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;ServiceResponse
+&lt;ul&gt;
+&lt;li&gt;a service level response wrapper&lt;&#x2F;li&gt;
+&lt;li&gt;in the Transform trait there is a type EitherBody. EitherBody is an enum with two variants, Left and Right. Each variant can contain a BoxBody type, which is a boxed message body with boxed errors&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Transform
+&lt;ul&gt;
+&lt;li&gt;defines the interface of a service factory and is what builds our middleware service&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;we need the Error struct from actix_web&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;there are a few things from the standard library that are necessary, in order to enable working with futures&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;ready
+&lt;ul&gt;
+&lt;li&gt;a function which immediately returns a future with a value&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Ready
+&lt;ul&gt;
+&lt;li&gt;a struct which represents our future and it&#x27;s associated value, it&#x27;s the output of the ready function&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;we&#x27;ll also pull in LocalBoxFuture from the futures_util crate&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;LocalBoxFuture is a &amp;quot;An owned dynamically typed Future for use in cases where you can’t statically type your result or need to add some indirection&amp;quot;
+&lt;ul&gt;
+&lt;li&gt;it doesn&#x27;t have the Send requirement, meaning it can&#x27;t be transferred across thread boundaries&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;em&gt;Structs&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Middleware is always implemented for a type. We need two structs:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;ApiKey
+&lt;ul&gt;
+&lt;li&gt;acts a hook to trigger the middleware&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;ApiKeyMiddleware
+&lt;ul&gt;
+&lt;li&gt;the actual middleware service that is built, called, and executed&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;em&gt;Transform trait&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;When you push aside all the trait bounds and type definitions, the core of the transform trait is the new_transform function. This function takes a &amp;amp;self reference and a service as parameters, and returns a future. You can think of this function as a factory that creates your middleware service. It&#x27;s necessary for each middleware service that you make.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Service trait&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Similar to Transform, there are a lot of trait bounds and type definitions to wade through. Again, the core of the Service trait is the call function. This is where the meat goes. It takes a reference to self and an incoming request as parameters, and returns a future. The Future type definition constrains the call function to return a future or an error.&lt;&#x2F;p&gt;
+&lt;p&gt;Clear as mud? I thought so. Let&#x27;s make the boiler plate do something now.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;meat-of-the-matter&quot;&gt;Meat of the Matter&lt;&#x2F;h2&gt;
+&lt;p&gt;This middleware will check the validity of an incoming API key. This example was created to run over on &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;shuttle.rs&quot;&gt;Shuttle&lt;&#x2F;a&gt; and I won&#x27;t get into the details of that, except to say the valid API key is stored in a secrets file which is read into and saved in the application state, using web::Data. This approach is overly simplistic and meant mainly for my learning purposes, so that there is something simple where I (and hopefully you) can visualize the flow. In real life you&#x27;re not going to handle an API key in this fashion.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; I&amp;#39;ll just show the completed call function forming part of the Service trait we started earlier
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;call&lt;&#x2F;span&gt;&lt;span&gt;(&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;request&lt;&#x2F;span&gt;&lt;span&gt;: ServiceRequest) -&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;Self::&lt;&#x2F;span&gt;&lt;span&gt;Future {
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; get the x-api-key header from the incoming request
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; x_api_key = request
+&lt;&#x2F;span&gt;&lt;span&gt;            .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;headers&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;            .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;get&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;x-api-key&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;)
+&lt;&#x2F;span&gt;&lt;span&gt;            .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;and_then&lt;&#x2F;span&gt;&lt;span&gt;(|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;value&lt;&#x2F;span&gt;&lt;span&gt;| value.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;to_str&lt;&#x2F;span&gt;&lt;span&gt;().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;ok&lt;&#x2F;span&gt;&lt;span&gt;());
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; get the valid api key from app state
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; api_key = request
+&lt;&#x2F;span&gt;&lt;span&gt;            .app_data::&amp;lt;Data&amp;lt;AppState&amp;gt;&amp;gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;            .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;(|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;data&lt;&#x2F;span&gt;&lt;span&gt;| data.api_key.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;clone&lt;&#x2F;span&gt;&lt;span&gt;());
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; check if the api key is valid
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if&lt;&#x2F;span&gt;&lt;span&gt; x_api_key != api_key.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;as_deref&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; return a 401 unauthorized response
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;(request, _payload) = request.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;into_parts&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; response = HttpResponse::Unauthorized().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;finish&lt;&#x2F;span&gt;&lt;span&gt;().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;map_into_right_body&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;Box::pin(async &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;move &lt;&#x2F;span&gt;&lt;span&gt;{ Ok(ServiceResponse::new(request, response)) });  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; error response is returned immediately, we don&amp;#39;t need to &amp;#39;await&amp;#39; it
+&lt;&#x2F;span&gt;&lt;span&gt;        }
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; return the request if the API key is valid
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; response = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;.service.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;call&lt;&#x2F;span&gt;&lt;span&gt;(request);
+&lt;&#x2F;span&gt;&lt;span&gt;        Box::pin(async &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;move &lt;&#x2F;span&gt;&lt;span&gt;{ response.await.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;(ServiceResponse::map_into_left_body) })
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here&#x27;s what&#x27;s happening:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;we read the incoming API key from the &amp;quot;x-api-key&amp;quot; key&#x2F;value pair that comes in with a request header, the content gets converted into a string slice&lt;&#x2F;li&gt;
+&lt;li&gt;we read in the valid API key from application state, it gets cloned to make the compiler happy...at least that&#x27;s what I had to do, I&#x27;m sure someone more experience would do it in a better way&lt;&#x2F;li&gt;
+&lt;li&gt;we compare the API keys, if they don&#x27;t match the request is refused and an error message is returned&lt;&#x2F;li&gt;
+&lt;li&gt;assuming the API key checks out, we pass the request through to it&#x27;s appropriate endpoint.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;In the API key validation if block, we split the request into it a request and payload, by destructuring into a tuple. Then, we construct the &amp;quot;unauthorized&amp;quot; error response we want to give, mapping it into the right variant of our ServiceResponse type, which is an EitherBody type because of our trait definition. The right variant of EitherBody typically holds error responses.&lt;&#x2F;p&gt;
+&lt;p&gt;If the API key is valid, then we pass through the request, using the left variant of our ServiceResponse type, which represents the response from the middleware, which in this case is the unmodified request.&lt;&#x2F;p&gt;
+&lt;p&gt;Ok, so, we finally have some middleware. how do we use it?&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;actix_web::{get, web, App, HttpServer, Responder};
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;get&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;hello&#x2F;{name}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;)]
+&lt;&#x2F;span&gt;&lt;span&gt;async &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;greet&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span&gt;: web::Path&amp;lt;String&amp;gt;) -&amp;gt; impl Responder {
+&lt;&#x2F;span&gt;&lt;span&gt;    format!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Hello &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;!&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, name)
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;actix_web&lt;&#x2F;span&gt;&lt;span&gt;::&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; or #[tokio::main]
+&lt;&#x2F;span&gt;&lt;span&gt;async &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() -&amp;gt; std::io::Result&amp;lt;()&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;    HttpServer::new(|| {
+&lt;&#x2F;span&gt;&lt;span&gt;        App::new().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;wrap&lt;&#x2F;span&gt;&lt;span&gt;(ApiKey).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;service&lt;&#x2F;span&gt;&lt;span&gt;(greet)    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; our middleware &amp;quot;wraps&amp;quot; the greet endpoint
+&lt;&#x2F;span&gt;&lt;span&gt;    })
+&lt;&#x2F;span&gt;&lt;span&gt;    .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;bind&lt;&#x2F;span&gt;&lt;span&gt;((&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;127.0.0.1&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;8080&lt;&#x2F;span&gt;&lt;span&gt;))?
+&lt;&#x2F;span&gt;&lt;span&gt;    .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;run&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;    .await
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This is the hello world example from the Actix Web docs. I&#x27;ve modified to show where our middleware gets invoked as the app spins up. It&#x27;s called by the .wrap() function the precedes the call to the greet endpoint handler. That&#x27;s it! I haven&#x27;t done it in the snip above, but you would need to bring your ApiKey type into scope with a use statement, assuming it lives in a separate module file. As a point of good practice, and given how long middleware might be, it&#x27;s best to split it up into separate module files.&lt;&#x2F;p&gt;
+&lt;p&gt;If you have multiple middleware pieces, you write each one separately and wrap it with a struct in the same fashion. Remember that middleware is executed in the opposite order to registration.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
+&lt;p&gt;Made it! I hope you enjoyed this short journey through Actix Web middleware. This is not exhaustive, and I&#x27;m sure there are a million nuances I&#x27;ve missed. I hope I&#x27;ve captured for you the flow of what you need to write your own. Remember, the boiler plate above can be added to your project and it will just sit and be ready for expansion. Once it&#x27;s done, it&#x27;s done and you just need to add your logic to the call function within the Service trait implementation.&lt;&#x2F;p&gt;
+&lt;p&gt;My purpose here was to understand full blow middleware, so that&#x27;s been the focus of this piece. I would be mistaken to not say that there is a simpler way to do middleware, if it&#x27;s literally something dead simple. It&#x27;s experimental right now, but will likely graduate sometime soon. &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;docs.rs&#x2F;actix-web-lab&#x2F;latest&#x2F;actix_web_lab&#x2F;middleware&#x2F;fn.from_fn.html&quot;&gt;Simpler Actix Web Middleware&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;I invite you to dig deeper in the articles below, especially Luca&#x27;s. He&#x27;s developing the Pavex web framework and in doing that, having to figure out his own take a middleware system. It&#x27;s a terrific read.&lt;&#x2F;p&gt;
+&lt;p&gt;Now, venture forth and make some middleware! Good luck!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;resources&quot;&gt;Resources&lt;&#x2F;h2&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;actix.rs&#x2F;docs&#x2F;middleware&quot;&gt;Actix Web Documentation: Middleware&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch10-02-traits.html&quot;&gt;The Rust Programming Language, Chapter 10.2, Traits: Defining Shared Behavior&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch19-03-advanced-traits.html&quot;&gt;The Rust Programming Language, Chapter 19.2 Advanced Traits&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;www.lpalmieri.com&#x2F;posts&#x2F;pavex-progress-report-06&#x2F;&quot;&gt;Pavex DevLog #6: designing safe and ergonomic middlwares&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

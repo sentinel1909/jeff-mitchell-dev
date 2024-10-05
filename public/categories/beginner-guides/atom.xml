@@ -1,0 +1,1425 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>jeff-mitchell.dev - Beginner Guides</title>
+    <subtitle>A blog mostly about Rust...mostly...</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://jeff-mitchell.dev/categories/beginner-guides/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-10-05T00:00:00+00:00</updated>
+    <id>https://jeff-mitchell.dev/categories/beginner-guides/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Yew: First Steps</title>
+        <published>2024-10-05T00:00:00+00:00</published>
+        <updated>2024-10-05T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Jeff Mitchell
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2024/2024-10-05-getting-started-with-yew/"/>
+        <id>https://jeff-mitchell.dev/blog/2024/2024-10-05-getting-started-with-yew/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2024/2024-10-05-getting-started-with-yew/">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h1&gt;
+&lt;p&gt;What if I said there was a different way to build for the web?&lt;&#x2F;p&gt;
+&lt;p&gt;There is, it&#x27;s called &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;webassembly.org&#x2F;&quot;&gt;WebAssembly&lt;&#x2F;a&gt;. The Rust programming language, of which this author is so fond, can target WebAssembly. This means you can leverage Rust&#x27;s type system and inherent memory safety to build for the web.&lt;&#x2F;p&gt;
+&lt;p&gt;WebAssembly is supported by all major browsers and is a completely viable way to build a web application. Two things are holding it back, a) the hegemony of the JavaScript libraries and frameworks, and b) the perceived difficulty of learning Rust. Frankly I&#x27;m not sure Rust front end web dev will truly ever be a thing, but for those of us that want to, it can be a happy and productive thing today. The main attraction, IMHO, is that you&#x27;re not cobbling together 600 tools like you have to in the JavaScript world.&lt;&#x2F;p&gt;
+&lt;p&gt;As soon as I found out Rust could be a viable choice for front end development, I said &amp;quot;I&#x27;m in&amp;quot;.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s take a closer look.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;enter-yew&quot;&gt;Enter Yew&lt;&#x2F;h2&gt;
+&lt;p&gt;There are several up and coming front end frameworks that are worth looking at. The oldest, and probably most stable (don&#x27;t let the 0.21 version number fool you) is &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;yew.rs&quot;&gt;Yew&lt;&#x2F;a&gt;. This is the one I started on and the one I&#x27;ve been focusing on the most. I enjoy it a lot, it&#x27;s very React like and retains the familiar notion of composing a web application out of re-usable components. It has state, hooks, a router, and is pretty much ready to go for whatever you want to do.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;setup&quot;&gt;Setup&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;em&gt;Install Rust&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;There is some setup to get off the ground. First thing, if you haven&#x27;t already, is install Rust. The official instructions are &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;www.rust-lang.org&#x2F;tools&#x2F;install&quot;&gt;here&lt;&#x2F;a&gt;. The minimum supported Rust version for Yew is 1.76.0. Older versions will not compile. If you have Rust installed already and just need to update your toolchain, do: &lt;code&gt;rustup update&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Install WebAssembly Target&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The compilation target for browser-based WebAssembly is called &lt;code&gt;wasm32-unknown-unknown&lt;&#x2F;code&gt;. Yes, I know it sounds wierd. The unknown-unknown thing bugged me for a long while, but I&#x27;m over that now. Install it:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;rustup&lt;&#x2F;span&gt;&lt;span&gt; target add wasm32-unknown-unknown
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;em&gt;Install Trunk&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The easiest build tool for managing and deploying your WebAssembly creations is called &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;trunkrs.dev&quot;&gt;trunk&lt;&#x2F;a&gt;. It&#x27;s really nice, and very straightforward to use. Install it via cargo:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cargo&lt;&#x2F;span&gt;&lt;span&gt; install&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --locked&lt;&#x2F;span&gt;&lt;span&gt; trunk
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Alright, setup is done. Let&#x27;s get on with a proverbial &amp;quot;Hello, World!&amp;quot;, but with a Yew flavour.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;create-the-project&quot;&gt;Create the Project&lt;&#x2F;h3&gt;
+&lt;p&gt;First thing is to navigate to wherever you save your development projects. Once there, do:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cargo&lt;&#x2F;span&gt;&lt;span&gt; new hello-yew-app
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;cd&lt;&#x2F;span&gt;&lt;span&gt; hello-yew-app
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This will start a new Rust project and change you into the freshly created directory that holds it. Replace the contents of the &lt;code&gt;Cargo.toml&lt;&#x2F;code&gt; file with this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;toml&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-toml &quot;&gt;&lt;code class=&quot;language-toml&quot; data-lang=&quot;toml&quot;&gt;&lt;span&gt;[package]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;name &lt;&#x2F;span&gt;&lt;span&gt;= &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;hello-yew-app&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;version &lt;&#x2F;span&gt;&lt;span&gt;= &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;0.1.0&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;edition &lt;&#x2F;span&gt;&lt;span&gt;= &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;2021&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;[dependencies]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;yew &lt;&#x2F;span&gt;&lt;span&gt;= { &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;version &lt;&#x2F;span&gt;&lt;span&gt;= &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;0.21&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;features &lt;&#x2F;span&gt;&lt;span&gt;= [ &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;csr&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;] }
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This adds the latest stable version of Yew, hosted on &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;crates.io&quot;&gt;crates.io&lt;&#x2F;a&gt;, as a dependency to your project. It adds the &amp;quot;csr&amp;quot; feature, which enables client side rendering, meaning the application you create is rendered in the target browser. Yew does have server side rendering capability, but it&#x27;s on the experimental side at the moment. For now, the end result will be a single page application, exactly the same as you&#x27;d build with a JavaScript library or framework.&lt;&#x2F;p&gt;
+&lt;p&gt;Now, go into &lt;code&gt;src&#x2F;main.rs&lt;&#x2F;code&gt;, delete the boilerplate that&#x27;s there and swap out with this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; src&#x2F;main.rs
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; dependencies
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;yew::{function_component, html};
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; the root app component, it&amp;#39;s annotated with Yew&amp;#39;s function_component macro, which marks it as a 
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; function component. This function has no parameters and returns Yew&amp;#39;s Html type. We use Yew&amp;#39;s html! 
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; macro to build and return a simple piece of text marked up with HTML.
+&lt;&#x2F;span&gt;&lt;span&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;function_component&lt;&#x2F;span&gt;&lt;span&gt;(App)]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;app&lt;&#x2F;span&gt;&lt;span&gt;() -&amp;gt; Html {
+&lt;&#x2F;span&gt;&lt;span&gt;  html! {
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;div&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;      &amp;lt;h1&amp;gt;{ &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Hello, World!&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; }&amp;lt;&#x2F;h1&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&#x2F;div&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; main function, mounts the app component and renders it
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;  yew::Renderer::&amp;lt;App&amp;gt;::new().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;render&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The very last piece we need is an html file to target. Create &lt;code&gt;index.html&lt;&#x2F;code&gt; at the root of your project and add:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;&amp;lt;!&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;DOCTYPE &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;html &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;lang&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;en&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;head&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;meta &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;charset&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;UTF-8&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; &#x2F;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;meta &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;viewport&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;content&lt;&#x2F;span&gt;&lt;span&gt;=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;width=device-width, initial-scale=1.0&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; &#x2F;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;Hello Yew&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;head&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Trunk will use this &lt;code&gt;index.html&lt;&#x2F;code&gt; to build out the assets for deployment. That&#x27;s pretty much all that&#x27;s need to get started.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;moment-of-truth&quot;&gt;Moment of Truth&lt;&#x2F;h2&gt;
+&lt;p&gt;To see all the fine fruits of your labours, back at your command prompt, type:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;trunk&lt;&#x2F;span&gt;&lt;span&gt; serve
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This will start up trunk&#x27;s hot reloading development server. Now, open your default browser to display your handiwork. You should be greeted with a very boring &amp;quot;Hello, World&amp;quot; message in the main window of your browser. On the one hand yes, it&#x27;s boring. On the other, take a step back and think about what you just did.&lt;&#x2F;p&gt;
+&lt;p&gt;You built a web site...with Rust. Yes, there&#x27;s HTML there, because you have to have that, but otherwise, it&#x27;s all done in Rust, compiled to WebAssembly and run by your browser. There is just the tinest bit of JavaScript in there because it&#x27;s needed to load the WebAssembly file that Rust built.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
+&lt;p&gt;This is a quick taste, to get you off the ground. There are a lot of details here that I&#x27;ve glossed over, in an effort to introduce the notion of web dev with Rust. In the future, I&#x27;ll circle back on some of the inner workings. Also in a future article, I&#x27;ll dive more into how to flesh out this simple site with assets and styles to begin to make it more interesting.&lt;&#x2F;p&gt;
+&lt;p&gt;Thanks for reading!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;references&quot;&gt;References&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;yew.rs&#x2F;docs&#x2F;tutorial&quot;&gt;Yew Tutorial&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Saving the Day: Error Handling</title>
+        <published>2024-09-14T00:00:00+00:00</published>
+        <updated>2024-09-14T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Jeff Mitchell
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2024/2024-09-14-error-handling/"/>
+        <id>https://jeff-mitchell.dev/blog/2024/2024-09-14-error-handling/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2024/2024-09-14-error-handling/">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h2&gt;
+&lt;p&gt;Today, we look at error handling in Rust. The sophistication of error handling is one of the language&#x27;s biggest advantages. It&#x27;s easy to gracefully handle whatever errors may arise. It can also be a source of frustration, because the compiler lets you get away with nearly nothing, expecting all paths, including error paths, to be handled. Compared to a dynamically typed language, this can feel a bit straight jacket-ish. The benefit is fewer surprises when things go wrong. By thinking just that little bit harder up front, and leveraging the tools Rust provides, the output is something you&#x27;ll have to worry about less.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s take a look more deeply.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;to-recover-or-not-to-recover-that-is-the-question&quot;&gt;To Recover or Not to Recover...That is the Question&lt;&#x2F;h2&gt;
+&lt;p&gt;It&#x27;s a fact of life that operations can fail. When things go wrong, what can we do? Errors come in two flavours when programming in Rust, unrecoverable and recoverable.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Unrecoverable Errors&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Sometimes, things go so wrong that there&#x27;s just nothing that can be done. In these instances, we halt execution of our program and provide some final message or output that will allow you the programmer to (hopefully) figure out what went wrong. The in built way of doing this in Rust is to use the &lt;code&gt;panic!&lt;&#x2F;code&gt; macro, which halts execution, cleans up the stack and dumps you out to the terminal with a terse error message.&lt;&#x2F;p&gt;
+&lt;p&gt;Rust gives us the ability to not deal with errors at all, via the &lt;code&gt;.unwrap()&lt;&#x2F;code&gt; method. If we know an operation or function will fail but we don&#x27;t care, we can just choose to throw the error away. If there is no happy path, the program will simply error out with a panic and terminate. There are times when it&#x27;s appropriate to use &lt;code&gt;unwrap()&lt;&#x2F;code&gt;, mainly in cases where a) we know the failure path is not a problem or unlikely to occur or b) as a starting point. It can frequently be a stepping stone to unwrap on something, then later handling the error more gracefully.&lt;&#x2F;p&gt;
+&lt;p&gt;A variation on &lt;code&gt;.unwrap()&lt;&#x2F;code&gt; is &lt;code&gt;.expect()&lt;&#x2F;code&gt; which panics, but allows you to attach context which is output when the panic happens.&lt;&#x2F;p&gt;
+&lt;p&gt;All of the above have one thing in common, program execution is over when they happen.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Recoverable Errors&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;There are many instances where, yes, something can go wrong, but whatever it was could be recovered from such that we pick ourselves up, dust off, and carry on. We can communicate some bit of information to the user such that they can fix a typo in their input or make an alternate choice that lets the program continue.&lt;&#x2F;p&gt;
+&lt;p&gt;Fortunately, Rust provides a nice way for us to, once again, leverage the type system and recover from errors if we choose.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;grace-too-the-result-t-e-type&quot;&gt;Grace, Too...The Result&amp;lt;T, E&amp;gt; Type&lt;&#x2F;h2&gt;
+&lt;p&gt;I wrote about the &lt;a href=&quot;https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2023&#x2F;2023-04-14-resultful-thinking-error-handling-in-rust&#x2F;&quot;&gt;Result&lt;&#x2F;a&gt; but let&#x27;s have another go with a small program to read text from a file and print it back out. Here&#x27;s the code:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;Rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-Rust &quot;&gt;&lt;code class=&quot;language-Rust&quot; data-lang=&quot;Rust&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; src&#x2F;main.rs
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; dependencies
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;std::fs::File;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;std::io::{Read, Result};
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; main function, returns a std::io::Result&amp;lt;()&amp;gt; type in case of error
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() -&amp;gt; Result&amp;lt;()&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; open the file called test.txt, located in the project root
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; the File::open method returns a result, which could be either the file handle, or an error
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; we use match to determine the courses of action
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; input_file = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;match &lt;&#x2F;span&gt;&lt;span&gt;File::open(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;test.txt&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;) {
+&lt;&#x2F;span&gt;&lt;span&gt;        Ok(file) =&amp;gt; file,
+&lt;&#x2F;span&gt;&lt;span&gt;        Err(e) =&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;            eprintln!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Unable to read the input file: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, e);
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;Err(e);
+&lt;&#x2F;span&gt;&lt;span&gt;        }
+&lt;&#x2F;span&gt;&lt;span&gt;    };
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; create an empty, mutable string variable to store the file contents in
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; data = String::new();
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; the read_to_string() method could fail, so again we match
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; print out the data contained in the file to stdout
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; if there was some error in the read operation, we print it out to stderr
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;match&lt;&#x2F;span&gt;&lt;span&gt; input_file.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;read_to_string&lt;&#x2F;span&gt;&lt;span&gt;(&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; data) {
+&lt;&#x2F;span&gt;&lt;span&gt;        Ok(_) =&amp;gt; println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{:?}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, data),
+&lt;&#x2F;span&gt;&lt;span&gt;        Err(e) =&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;            eprintln!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Unable to read the file contents as a string: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, e);
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;Err(e);
+&lt;&#x2F;span&gt;&lt;span&gt;        }
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    Ok(())
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;the-operator&quot;&gt;The ? Operator&lt;&#x2F;h2&gt;
+&lt;p&gt;The above is a little verbose. Let&#x27;s do better:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;Rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-Rust &quot;&gt;&lt;code class=&quot;language-Rust&quot; data-lang=&quot;Rust&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; src&#x2F;main.rs
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; dependencies
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;std::fs::File;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;std::io::{Read, Result};
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() -&amp;gt; Result&amp;lt;()&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; input_file = File::open(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;test.txt&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;)?;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; data = String::new();
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    input_file.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;read_to_string&lt;&#x2F;span&gt;&lt;span&gt;(&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; data)?;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    Ok(())
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here we use the Rust &lt;code&gt;?&lt;&#x2F;code&gt; operator, which is some syntactic sugar which does the equivalent of the code in the &lt;code&gt;match {}&lt;&#x2F;code&gt; blocks shown above. This special operator:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;evaluates the &lt;code&gt;Result&amp;lt;T, E&amp;gt;&lt;&#x2F;code&gt; type that comes back from the IO related operations.&lt;&#x2F;li&gt;
+&lt;li&gt;if it&#x27;s the error path, we do an early return and print the error.&lt;&#x2F;li&gt;
+&lt;li&gt;if it&#x27;s the Happy Path, execution continues as we expect, the file is read into the variable &lt;code&gt;input_file&lt;&#x2F;code&gt; and later the data contained within the file, is output.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Use of the &lt;code&gt;?&lt;&#x2F;code&gt; operator makes your Rust programs a whole lot more concise. In your mind, when you see it, you can think &amp;quot;possible failure here, we either succeed and carry on, or we error out&amp;quot;.&lt;&#x2F;p&gt;
+&lt;p&gt;When the &lt;code&gt;?&lt;&#x2F;code&gt; is used in a function body, the function signature must include returning a Result type. In this instance we say we are &amp;quot;propagating&amp;quot; the error back to the caller, which could potentially be the main function. It will be up to the main function to handle the returned result type in some final, possibly different, way.&lt;&#x2F;p&gt;
+&lt;p&gt;When the Result type is used, program termination is more under the programmers control. The type can be used to set pathways that allow recovery and continued program operation. The example program above does not handle errors any more gracefully per se, but using the Result type, together with embelished error information (the actual error is included with the overall message) the programmer gains more control over the messaging.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;closing-thoughts&quot;&gt;Closing Thoughts&lt;&#x2F;h2&gt;
+&lt;p&gt;The Rust Book is overly wordy on the matter of error handling. Here I&#x27;ve attempted to break it down in the way I&#x27;ve started to understand and use it. It can be one of the more difficult language aspects to grasp, but once you&#x27;ve got it, it&#x27;s hard to go without it.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;references&quot;&gt;References&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch09-00-error-handling.html&quot;&gt;The Rust Programming Language: Error Handling&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;kerkour.com&#x2F;rust-error-handling&quot;&gt;The simplest guide to error handling in Rust&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>The Mystery of the Hashmap</title>
+        <published>2024-08-26T00:00:00+00:00</published>
+        <updated>2024-08-26T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Jeff Mitchell
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2024/2024-08-26-the-mystery-of-the-hashmap/"/>
+        <id>https://jeff-mitchell.dev/blog/2024/2024-08-26-the-mystery-of-the-hashmap/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2024/2024-08-26-the-mystery-of-the-hashmap/">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h2&gt;
+&lt;p&gt;A little over two years ago, I started seriously doubling down on the Rust programming language. I found &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;zerotomastery.io&quot;&gt;Zero to Mastery&lt;&#x2F;a&gt; and their Rust course. With a great head of steam, as I did the course, I also started blogging my way through the Rust Book. This head of steam continued nicely through the more basic aspects of the language, but as I entered the deeper waters, I faltered.&lt;&#x2F;p&gt;
+&lt;p&gt;One of the areas I faltered in was the Hashmap collection type. I found it difficult to think up something specific to write about, but didn&#x27;t want to just rehash&#x2F;regurgitate the chapter content from the Rust book. So, I asked ChatGPT, which is great for offering suggestions, and it gave me a few clues. Oddly enough, this interaction also gave me a clue in general for a structure for future posts on this blog.&lt;&#x2F;p&gt;
+&lt;p&gt;I can come up with a problem, then write about how to solve it in a structured way. In this instance, how can we use hashmaps as part of the solution to a particular problem?&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s dive in!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;what-is-a-hashmap&quot;&gt;What is a HashMap?&lt;&#x2F;h2&gt;
+&lt;p&gt;A HashMap is a data type which stores mappings of keys to values. A hashing function is used to determine placement of these keys and values in memory. The advantage of a HashMap is that the key can be of any type. Rust considers HashMaps as a &amp;quot;collection&amp;quot; so you&#x27;ll see it referred to as a collection type. It&#x27;s not the most used data structure, so you have to bring it into scope in your programs.&lt;&#x2F;p&gt;
+&lt;p&gt;HashMaps are stored in heap memory. Their keys must be all of the same type and their values must be all of the same type.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;the-problem&quot;&gt;The Problem&lt;&#x2F;h2&gt;
+&lt;p&gt;I&#x27;d like a simple way of remembering snippets of text with a keyword attached to each for searching. I&#x27;d like some tool that will be a portable memory aid. It should let me create, retrieve, update and delete items of knowledge. I&#x27;d like it to have storage so that what I enter is not lost. Finally, I want to be able to take this program with me whereever I go.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;the-solution&quot;&gt;The Solution&lt;&#x2F;h2&gt;
+&lt;p&gt;Admittedly, this is a little contrived, and there are probably much, much better ways to solve this problem, but we&#x27;re going to leverage HashMaps and create a little CRUD (Create, Retrieve, Update, Delete) tool. It&#x27;s not going to be a command line interface (CLI) tool, but will still be terminal based with a menu driven user inteface. We&#x27;ll keep it modular, using functions rather than one giant blob in the main function. We&#x27;ll also try to pull in many of the basic Rust data types, such as enums, and control flow mechanisms, like loop. Lastly, we&#x27;re going to confine ourselves to what&#x27;s available in the Rust standard library, no community crates.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;algorithm-design&quot;&gt;Algorithm (Design)&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;em&gt;Data Types - Snippet&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;ve learned that in Rust, types are central (duh, I know). We begin by thinking about our data and the constrait that it needs to be represented by a HashMap. I want to store text snippetssuch as web links. Our key could be just a word, like &amp;quot;Tera&amp;quot; for entries related to the Tera template engine. The key can just be a string. The associated value is words and characters, representing our code snippet. It could also be stored as a string. We&#x27;re going to wrap our Snippet HashMap in a struct, which will let us implement the &lt;code&gt;Default&lt;&#x2F;code&gt; trait for it, making it easy to initialize or even outright reset our data. Our Snippet type will look like this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;derive&lt;&#x2F;span&gt;&lt;span&gt;(Debug)]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct &lt;&#x2F;span&gt;&lt;span&gt;Snippet {
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;item&lt;&#x2F;span&gt;&lt;span&gt;: HashMap&amp;lt;String, String&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We could do this without the struct, but I&#x27;m trying to practice some concepts here so bear with me. It&#x27;s always a good idea to derive the &lt;code&gt;Debug&lt;&#x2F;code&gt; trait on any struct, so we do it for good measure.&lt;&#x2F;p&gt;
+&lt;p&gt;We can then implement the &lt;code&gt;Default&lt;&#x2F;code&gt; trait, which will initialize and return and empty Snippet HashMap for us;&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;impl &lt;&#x2F;span&gt;&lt;span&gt;Default &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;Snippet {
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;default&lt;&#x2F;span&gt;&lt;span&gt;() -&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;Self &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    item: HashMap::new()
+&lt;&#x2F;span&gt;&lt;span&gt;  }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;em&gt;Data Types - Menu Items&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;We need something to represent the main menu of our program, which will need to present 5 choices: Create, Retrieve, Update, Delete, Exit. The natural choice here is an enum. It will look like this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;enum &lt;&#x2F;span&gt;&lt;span&gt;Menu {
+&lt;&#x2F;span&gt;&lt;span&gt;  Create,
+&lt;&#x2F;span&gt;&lt;span&gt;  Retrieve,
+&lt;&#x2F;span&gt;&lt;span&gt;  Update,
+&lt;&#x2F;span&gt;&lt;span&gt;  Delete,
+&lt;&#x2F;span&gt;&lt;span&gt;  Exit
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;em&gt;Methods on the Snippet Type&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Once our data type is set, we can think in terms of methods on the data. What we will need will look like this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;impl &lt;&#x2F;span&gt;&lt;span&gt;Snippet {
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;create&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; create method - creates new code snippets, given a key and a value
+&lt;&#x2F;span&gt;&lt;span&gt;  }
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;retrieve&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; retrieve method - retrieves any code snippet, given a key
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; this method will also act as a way of displaying snippets
+&lt;&#x2F;span&gt;&lt;span&gt;  }
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;update&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; update method - updates any code snippet, given a key
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; (Note: this one is tricky, we&amp;#39;ll see later...)
+&lt;&#x2F;span&gt;&lt;span&gt;  }
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;delete&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; delete method - delete any code snippet, given a key
+&lt;&#x2F;span&gt;&lt;span&gt;  }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;em&gt;General Program Structure&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;We&#x27;ll need to declare our data types, their methods, as well as a couple of helper functions. We&#x27;ll need functions which display the menu, get input from the user, and read&#x2F;write to our storage medium, which will just be a file.&lt;&#x2F;p&gt;
+&lt;p&gt;The program will run in a loop, presenting menu choices to the user for further action. The loop will be endless until the user chooses the &amp;quot;Exit&amp;quot; menu option, at which time the program will terminate.&lt;&#x2F;p&gt;
+&lt;p&gt;After a couple of weeks of messing about, and yes, drifting between other things, here&#x27;s what I came up with:&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;final-code&quot;&gt;Final Code&lt;&#x2F;h3&gt;
+&lt;p&gt;In future I probably won&#x27;t spit out the entire code like this, but for today I will. Here&#x27;s the final result:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; src&#x2F;main.rs
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; dependencies
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;std::collections::HashMap;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;std::fs;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;std::io::{&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;, Write};
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; type aliases
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;type &lt;&#x2F;span&gt;&lt;span&gt;UpdateResult = std::result::Result&amp;lt;(), String&amp;gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; struct type to represent a code Snippet
+&lt;&#x2F;span&gt;&lt;span&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;derive&lt;&#x2F;span&gt;&lt;span&gt;(Debug, Default)]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct &lt;&#x2F;span&gt;&lt;span&gt;Snippet {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;items&lt;&#x2F;span&gt;&lt;span&gt;: HashMap&amp;lt;String, String&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; methods for the Snippet type
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;impl &lt;&#x2F;span&gt;&lt;span&gt;Snippet {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; create method; creates a new key, value pair, returns an String wrapped by the Option type
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;create&lt;&#x2F;span&gt;&lt;span&gt;(&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;key&lt;&#x2F;span&gt;&lt;span&gt;: String, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;value&lt;&#x2F;span&gt;&lt;span&gt;: String) -&amp;gt; Option&amp;lt;String&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;.items.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;insert&lt;&#x2F;span&gt;&lt;span&gt;(key, value)
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; retrieve method; retrieves a given value given a key, returns a reference to a String, wrapped by the Option type
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;retrieve&lt;&#x2F;span&gt;&lt;span&gt;(&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;key&lt;&#x2F;span&gt;&lt;span&gt;: String) -&amp;gt; Option&amp;lt;&amp;amp;String&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;.items.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;get&lt;&#x2F;span&gt;&lt;span&gt;(&amp;amp;key)
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; update method; updates the value associated with a given key returns the unit type or an error String, wrapped in a Result type
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;update&lt;&#x2F;span&gt;&lt;span&gt;(&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;key&lt;&#x2F;span&gt;&lt;span&gt;: String, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;updated_value&lt;&#x2F;span&gt;&lt;span&gt;: String) -&amp;gt; UpdateResult {
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;.items
+&lt;&#x2F;span&gt;&lt;span&gt;            .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;get_mut&lt;&#x2F;span&gt;&lt;span&gt;(&amp;amp;key)
+&lt;&#x2F;span&gt;&lt;span&gt;            .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;(|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;value&lt;&#x2F;span&gt;&lt;span&gt;| *value = updated_value)
+&lt;&#x2F;span&gt;&lt;span&gt;            .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;ok_or_else&lt;&#x2F;span&gt;&lt;span&gt;(|| format!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Item &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;#39; not found&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, key))
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; delete method; deletes a key, value pair given a key, returns a String, wrapped by the Option type
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;delete&lt;&#x2F;span&gt;&lt;span&gt;(&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;key&lt;&#x2F;span&gt;&lt;span&gt;: String) -&amp;gt; Option&amp;lt;String&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;.items.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;remove&lt;&#x2F;span&gt;&lt;span&gt;(&amp;amp;key)
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; enum type for the application menu
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;enum &lt;&#x2F;span&gt;&lt;span&gt;Menu {
+&lt;&#x2F;span&gt;&lt;span&gt;    Create,
+&lt;&#x2F;span&gt;&lt;span&gt;    Retrieve,
+&lt;&#x2F;span&gt;&lt;span&gt;    Update,
+&lt;&#x2F;span&gt;&lt;span&gt;    Delete,
+&lt;&#x2F;span&gt;&lt;span&gt;    Exit,
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; function to read in any saved input
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;read_data&lt;&#x2F;span&gt;&lt;span&gt;() -&amp;gt; std::io::Result&amp;lt;Vec&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;u8&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; data = fs::read(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;data&#x2F;items.txt&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;)?;
+&lt;&#x2F;span&gt;&lt;span&gt;    Ok(data)
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; function to convert the saved input into our Snippet type
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;input_to_snippet&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;raw_data&lt;&#x2F;span&gt;&lt;span&gt;: Vec&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;u8&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;snippet&lt;&#x2F;span&gt;&lt;span&gt;: Snippet) -&amp;gt; Snippet {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; string_data = String::from_utf8(raw_data).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;expect&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Unable to read the data stored in the file.&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; key_value_pairs = string_data.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;split&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\n&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;).collect::&amp;lt;Vec&amp;lt;&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;str&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; pairs: Vec&amp;lt;(&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;str&lt;&#x2F;span&gt;&lt;span&gt;, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;str&lt;&#x2F;span&gt;&lt;span&gt;)&amp;gt; = key_value_pairs
+&lt;&#x2F;span&gt;&lt;span&gt;        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;iter&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;filter_map&lt;&#x2F;span&gt;&lt;span&gt;(|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pair&lt;&#x2F;span&gt;&lt;span&gt;| pair.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;split_once&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;))
+&lt;&#x2F;span&gt;&lt;span&gt;        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;collect&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;(key, value) in &amp;amp;pairs {
+&lt;&#x2F;span&gt;&lt;span&gt;        snippet.items.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;insert&lt;&#x2F;span&gt;&lt;span&gt;(key.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;to_string&lt;&#x2F;span&gt;&lt;span&gt;(), value.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;to_string&lt;&#x2F;span&gt;&lt;span&gt;());
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;    snippet
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; function to get user input and pass it back for use
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;get_user_input&lt;&#x2F;span&gt;&lt;span&gt;() -&amp;gt; io::Result&amp;lt;String&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; input = String::new();
+&lt;&#x2F;span&gt;&lt;span&gt;    io::stdin().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;read_line&lt;&#x2F;span&gt;&lt;span&gt;(&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; input)?;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; input = input.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;trim&lt;&#x2F;span&gt;&lt;span&gt;().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;to_string&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;    Ok(input)
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; function to write output to stdout
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;write_message&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;message&lt;&#x2F;span&gt;&lt;span&gt;: &amp;amp;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;u8&lt;&#x2F;span&gt;&lt;span&gt;], &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;writer&lt;&#x2F;span&gt;&lt;span&gt;: &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; dyn Write) {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if let &lt;&#x2F;span&gt;&lt;span&gt;Err(e) = writer.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;write_all&lt;&#x2F;span&gt;&lt;span&gt;(message) {
+&lt;&#x2F;span&gt;&lt;span&gt;        eprintln!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Error writing to stdout: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, e);
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if let &lt;&#x2F;span&gt;&lt;span&gt;Err(e) = writer.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;flush&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;        eprintln!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Error flushing stdout: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, e);
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; function which triggers the appropriate program functionality, based on the user choice
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;handle_menu_choice&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;choice&lt;&#x2F;span&gt;&lt;span&gt;: Menu, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;snippet&lt;&#x2F;span&gt;&lt;span&gt;: &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; Snippet, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;handle&lt;&#x2F;span&gt;&lt;span&gt;: &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; dyn Write) -&amp;gt; io::Result&amp;lt;()&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;match&lt;&#x2F;span&gt;&lt;span&gt; choice {
+&lt;&#x2F;span&gt;&lt;span&gt;        Menu::Create =&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;write_message&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Enter the new key:&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle);
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; new_key = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;get_user_input&lt;&#x2F;span&gt;&lt;span&gt;()?;
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;write_message&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Enter the new value for that key: &lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle);
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; new_value = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;get_user_input&lt;&#x2F;span&gt;&lt;span&gt;()?;
+&lt;&#x2F;span&gt;&lt;span&gt;            Snippet::create(snippet, new_key.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;clone&lt;&#x2F;span&gt;&lt;span&gt;(), new_value.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;clone&lt;&#x2F;span&gt;&lt;span&gt;());
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;write_message&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;                format!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Created new key: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt; with value: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\n&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, new_key, new_value).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;as_bytes&lt;&#x2F;span&gt;&lt;span&gt;(),
+&lt;&#x2F;span&gt;&lt;span&gt;                &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle,
+&lt;&#x2F;span&gt;&lt;span&gt;            );
+&lt;&#x2F;span&gt;&lt;span&gt;        }
+&lt;&#x2F;span&gt;&lt;span&gt;        Menu::Retrieve =&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;write_message&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Enter the desired key: &lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle);
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; key = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;get_user_input&lt;&#x2F;span&gt;&lt;span&gt;()?;
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;match &lt;&#x2F;span&gt;&lt;span&gt;Snippet::retrieve(snippet, key) {
+&lt;&#x2F;span&gt;&lt;span&gt;                Some(value) =&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;                    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;write_message&lt;&#x2F;span&gt;&lt;span&gt;(format!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Retrieved: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{:?}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\n&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, value).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;as_bytes&lt;&#x2F;span&gt;&lt;span&gt;(), &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle)
+&lt;&#x2F;span&gt;&lt;span&gt;                }
+&lt;&#x2F;span&gt;&lt;span&gt;                None =&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;                    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;write_message&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;There is no key value pair that matches&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\n&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle);
+&lt;&#x2F;span&gt;&lt;span&gt;                }
+&lt;&#x2F;span&gt;&lt;span&gt;            };
+&lt;&#x2F;span&gt;&lt;span&gt;        }
+&lt;&#x2F;span&gt;&lt;span&gt;        Menu::Update =&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;write_message&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Enter the desired key to update: &lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle);
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; key = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;get_user_input&lt;&#x2F;span&gt;&lt;span&gt;()?;
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;write_message&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Enter the desired new value: &lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle);
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; updated_value = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;get_user_input&lt;&#x2F;span&gt;&lt;span&gt;()?;
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; _result = Snippet::update(snippet, key.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;clone&lt;&#x2F;span&gt;&lt;span&gt;(), updated_value);
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;write_message&lt;&#x2F;span&gt;&lt;span&gt;(format!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Updated &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{:?}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt; successfully.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\n&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, key).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;as_bytes&lt;&#x2F;span&gt;&lt;span&gt;(), &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle);
+&lt;&#x2F;span&gt;&lt;span&gt;        }
+&lt;&#x2F;span&gt;&lt;span&gt;        Menu::Delete =&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;write_message&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Enter the desired key to delete: &lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle);
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; key = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;get_user_input&lt;&#x2F;span&gt;&lt;span&gt;()?;
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; result = Snippet::delete(snippet, key);
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if let &lt;&#x2F;span&gt;&lt;span&gt;Some(deleted) = result {
+&lt;&#x2F;span&gt;&lt;span&gt;                &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;write_message&lt;&#x2F;span&gt;&lt;span&gt;(format!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Deleted: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{:?}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\n&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, deleted).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;as_bytes&lt;&#x2F;span&gt;&lt;span&gt;(), &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle);
+&lt;&#x2F;span&gt;&lt;span&gt;            }
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        }
+&lt;&#x2F;span&gt;&lt;span&gt;        Menu::Exit =&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;write_message&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Exiting the program.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\n&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle);
+&lt;&#x2F;span&gt;&lt;span&gt;        }
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    Ok(())
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; main function
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() -&amp;gt; std::io::Result&amp;lt;()&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; initialize stdout for output to the terminal
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; handle = io::stdout();
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; initialize an instance of our snippet type
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; snippet = Snippet::default();
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; load input from the saved file
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; raw_data = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;read_data&lt;&#x2F;span&gt;&lt;span&gt;()?;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; convert the input into the Snippet type
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; data = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;input_to_snippet&lt;&#x2F;span&gt;&lt;span&gt;(raw_data, snippet);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; the main program loop; display the menu choices, act on them, exit the program if &amp;quot;E&amp;quot; is selected
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;loop &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; display the menu options
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;write_message&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Menu: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\n&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle);
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;write_message&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;C - Create &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\n&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle);
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;write_message&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;R - Retrieve &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\n&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle);
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;write_message&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;U - Update &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\n&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle);
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;write_message&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;D - Delete &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\n&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle);
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;write_message&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;E - Exit &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\n&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; display a message asing for the user to make a menu choice
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;write_message&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Enter your choice: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\n&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; trigger the appropriate menu option based on the user&amp;#39;s choice
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;match &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;get_user_input&lt;&#x2F;span&gt;&lt;span&gt;()?.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;to_uppercase&lt;&#x2F;span&gt;&lt;span&gt;().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;as_str&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;            &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;C&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; =&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;handle_menu_choice&lt;&#x2F;span&gt;&lt;span&gt;(Menu::Create, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; data, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle)?,
+&lt;&#x2F;span&gt;&lt;span&gt;            &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;R&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; =&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;handle_menu_choice&lt;&#x2F;span&gt;&lt;span&gt;(Menu::Retrieve, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; data, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle)?,
+&lt;&#x2F;span&gt;&lt;span&gt;            &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;U&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; =&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;handle_menu_choice&lt;&#x2F;span&gt;&lt;span&gt;(Menu::Update, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; data, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle)?,
+&lt;&#x2F;span&gt;&lt;span&gt;            &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;D&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; =&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;handle_menu_choice&lt;&#x2F;span&gt;&lt;span&gt;(Menu::Delete, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; data, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle)?,
+&lt;&#x2F;span&gt;&lt;span&gt;            &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;E&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; =&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;                &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;handle_menu_choice&lt;&#x2F;span&gt;&lt;span&gt;(Menu::Exit, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; data, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; handle)?;
+&lt;&#x2F;span&gt;&lt;span&gt;                &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;break&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;            }
+&lt;&#x2F;span&gt;&lt;span&gt;            _ =&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;                writeln!(handle, &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Invalid Choice. Please enter C, R, U, D, or E.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\n&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;)?
+&lt;&#x2F;span&gt;&lt;span&gt;            }
+&lt;&#x2F;span&gt;&lt;span&gt;        };
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    Ok(())
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;some-key-aspects&quot;&gt;Some Key Aspects&lt;&#x2F;h2&gt;
+&lt;p&gt;There are a couple of key things to call out:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;I have an odd obsession with not using the `println!&#x27; macro. As of this program, I&#x27;m kind of favouring to not do things with macros.&lt;&#x2F;li&gt;
+&lt;li&gt;I&#x27;ve tried to get rid of all pesky &lt;code&gt;.unwraps()&lt;&#x2F;code&gt;, errors should generally be handled decently&lt;&#x2F;li&gt;
+&lt;li&gt;I haven&#x27;t made a custom error type or pulled in &lt;code&gt;anyhow&lt;&#x2F;code&gt; or &lt;code&gt;color_eyre&lt;&#x2F;code&gt; because, generally, failures can be handled by returning a &lt;code&gt;std::io::Result&amp;lt;()&amp;gt;&lt;&#x2F;code&gt;
+&lt;ul&gt;
+&lt;li&gt;I&#x27;ve used one &lt;code&gt;.except()&lt;&#x2F;code&gt;, in the &lt;code&gt;input_to_snippet&lt;&#x2F;code&gt; function, which I feel is reasonable because if you can&#x27;t read in the saved data (the &lt;code&gt;String::from_utf8&lt;&#x2F;code&gt; conversion could fail for characters that are not UTF-8) there&#x27;s not much point in continuing. You may disagree.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;areas-for-further-work&quot;&gt;Areas for Further Work&lt;&#x2F;h2&gt;
+&lt;p&gt;This &amp;quot;tool&amp;quot; isn&#x27;t complete. I haven&#x27;t implemented the ability to save yet. I thought I&#x27;d leave you the reader to tackle that. How would you modify my code to append data back to the file? In the future I&#x27;ll write about my solution.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;closing&quot;&gt;Closing&lt;&#x2F;h2&gt;
+&lt;p&gt;Thanks for reading. I hope the HashMap collection type is a little less mysterious for you. It&#x27;s much less mysterious for me after going through this exercise.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;code-on-github&quot;&gt;Code on GitHub&lt;&#x2F;h2&gt;
+&lt;p&gt;You can find a repo to support for this article here:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;sentinel1909&#x2F;memoria-rs&quot;&gt;memoria-rs&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;references&quot;&gt;References&lt;&#x2F;h2&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch08-03-hash-maps.html&quot;&gt;The Rust Programming Language: Chapter 8.3&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;resources&quot;&gt;Resources&lt;&#x2F;h2&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch08-03-hash-maps.html&quot;&gt;Rust Standard Library: HashMap Collection&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>String Theory</title>
+        <published>2024-07-30T00:00:00+00:00</published>
+        <updated>2024-07-30T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Jeff Mitchell
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2024/2024-07-30-string-theory/"/>
+        <id>https://jeff-mitchell.dev/blog/2024/2024-07-30-string-theory/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2024/2024-07-30-string-theory/">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h2&gt;
+&lt;p&gt;String in Rust are hard. The difficulty stems from the different ways strings are handled by the language. This article reflects the two core types of strings and my understanding of them. It will evolve over time. Be aware, this does not offer the be-all-end-all explanation of strings. The main purpose here is to provide a jumping off point for me, and you, to dive deeper as needed. To often, I avoid writing because I feel I can&#x27;t do a topic justice.&lt;&#x2F;p&gt;
+&lt;p&gt;This is just an excuse.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s go.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;what-the-heck-is-utf-8&quot;&gt;What the Heck is UTF-8?&lt;&#x2F;h2&gt;
+&lt;p&gt;Before we can examine the string collection type in Rust. We need to understand what is UTF-8, which stands for Unicode Transformation Format - 8 bits. I&#x27;m not going to attempt to write about it, it&#x27;s well explained here: &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;blog.hubspot.com&#x2F;website&#x2F;what-is-utf-8&quot;&gt;What is UTF-8 Encoding? A Guide for Non-Programmers&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;In a nutshell, UTF-8 is an encoding method which covers every character in any human language, yes emojis included.&lt;&#x2F;p&gt;
+&lt;p&gt;Rust encodes strings into UTF-8 by default.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;flavours-of-strings&quot;&gt;Flavours of Strings&lt;&#x2F;h1&gt;
+&lt;p&gt;The internet will yell at me if I don&#x27;t point out the fact that there are &lt;strong&gt;many&lt;&#x2F;strong&gt; string types in Rust, I&#x27;m not going to list them all. However, in your day to day Rusting, I maintain there are really two you&#x27;re going to care about:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;the &lt;code&gt;String&lt;&#x2F;code&gt; type&lt;&#x2F;li&gt;
+&lt;li&gt;the &lt;code&gt;&amp;amp;str&lt;&#x2F;code&gt; type&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Let&#x27;s get into &#x27;em.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;strings-are-magical-paper&quot;&gt;Strings are Magical Paper&lt;&#x2F;h2&gt;
+&lt;p&gt;In preparing this article, I asked to ChatGPT to explain the String type to me like I was five. Here&#x27;s what it came up with, which I thought was pretty good:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+Let&#x27;s imagine that a String in Rust is like a magical piece of paper that can change its size to hold different words or sentences.
+&lt;p&gt;Magic Paper: The String is like a piece of paper that you can write on. If you write &amp;quot;Hello,&amp;quot; it fits perfectly. If you want to write &amp;quot;Hello, world!&amp;quot; instead, the paper can grow to fit the new words.&lt;&#x2F;p&gt;
+&lt;p&gt;Easy to Change: You can add more words to your magical paper. If you have &amp;quot;Hello&amp;quot; and you want to add &amp;quot; world,&amp;quot; you can just stick it on, and the paper will get bigger to fit the new words.&lt;&#x2F;p&gt;
+&lt;p&gt;Special Marker: This paper has a special marker called the end marker. It always knows where the end of your writing is, so it knows exactly how long your sentence is.&lt;&#x2F;p&gt;
+&lt;p&gt;Start Small, Grow Big: You don&#x27;t need to know how big your sentence will be at the beginning. You can start with a tiny piece of paper and let it grow as you add more words.&lt;&#x2F;p&gt;
+&lt;p&gt;Super Flexible: You can do all sorts of things with this magical paper. You can take words away, change them, or even find out how many letters there are.&lt;&#x2F;p&gt;
+&lt;p&gt;In Rust, the String type works just like this magical paper. It&#x27;s a flexible, growable piece of text that you can change however you want. It&#x27;s different from a &amp;amp;str (a string slice) which is more like a regular piece of paper that can&#x27;t change size.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;I thought this was actually pretty good.&lt;&#x2F;p&gt;
+&lt;p&gt;A &lt;code&gt;String&lt;&#x2F;code&gt; is a growable, mutable, owned, UTF-8 encode type. Behind any &lt;code&gt;String&lt;&#x2F;code&gt; is a &lt;code&gt;Vec&amp;lt;T&amp;gt;&lt;&#x2F;code&gt; where the type is bytes, it is a collection of bytes organized into a vector.&lt;&#x2F;p&gt;
+&lt;p&gt;There are several ways to crate a &lt;code&gt;String&lt;&#x2F;code&gt; type, which can be confusing, but they have their time and place.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;You can create an empty string: &lt;code&gt;let mut s = String::new();&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;The &lt;code&gt;to_string()&lt;&#x2F;code&gt; method is available on an type that implements the &lt;code&gt;Display&lt;&#x2F;code&gt; trait: &lt;code&gt;let s = &amp;quot;I&#x27;m a string&amp;quot;.to_string();&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;We can use &lt;code&gt;String::from()&lt;&#x2F;code&gt; to create a &lt;code&gt;String&lt;&#x2F;code&gt; from a string literal: &lt;code&gt;let s = String::from(&amp;quot;I&#x27;m a string too!);&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;The last two a functionally equivalent, your choice comes down to style and preference.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;a-view-to-a-string&quot;&gt;A View to a String&lt;&#x2F;h2&gt;
+&lt;p&gt;That was &lt;code&gt;String&lt;&#x2F;code&gt;, what is a string slice? Again, let&#x27;s ask ChatGPT:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+Let&#x27;s imagine that a string slice in Rust is like a piece of paper with words on it that you can look at but not change.
+&lt;p&gt;Snapshot Paper: A string slice, written as &amp;amp;str, is like taking a picture of a part of your magical paper. This picture shows the words exactly as they are, but you can&#x27;t add or remove words from the picture.&lt;&#x2F;p&gt;
+&lt;p&gt;Just Looking: If you have a book and you want to show someone just one sentence from a page, you can take a picture of that sentence. They can read the sentence in the picture, but they can&#x27;t change any of the words.&lt;&#x2F;p&gt;
+&lt;p&gt;Point to Words: When you have a string slice, you&#x27;re just pointing to some words that are already written down somewhere else. You&#x27;re not making a new copy of the words; you&#x27;re just saying, &amp;quot;Look here!&amp;quot;&lt;&#x2F;p&gt;
+&lt;p&gt;Small Window: You can take a string slice of any part of the text. If your magical paper says &amp;quot;Hello, world!&amp;quot; you can take a slice that just shows &amp;quot;Hello&amp;quot; or &amp;quot;world&amp;quot; or even &amp;quot;lo, wo&amp;quot;.&lt;&#x2F;p&gt;
+&lt;p&gt;No Changing Allowed: The important thing is that with a string slice, you&#x27;re not allowed to change the words. It&#x27;s like looking through a window at something outside. You can see it, but you can&#x27;t reach through the window to change it.&lt;&#x2F;p&gt;
+&lt;p&gt;In Rust, a string slice (&amp;amp;str) is a way to look at a piece of text without changing it. It’s like pointing at part of a String or another piece of text and saying, &amp;quot;I want to see this part,&amp;quot; but not being able to change what you see.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;A &lt;code&gt;&amp;amp;str&lt;&#x2F;code&gt; is a pointer into memory which holds a string slice.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;use-cases-when-to-choose-string-over-str&quot;&gt;Use Cases - When to Choose &lt;code&gt;String&lt;&#x2F;code&gt; over &lt;code&gt;&amp;amp;str&lt;&#x2F;code&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;The &lt;code&gt;String&lt;&#x2F;code&gt; type is most useful when you don&#x27;t want to worry about ownership and lifetimes. However, be aware that you&#x27;re allocating memory every time you create a new &lt;code&gt;String&lt;&#x2F;code&gt; variable. This may incur a performance penalty that&#x27;s unacceptable. Also, the &lt;code&gt;String&lt;&#x2F;code&gt; type doesn&#x27;t implement the &lt;code&gt;Copy&lt;&#x2F;code&gt; trait, so using it as a field in a &lt;code&gt;struct&lt;&#x2F;code&gt; may cause issues and cloning is your best option...which again, may incur a performance hit that might or might not be ok.&lt;&#x2F;p&gt;
+&lt;p&gt;Since a &lt;code&gt;&amp;amp;str&lt;&#x2F;code&gt; is a view to a String, you can&#x27;t change it, you can only view it. The &lt;code&gt;&amp;amp;str&lt;&#x2F;code&gt; type is good for function parameters, where many times you&#x27;re just passing information in and don&#x27;t need to worry about ownership of the data being passed.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
+&lt;p&gt;That was your brief introduction to strings in Rust! This is a very, very watered down version, there is much more to know. Please check out the full scoop in the Rust Book.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;references&quot;&gt;References&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch04-03-slices.html&quot;&gt;The Rust Programming Language, Chapter 4.3: The Slice Type&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch08-02-strings.html&quot;&gt;The Rust Programming Language, Chapter 8.2: Storing UTF-8 Encoded Text with String&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;rust-by-example&#x2F;std&#x2F;str.html&quot;&gt;Rust By Example: Strings&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;blog-articles&quot;&gt;Blog Articles&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;zerotomastery.io&#x2F;blog&#x2F;how-strings-work-in-rust&#x2F;&quot;&gt;How Strings Work in Rust&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>The Mighty Vector</title>
+        <published>2023-11-07T00:00:00+00:00</published>
+        <updated>2023-11-07T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2023/2023-11-07-the-mighty-vector/"/>
+        <id>https://jeff-mitchell.dev/blog/2023/2023-11-07-the-mighty-vector/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2023/2023-11-07-the-mighty-vector/">&lt;h2 id=&quot;indtroduction&quot;&gt;Indtroduction&lt;&#x2F;h2&gt;
+&lt;p&gt;Today I resume my journey through the Rust Book, in the spotlight is the vector type.&lt;&#x2F;p&gt;
+&lt;p&gt;The Rust Book introduces vectors as a &amp;quot;collection&amp;quot;. A vector is similar to an array type, but with the critical difference that a vector can grow and shrink in size. A vector is capable of storing a list of items in a single data structure. All the individual values in a vector are stored next to each other in memory. Vectors can only store data of the same type.&lt;&#x2F;p&gt;
+&lt;p&gt;I called this article &amp;quot;The Mighty Vector&amp;quot; because vectors are an extremely versatile and useful way of storing data. I think you&#x27;ll use them quite a bit in your own Rust adventures.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;creation&quot;&gt;Creation&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;vec-new-function&quot;&gt;Vec::new() Function&lt;&#x2F;h3&gt;
+&lt;p&gt;A fresh, empty vector can be created like so:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; origin_coordinates: Vec&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;i32&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt; = Vec::new();
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Since we haven&#x27;t initialized this coordinates vector with values, we have to tell the compiler what we want, because otherwise it won&#x27;t know. The vector type provided by the Rust standard library is implemented using generics and can hold any type. In this case we&#x27;ve said that our coordinates vector is going to contain i32 elements.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;vec-macro&quot;&gt;vec! Macro&lt;&#x2F;h3&gt;
+&lt;p&gt;More often than not, we want to initialize a vector with some values. Rust gives us a macro, the vec! macro, which creates a vector with whatever values we choose:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; origin_coordinates = vec![&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;];
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The initial values allow the compiler to infer what we want, so we don&#x27;t have to use a type annotation like in the first example.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;modifying-a-vector&quot;&gt;Modifying a Vector&lt;&#x2F;h3&gt;
+&lt;p&gt;Hopefully you recall that all variables in Rust, when declared, are immutable, they can&#x27;t be changed. If we know we need to change the values in our vector, we need to use the mut keyword:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; coordinates = vec![&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;3&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;5&lt;&#x2F;span&gt;&lt;span&gt;];
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Then, we can add values to this vector by using the push method:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span&gt;coordinates.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;push&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;10&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;coordinates.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;push&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;15&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;coordinates.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;push&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;20&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Let&#x27;s make a complete program to see what we get:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; coordinates = vec![&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;3&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;5&lt;&#x2F;span&gt;&lt;span&gt;];
+&lt;&#x2F;span&gt;&lt;span&gt;    coordinates.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;push&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;10&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;    coordinates.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;push&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;15&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;    coordinates.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;push&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;20&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;for&lt;&#x2F;span&gt;&lt;span&gt; coordinate in coordinates {
+&lt;&#x2F;span&gt;&lt;span&gt;        println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, coordinate);
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here we initialize our vector with some default i32 values, then we push 3 more values into the vector. Finally, we use a for loop to print out the values to the console. Note that we don&#x27;t need any type annotations because the Rust compiler can infer from the information we&#x27;ve provided.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Compiling&lt;&#x2F;span&gt;&lt;span&gt; playground v0.0.1 (&#x2F;playground)
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Finished&lt;&#x2F;span&gt;&lt;span&gt; dev &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span&gt;unoptimized + debuginfo&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span&gt; target(s) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;in&lt;&#x2F;span&gt;&lt;span&gt; 0.37s
+&lt;&#x2F;span&gt;&lt;span&gt;     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Running &lt;&#x2F;span&gt;&lt;span&gt;`&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;target&#x2F;debug&#x2F;playground&lt;&#x2F;span&gt;&lt;span&gt;`
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;1
+&lt;&#x2F;span&gt;&lt;span&gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;3
+&lt;&#x2F;span&gt;&lt;span&gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;5
+&lt;&#x2F;span&gt;&lt;span&gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;10
+&lt;&#x2F;span&gt;&lt;span&gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;15
+&lt;&#x2F;span&gt;&lt;span&gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;20
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;reading-the-elements-in-a-vector&quot;&gt;Reading the Elements in a Vector&lt;&#x2F;h3&gt;
+&lt;p&gt;So, we can add elements to our vector, how do we read the elements back? Rust gives us a couple of ways, depending on what we want our program to do.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Panic Attack&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The first way of reading an element is by simple indexing.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; coordinates = vec![&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;25&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;24&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;23&lt;&#x2F;span&gt;&lt;span&gt;];
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; z: &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;i32 &lt;&#x2F;span&gt;&lt;span&gt;= &amp;amp;coordinates[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;];
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;In one of the greatest quirks of computer science, which to this day trips just about everyone up at one time or another, vectors are indexed starting at zero. In the previous example, the indices of our coordinates vector are 0, 1, 2. To get the third element, let&#x27;s call it the &#x27;z&#x27; coordinate, we use &amp;amp; and [] along with the index 2, to give us a reference to the element 23.&lt;&#x2F;p&gt;
+&lt;p&gt;This is all fine and happy if the element at the index we request exists. What if it doesn&#x27;t? If it doesn&#x27;t, the program panics and immediately terminates. We might want that behaviour, so it is a legitmate option.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;More Elegant Way&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;There is another more elegant way to handle the possibility of a vector element not existing:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; coordinates = vec![&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;25&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;24&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;23&lt;&#x2F;span&gt;&lt;span&gt;];
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; z: Option&amp;lt;&amp;amp;32&amp;gt; = coordinates.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;get&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;match&lt;&#x2F;span&gt;&lt;span&gt; z {
+&lt;&#x2F;span&gt;&lt;span&gt;    Some(z) =&amp;gt; println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;The z coordinate is &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{z}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;),
+&lt;&#x2F;span&gt;&lt;span&gt;    None() =&amp;gt; println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Oops, no third element exists in this vector!);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The .get() method, when passed an index that is outside of the vector&#x27;s range, leverages the Option type and returns a None value without the panic. You can then use the match statement to gracefully handle the possibilities. This approach results in more user friendliness than a panic and crash, because you can craft error messages to explain what happened.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;enums-to-store-multiple-types&quot;&gt;Enums to Store Multiple Types&lt;&#x2F;h3&gt;
+&lt;p&gt;Remember earlier I said that vectors can only hold data of the same type? Well, I lied a teeny tiny bit. We can leverage Rust&#x27;s enum type to get around this limitation. There are times when we may want to have a list of items that have different types.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;enum &lt;&#x2F;span&gt;&lt;span&gt;SportsTeam {
+&lt;&#x2F;span&gt;&lt;span&gt;    Name(String),
+&lt;&#x2F;span&gt;&lt;span&gt;    Conference(String),
+&lt;&#x2F;span&gt;&lt;span&gt;    Standing(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;i32&lt;&#x2F;span&gt;&lt;span&gt;),
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; teams = vec![
+&lt;&#x2F;span&gt;&lt;span&gt;    SportsTeam::Name(String::from(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Seattle Seahawks&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;)),
+&lt;&#x2F;span&gt;&lt;span&gt;    SportsTeam::Conference(String::from(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;NFC West&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;)),
+&lt;&#x2F;span&gt;&lt;span&gt;    SportsTeam::Standing(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;];
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This is not the greatest example, because the variations represented by the enum SportsTeam are not that dramatically different. However, it illustrates that we can create a vector to hold some information about our sports team and because the underlying type of each vector element is an enum, this satisfies the need that the elements all be of the same type.&lt;&#x2F;p&gt;
+&lt;p&gt;A vector is stored on the heap. The Rust compiler must know exactly how much memory space to allocate at compile time. A match expression needs to be used which aids the compiler in ensuring that every possible variation is handled. If the data in your program is such that you can&#x27;t know the exhaustive set of types at runtime that a vector will contain, then this enum technique won&#x27;t work. The solution is to use a trait object, which I&#x27;ll cover in a future article.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
+&lt;p&gt;This article has been my take on vectors. I&#x27;ve gone over the basics, but be sure to check out the Rust Standard Library documentation for the std::vec module, as there are more things you can do with this powerful and flexible data type.&lt;&#x2F;p&gt;
+&lt;p&gt;Thanks for reading!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;references&quot;&gt;References&lt;&#x2F;h2&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;std&#x2F;vec&#x2F;index.html&quot;&gt;Rust Standard Library, Module std::vec&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch08-01-vectors.html&quot;&gt;The Rust Programming Language, Chapter 8.1 Storing List of Values with Vectors&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Building Something - Saying Hello</title>
+        <published>2022-05-06T00:00:00+00:00</published>
+        <updated>2022-05-06T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-05-04-building-something-saying-hello/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-05-04-building-something-saying-hello/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-05-04-building-something-saying-hello/">&lt;p&gt;I’ve covered what I consider the core concepts of the Rust language, namely:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;constants&lt;&#x2F;li&gt;
+&lt;li&gt;comments, variables, mutability and shadowing&lt;&#x2F;li&gt;
+&lt;li&gt;simple data types&lt;&#x2F;li&gt;
+&lt;li&gt;compound data types&lt;&#x2F;li&gt;
+&lt;li&gt;functions&lt;&#x2F;li&gt;
+&lt;li&gt;decision making&lt;&#x2F;li&gt;
+&lt;li&gt;flow control&lt;&#x2F;li&gt;
+&lt;li&gt;From this core, useful things can arise. Let’s build something.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;In my Let the Journey Begin piece, I showed you how to create the classic coding journey starting point, a hello world program. That little grain of salt didn’t take any user input. We shall write a program which asks for your name and then prints to the console a simple greeting.&lt;&#x2F;p&gt;
+&lt;p&gt;Here’s what the output will be:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;What is your name? Jeff
+&lt;&#x2F;span&gt;&lt;span&gt;Hello, Jeff, nice to meet you!
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;There are a few important concepts that will bubble up from this simple example. You’ll learn how to use Rust’s standard library as well as how to “sanitize” or clean up input received from a user. We’ll also take the opportunity to incorporate modularity by breaking the program up into distinct parts, each with a specific purpose.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;problem-statement&quot;&gt;Problem Statement&lt;&#x2F;h3&gt;
+&lt;p&gt;The “Hello, World” program is the first program you learn to write in many languages but doesn’t typically involve any input. Create a program that prompts for your name and prints a greeting using your name.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;constraints&quot;&gt;Constraints&lt;&#x2F;h3&gt;
+&lt;p&gt;We’ll impose some constraints on our solution and exercise the principle of “separation of concerns” to make our program modular. We’ll structure our program into separate functions to keep the input, string building, and output jobs separate.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;walkthrough&quot;&gt;Walkthrough&lt;&#x2F;h3&gt;
+&lt;p&gt;I’m terrible for just jumping in and coding, without solving the problem or outlining my program structure. I vow to help you be better. Let’s think for a minute about what we need to do.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;ask for the user’s name&lt;&#x2F;li&gt;
+&lt;li&gt;“sanitize” the user’s input, as it will contain white space (a carriage return) that will affect our output format&lt;&#x2F;li&gt;
+&lt;li&gt;build the greeting string from three parts, including the input received&lt;&#x2F;li&gt;
+&lt;li&gt;output the result&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;em&gt;Function to get the name&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn get_name() -&amp;gt; String {
+&lt;&#x2F;span&gt;&lt;span&gt;     print!(&amp;quot;What is your name? &amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;     io::stdout().flush().unwrap();
+&lt;&#x2F;span&gt;&lt;span&gt;     let mut buffer = String::new();
+&lt;&#x2F;span&gt;&lt;span&gt;     io::stdin().read_line(&amp;amp;mut buffer).unwrap();
+&lt;&#x2F;span&gt;&lt;span&gt;     buffer
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;First up is our get_name function. It doesn’t need to take any parameters and must return a string to the next part of our program. We use the print! macro to output the text “What is your name?” and then wait for input. We haven’t used println! because we don’t want a carriage return. We need to pose the question, then wait for the user to type it all on the same line.&lt;&#x2F;p&gt;
+&lt;p&gt;Next, we declare a variable named buffer, which is made mutable so that we can receive the input and store it. We take the user’s typed name, store it in our mutable buffer variable, and then the function ends and we return the name as a string.&lt;&#x2F;p&gt;
+&lt;p&gt;You’ll notice the .unwrap() method. I’ve not explained this yet, but will in the future. There’s a good preview here at &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;rust-by-example&#x2F;error&#x2F;option_unwrap.html&quot;&gt;Rust by Example&lt;&#x2F;a&gt;. The read_line method might fail, in that it might not return a result. The use of .unwrap() says we’ll ignore the possible error and assume we get the result we need. The program will panic and crash if we don’t get the name as an input.&lt;&#x2F;p&gt;
+&lt;p&gt;There is a concept glossed over. The use of the print! macro carries with it the need to force out our text of the request to enter your name, as it may not be emitted immediately. We use the .flush() method on io::stdout() to achieve this. Similar to the use of the read_line method, we .unwrap() the result and ignore the potential for errors.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Function to build the greeting message&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn build_greeting(name: String) -&amp;gt; String {
+&lt;&#x2F;span&gt;&lt;span&gt;     let mut greeting = &amp;quot;Hello, &amp;quot;.to_owned();
+&lt;&#x2F;span&gt;&lt;span&gt;     greeting.push_str(name.trim());
+&lt;&#x2F;span&gt;&lt;span&gt;     greeting.push_str(&amp;quot;, nice to meet you!&amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;     greeting
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;In the build_greeting function, the main work happens. This function needs a parameter, namely the name string we just received from the get_name function. A string (the complete greeting) will be returned. We declare a mutable variable (an owned string…haven’t talked about what ownership means yet, but it’s coming soon). We use the push_str method to append our name variable and we use the trim() method to trim off any carriage returns received as part of the name variable. This action serves to “sanitize” the user input. Then, we append the last part of the greeting, once again using the push_str method. Finally, we return the completed greeting.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Function to print the greeting to the console&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn print_greeting(greeting: String) {
+&lt;&#x2F;span&gt;&lt;span&gt;    println!(&amp;quot;{}&amp;quot;, greeting);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Our final function, print_greeting, receives our greeting string as a parameter and uses the println! macro to output it to the console.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;final-code&quot;&gt;Final Code&lt;&#x2F;h3&gt;
+&lt;p&gt;Let’s put it all together.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;use std::io::{self, Write};
+&lt;&#x2F;span&gt;&lt;span&gt;&#x2F;&#x2F; function that retrieves user input
+&lt;&#x2F;span&gt;&lt;span&gt;fn get_name() -&amp;gt; String {
+&lt;&#x2F;span&gt;&lt;span&gt;     print!(&amp;quot;What is your name? &amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;     io::stdout().flush().unwrap();
+&lt;&#x2F;span&gt;&lt;span&gt;     let mut buffer = String::new();
+&lt;&#x2F;span&gt;&lt;span&gt;     io::stdin().read_line(&amp;amp;mut buffer).unwrap();
+&lt;&#x2F;span&gt;&lt;span&gt;     buffer
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;&#x2F;&#x2F; function that builds the output string
+&lt;&#x2F;span&gt;&lt;span&gt;fn build_greeting(name: String) -&amp;gt; String {
+&lt;&#x2F;span&gt;&lt;span&gt;     let mut greeting = &amp;quot;Hello, &amp;quot;.to_owned();
+&lt;&#x2F;span&gt;&lt;span&gt;     greeting.push_str(name.trim());
+&lt;&#x2F;span&gt;&lt;span&gt;     greeting.push_str(&amp;quot;, nice to meet you!&amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;     greeting
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;&#x2F;&#x2F; function that displays the output string
+&lt;&#x2F;span&gt;&lt;span&gt;fn print_greeting(greeting: String) {
+&lt;&#x2F;span&gt;&lt;span&gt;     println!(&amp;quot;{}&amp;quot;, greeting);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;&#x2F;&#x2F; main program
+&lt;&#x2F;span&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;     print_greeting(build_greeting(get_name()));
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The very beginning of our program has a use statement. We need to use some things from Rust’s standard library (stdin and stdout, along with their associated methods), to aid in getting our input, and we need to bring them “into scope” so that our program can find and use them.&lt;&#x2F;p&gt;
+&lt;p&gt;The main function calls the three functions in a nested fashion, with the result being our greeting to the user. In this nested function call, it’s important to remember that the get_name function returns the name, which serves as the parameter that the build_greeting function needs. Lastly, the greeting string returned from build_greeting serves as the parameter that print_greeting needs to print the greeting.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
+&lt;p&gt;I’ve shown you a step-by-step methodology for creating a program which asks for user input in the form of your name, builds a greeting using by combining the name with a pre-built string, and outputs the result to the console. This program is simple but surfaces several subtleties that are useful going forward and act as building blocks to the creation of bigger and better things. It’s critical to imagine the flow of data through your program and the act of working through a problem with a simple solution helps sharpen your ability.&lt;&#x2F;p&gt;
+&lt;p&gt;GitHub Repo&lt;&#x2F;p&gt;
+&lt;p&gt;I’ve put the code into a GitHub repo, you can access it here:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;sentinel1909&#x2F;57-exercises&quot;&gt;57-exercises: Say-Hello&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;References&lt;&#x2F;p&gt;
+&lt;p&gt;Exercises for Programmers: 57 Exercises to Challenge your Programming Skills, by Brian P. Hogan&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;http:&#x2F;&#x2F;web.mit.edu&#x2F;rust-lang_v1.25&#x2F;arch&#x2F;amd64_ubuntu1404&#x2F;share&#x2F;doc&#x2F;rust&#x2F;html&#x2F;std&#x2F;io&#x2F;index.html&quot;&gt;The Rust Standard Library: std::io&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Controlling the Flow</title>
+        <published>2022-05-01T00:00:00+00:00</published>
+        <updated>2022-05-01T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-05-01-controlling-the-flow/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-05-01-controlling-the-flow/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-05-01-controlling-the-flow/">&lt;p&gt;Last time, in &lt;a href=&quot;https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2022&#x2F;2022-04-27-decisions-decisions&#x2F;&quot;&gt;Decisions, Decisions&lt;&#x2F;a&gt;, we looked at a method for adding logic within a program, via the if and if else expressions. Next up, we see how we can further control the flow, through loops. Loops allow repetition of blocks of code until some desired event or outcome. There are three kinds of loops in Rust: loop, while, and for.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;loop&quot;&gt;loop&lt;&#x2F;h3&gt;
+&lt;p&gt;The loop keyword tells Rust to execute the same block of code over, and over, and over again, until told specifically to stop. Here’s a basic example:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;	loop {
+&lt;&#x2F;span&gt;&lt;span&gt;		println!(&amp;quot;Help, I&amp;#39;m stuck in a loop!&amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;	}
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This program will endlessly print out the message, “Help, I’m stuck in a loop!”, over and over to the console until you hit the control-C key combo to break out. This is not particularly elegant or useful. Luckily, you can control how long you stay in the loop.&lt;&#x2F;p&gt;
+&lt;p&gt;Here’s another example:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;	let mut count = 10;
+&lt;&#x2F;span&gt;&lt;span&gt;	loop {
+&lt;&#x2F;span&gt;&lt;span&gt;		println!(&amp;quot;Ok, in a loop, but will get out once the count reaches {}&amp;quot;, count);
+&lt;&#x2F;span&gt;&lt;span&gt;			count -= 1;
+&lt;&#x2F;span&gt;&lt;span&gt;			if count &amp;lt; 0 {
+&lt;&#x2F;span&gt;&lt;span&gt;				println!(&amp;quot;Yay, I&amp;#39;m saved!&amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;				break;
+&lt;&#x2F;span&gt;&lt;span&gt;			}
+&lt;&#x2F;span&gt;&lt;span&gt;	}
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We declare a counter variable and bind the starting value of 10 to it. Then, we enter a loop. In the loop, we iterate through the following steps:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;print a message about being stuck in a loop&lt;&#x2F;li&gt;
+&lt;li&gt;decrease the counter value by one&lt;&#x2F;li&gt;
+&lt;li&gt;check if the counter is less than zero, if it is, we print one final message then break out of the loop, terminating the program&lt;&#x2F;li&gt;
+&lt;li&gt;if the counter is not less than zero, around we go again&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Values can be returned out of loops. This is useful in the case where you might be computing something, then need to return the value out to the rest of the program. When doing this, the loop can be assigned to a variable, which will hold the result computed from the loop. Here’s an example:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;	let mut counter = 0;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	let result = loop {
+&lt;&#x2F;span&gt;&lt;span&gt;		counter += 1;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;		if counter == 10 {
+&lt;&#x2F;span&gt;&lt;span&gt;			break counter * 2;
+&lt;&#x2F;span&gt;&lt;span&gt;		}
+&lt;&#x2F;span&gt;&lt;span&gt;	};
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	println!(&amp;quot;The result is {}&amp;quot;, result);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here, you can see that we’ve added the final result of the counter variable to the break keyword, then bound the whole loop structure to the variable result.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;while&quot;&gt;while&lt;&#x2F;h3&gt;
+&lt;p&gt;Frequently, we need to repeat an action while a certain condition is true. Without any other methods, we could do this with a combination of the loop we just learned about, along with if, else, and break, however, this is cumbersome. Rust has the while loop for us.&lt;&#x2F;p&gt;
+&lt;p&gt;Here’s an example:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;	let mut number = 10;
+&lt;&#x2F;span&gt;&lt;span&gt;	while number != 0 {
+&lt;&#x2F;span&gt;&lt;span&gt;		println!(&amp;quot;Counting down...{}!&amp;quot;, number);
+&lt;&#x2F;span&gt;&lt;span&gt;		number -= 1;
+&lt;&#x2F;span&gt;&lt;span&gt;	}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	println!(&amp;quot;Liftoff!!!&amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We declare a variable named number and bind the value 10 to it, when we enter the while loop, checking that number is not equal to 0. We print a message with the value of number, decreasing it by 1 on each pass through the loop. Eventually, we reach 0 and the final message is output.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;for&quot;&gt;for&lt;&#x2F;h3&gt;
+&lt;p&gt;The last basic loop structure is a for loop. In a for loop, execution happens for as many times as you specify. Any other decision logic you have to add yourself. The for loop will execute the specified number of times, in absence of anything else.&lt;&#x2F;p&gt;
+&lt;p&gt;Let’s say we have a couple of arrays and we need to print out all the elements within each. We can do that with a for loop.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;	let array_one = [40, 80, 120];
+&lt;&#x2F;span&gt;&lt;span&gt;	let array_two = [30, 70, 110];
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	for array_item in array_one {
+&lt;&#x2F;span&gt;&lt;span&gt;		println!(&amp;quot;the value is: {}&amp;quot;, array_item);
+&lt;&#x2F;span&gt;&lt;span&gt;	}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	for array_item in array_two {
+&lt;&#x2F;span&gt;&lt;span&gt;		println!(&amp;quot;the value is: {}&amp;quot;, array_item);
+&lt;&#x2F;span&gt;&lt;span&gt;	}
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This will loop through the individual entries in each array, and print the entries to the console.&lt;&#x2F;p&gt;
+&lt;p&gt;A handy thing to do with for loops is to pull in Range from the standard library AND use the rev method available on Range to countdown. Let’s do another countdown using this technique:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;	for number in (1..10).rev() {
+&lt;&#x2F;span&gt;&lt;span&gt;		println!(&amp;quot;{}!&amp;quot;, number);
+&lt;&#x2F;span&gt;&lt;span&gt;	}
+&lt;&#x2F;span&gt;&lt;span&gt;	println!(&amp;quot;We have liftoff!!!&amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This is quite elegant.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
+&lt;p&gt;These loops, when combined with decision logic such as if and else if, allow programs to have a more sophisticated execution order and be more flexible to internal and external input. These basic building blocks form the basis of all you do with Rust going forward. When combined with Rust’s more advanced features and data structures, you’re able to create truly useful software. My writings up to this point have covered the very basic programming concepts included in Rust. Before I move on to the more advanced territory from the Rust Book, in my next article I’ll demonstrate building something simple with all that I’ve written about so far. Stay tuned!&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;references&quot;&gt;References&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch03-05-control-flow.html&quot;&gt;The Rust Programming Language, Chapter 3.5&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Decisions Decisions</title>
+        <published>2022-04-27T00:00:00+00:00</published>
+        <updated>2022-04-27T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-04-27-decisions-decisions/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-04-27-decisions-decisions/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-04-27-decisions-decisions/">&lt;p&gt;Software capability would be very limited if there were no ability to make decisions and follow different logic paths. The ability to branch and provide different outcomes, based on either internal results or external user input, is essential. Rust provides basic decision logic in the form of the if and else if expressions.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;the-if-expression&quot;&gt;The if Expression&lt;&#x2F;h3&gt;
+&lt;p&gt;An if expression starts with the if keyword and is followed by a condition. Immediately after the condition is a block of code, surrounded by curly braces, which is executed if the condition proves true. If the condition is not true, the code after the condition is skipped entirely and execution flows to the next statement.&lt;&#x2F;p&gt;
+&lt;p&gt;Let’s see an example:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;     let year = 1984;
+&lt;&#x2F;span&gt;&lt;span&gt;     if year &amp;gt; 2000 {
+&lt;&#x2F;span&gt;&lt;span&gt;     println!(“The year is: {}”, year);
+&lt;&#x2F;span&gt;&lt;span&gt;     }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We first declare a variable named year and bind to it the integer 1984. Next, we start the if expression. The condition checks that the value bound to the year variable is greater than 2000. In this instance, it is not, so the code in the curly braces is ignored and the program ends. Nothing is output.&lt;&#x2F;p&gt;
+&lt;p&gt;If the condition was true, then the code within the curly braces would execute and we’d see the message “The years is: 1984” output to the console.&lt;&#x2F;p&gt;
+&lt;p&gt;Conditions can be chained with operators like or || and &amp;amp;&amp;amp;. This provides the ability to make decisions with more complex criteria.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;     let year = 2022;
+&lt;&#x2F;span&gt;&lt;span&gt;     if year &amp;gt; 2000 &amp;amp;&amp;amp; year &amp;lt; 2025 {
+&lt;&#x2F;span&gt;&lt;span&gt;     println!(“The year is: {}”, year);
+&lt;&#x2F;span&gt;&lt;span&gt;     }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The condition in this code will evaluate true if the year is greater than 2000 and less than 2025. Our year variable has a value of 2022, which satisfies both conditions. The code block after the condition will execute and the message “The year is: 2022” will output to the console.&lt;&#x2F;p&gt;
+&lt;p&gt;When the condition after an if statement is not satisfied, code execution jumps to whatever comes after the if expression. An optional else expression can be added to provide another pathway for code to follow. The code preceding the else statement will execute only when the condition evaluates to false.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;    let number = 26;
+&lt;&#x2F;span&gt;&lt;span&gt;     if number &amp;gt; 30 {
+&lt;&#x2F;span&gt;&lt;span&gt;     println!(“{} is greater than 30”, number);
+&lt;&#x2F;span&gt;&lt;span&gt;     } else {
+&lt;&#x2F;span&gt;&lt;span&gt;          println!(“{} is less than 30”, number);
+&lt;&#x2F;span&gt;&lt;span&gt;     }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here, we declare a variable named number and bind to it the value 26. We check if the value assigned to number is greater than 30. In this case, it is not, so execution transfers to the else expression and the code within the curly brackets preceding it is executed. The message “26 is less than 30” is printed to the console.&lt;&#x2F;p&gt;
+&lt;p&gt;If the variable year contained a value that was greater than 30, the code preceding the condition is executed instead, resulting in a different message being output to the console. In this case, the else expression would be skipped and code flow would proceed to whatever comes after.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;the-else-if-expression&quot;&gt;The else…if Expression&lt;&#x2F;h3&gt;
+&lt;p&gt;If there is a need to check multiple conditions, the else if expression is available. Let’s take the example given in Chapter 3.5 of The Rust Programming Language, as it illustrates an important nuance.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;     let number = 6;
+&lt;&#x2F;span&gt;&lt;span&gt;     if number % 4 == 0 {
+&lt;&#x2F;span&gt;&lt;span&gt;          println!(“number is divisible by 4”);
+&lt;&#x2F;span&gt;&lt;span&gt;     } else if number % 3 == 0 {
+&lt;&#x2F;span&gt;&lt;span&gt;          println!(“number is divisible by 3”);
+&lt;&#x2F;span&gt;&lt;span&gt;     } else if number % 2 == 0 {
+&lt;&#x2F;span&gt;&lt;span&gt;          println!(“number is divisible by 2”);
+&lt;&#x2F;span&gt;&lt;span&gt;     } else {
+&lt;&#x2F;span&gt;&lt;span&gt;          println!(“number is not divisible by 4, 3, or 2”);
+&lt;&#x2F;span&gt;&lt;span&gt;     }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We bind the integer 6 to the variable named number. We then have a list of conditions to check. Rust will execute the first block of code for which a condition is satisfied, which in this case is the first else expression. The number six is evenly divisible by 3, so the message “number is divisible by 3” is output to the console. Even though some of the other conditions in the series may be true, it doesn’t matter. Only the first true one is executed, all the other possibilities are ignored.&lt;&#x2F;p&gt;
+&lt;p&gt;Nested if else if expressions can get out of hand very quickly resulting in messy code that’s hard to reason through. Rust has a more advanced option, the match statement, which is very powerful. I’ll explore it in future writings.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;using-if-in-a-let-statement&quot;&gt;Using if in a let Statement&lt;&#x2F;h3&gt;
+&lt;p&gt;Given if is an expression, it can form part of a let statement and be used to assign variables. Again, an example from The Rust Programming language is useful.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;     let condition = true;
+&lt;&#x2F;span&gt;&lt;span&gt;     let number = if condition { 5 } else { 6 };
+&lt;&#x2F;span&gt;&lt;span&gt;     println!(“The value of number is: {}”, number);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here, we bind the boolean value true to a variable named condition. Next, the integer 5 is bound to the variable number. This happens because the variable condition is true. An if statement, fundamentally, is checking whether something is true, then executing code after. The else part of the expression is ignored. If the condition was false instead of true, the integer 6 would be bound to number.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
+&lt;p&gt;I’ve shown you Rust’s most basic tools for coding decision-making. The combination of if, else, and else if provide the ability for different code paths to execute, thus varying the output as needed based on internal conditions or a combination of internal conditions and external input.&lt;&#x2F;p&gt;
+&lt;p&gt;References&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch03-05-control-flow.html&quot;&gt;The Rust Programming Language, Chapter 3.5&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Let&#x27;s Get Functional</title>
+        <published>2022-04-22T00:00:00+00:00</published>
+        <updated>2022-04-22T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-04-22-lets-get-functional/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-04-22-lets-get-functional/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-04-22-lets-get-functional/">&lt;p&gt;In my last Rusty writings, I covered Rust’s &lt;a href=&quot;https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2022&#x2F;2022-04-18-pouring-the-footings-compound&#x2F;&quot;&gt;compound data types&lt;&#x2F;a&gt;. Today I will write to you about functions. Functions are essential tool to help make code more organized and maintainable.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;purpose&quot;&gt;Purpose&lt;&#x2F;h3&gt;
+&lt;p&gt;I’m sure you are familiar with the term spaghetti code, in which your code is a nested mess of twisted logic. Functions are a partial solution to this as they encourage modularity and can make your code base more understandable. Common tasks can be moved to separate blocks of code, then called upon by the main program when needed.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;syntax&quot;&gt;Syntax&lt;&#x2F;h3&gt;
+&lt;p&gt;We’re already familiar with one function in Rust, the main function. It serves as the entry point to your program. Every Rust binary program has one.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main () {
+&lt;&#x2F;span&gt;&lt;span&gt;     &#x2F;&#x2F; program logic goes here
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;A function is declared with the fn keyword followed by the function name. Immediately after the name are brackets to contain possible parameters. Then, if the function is to return a value, the → syntax is used with a type declaration. Lastly, we have curly braces denoting the beginning of the code block comprising the function.&lt;&#x2F;p&gt;
+&lt;p&gt;Functions in Rust uses the so called snake case as the naming convention. The snake case consists of two or more lower case words separated by an underscore.&lt;&#x2F;p&gt;
+&lt;p&gt;Let’s try it:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn remaining_lyrics() {
+&lt;&#x2F;span&gt;&lt;span&gt;     println!(&amp;quot;...give me that which I desire!&amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;     println!(&amp;quot;Give me fuel, give me fire...&amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;     remaining_lyrics();
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;Output:
+&lt;&#x2F;span&gt;&lt;span&gt;Give me fuel, give me fire...
+&lt;&#x2F;span&gt;&lt;span&gt;...give me that which I desire!
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;What have we done here?&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;declared a new function called remaining_lyrics&lt;&#x2F;li&gt;
+&lt;li&gt;the function accepts no parameters and doesn’t return anything&lt;&#x2F;li&gt;
+&lt;li&gt;the function uses the println! macro to print out a message to the terminal&lt;&#x2F;li&gt;
+&lt;li&gt;declared a main function&lt;&#x2F;li&gt;
+&lt;li&gt;the main function prints out a message to the terminal&lt;&#x2F;li&gt;
+&lt;li&gt;the remaining_lyrics function is called to finish the message&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;One item of note is I’ve declared the function first before the main function. This is just a choice on my part. Historically I’ve always liked declaring my functions first, then having the main function as the very last thing. This is just a personal preference.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;parameters&quot;&gt;Parameters&lt;&#x2F;h3&gt;
+&lt;p&gt;Functions can accept values, also known as parameters, on which to do further operations. Parameters are sometimes referred to as arguments. You may see these terms used interchangeably in your coding travels. I will try to be consistent going forward and refer to them as parameters.&lt;&#x2F;p&gt;
+&lt;p&gt;Let’s adapt our snippet above to use some parameters:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn remaining_lyrics(band: &amp;amp;str, album: &amp;amp;str, song: &amp;amp;str) {
+&lt;&#x2F;span&gt;&lt;span&gt;     println!(&amp;quot;...give me that which I desire! {}, {}&amp;quot;, band, album, song);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;     println!(&amp;quot;Give me fuel, give me fire...&amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;     remaining_lyrics(&amp;quot;Metallica&amp;quot;, &amp;quot;Reload&amp;quot;, &amp;quot;Fuel&amp;quot;);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;Output:
+&lt;&#x2F;span&gt;&lt;span&gt;Give me fuel, give me fire...
+&lt;&#x2F;span&gt;&lt;span&gt;...give me that which I desire! Metallica, Reload, Fuel
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We’ve now made our remaining_lyrics function accept 3 string slices as parameters. It accepts these string slices when they are passed from the main program by placing them inside brackets right after the function call. The output is the same, but now we have Metallica, Reload, and Fuel printed after the lyrics.&lt;&#x2F;p&gt;
+&lt;p&gt;An essential thing about using parameters in functions: the type of the parameter must be annotated to the parameter name. In our little music example, the &amp;amp;str type has been annotated. Failing to annotate the type will result in a compiler error.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;return-values&quot;&gt;Return Values&lt;&#x2F;h3&gt;
+&lt;p&gt;Functions can not only receive parameters and process them. Functions can return values back to where they are called from. Let’s make a program which prints a message to tell us the year of release of a very famous album by a favourite band:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn year_released() -&amp;gt; u32 {
+&lt;&#x2F;span&gt;&lt;span&gt;    1991
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;     println!(&amp;quot;The Black Album, by Metallica, was released in: {}&amp;quot;,     year_released());
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;Output:
+&lt;&#x2F;span&gt;&lt;span&gt;The Black Album, by Metallica, was released in: 1991
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here, the main function prints out a simple message, but calls the function year_released(), which accepts no parameters, and simply returns an integer. This example serves to illustrate an important concept, beyond just the notion of returning a value, the difference between statements and expressions.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;expressions-vs-statements&quot;&gt;Expressions vs Statements&lt;&#x2F;h3&gt;
+&lt;p&gt;Rust functions are made up of statements and expressions. Statements are instructions that perform some action and do not return a value. An example is the println! statement in the remaining_lyrics function above. It performs the action of printing out a message. Expressions evaluate out to a value. This is what happens in our example above of returning a value. The year_released() function has a single expression which evaluates to an integer.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Statements are terminated with semi-colons.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Expressions are not terminated with semi-colons.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Use of the return keyword at the end of a function is optional in Rust. There are times when it’s beneficial to use the return keyword, such as in the instance of an early return out of a function.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
+&lt;p&gt;This article has covered the basics of functions in Rust. It’s shown you the syntax as well as explained the ability of functions to accept optional parameters and return values. Functions are the bread and butter of Rust and provide a means of keeping your code concise, tidy, and maintainable. In my own journey to learn Rust, I’ve found functions relatively easy to understand, as their structure is almost identical to other languages I have familiarity with, namely C and Turbo Pascal (wow, I’m old). I hope you’ve enjoyed this short article on functions. Next up will be decision making and flow control. See you next time!&lt;&#x2F;p&gt;
+&lt;p&gt;References&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch03-03-how-functions-work.html&quot;&gt;The Rust Programming Language, Chapter 3.3&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Pouring the Footings: Compound Data Types</title>
+        <published>2022-04-18T00:00:00+00:00</published>
+        <updated>2022-04-18T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-04-18-pouring-the-footings-compound/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-04-18-pouring-the-footings-compound/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-04-18-pouring-the-footings-compound/">&lt;p&gt;Selecting a data structure model is a key step in software development. Previously, I showed the very basic single data types in Rust. This article covers compound data types. Compound types can incorporate multiple building blocks in one overall type.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;tuples&quot;&gt;Tuples&lt;&#x2F;h3&gt;
+&lt;p&gt;A tuple can contain multiple values, each with their own type, into one single entity. Tuples have a fixed length, they cannot grow or shrink later on. Tuples are stored on the stack in memory. Care is needed up front with creation because a tuples size can’t be modified later. You can modify the values inside the tuple, but new values can’t be added to it.&lt;&#x2F;p&gt;
+&lt;p&gt;We can declare a tuple like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;let survey_result: (&amp;amp;str, u8, bool) = (&amp;quot;John&amp;quot;, 36, true);
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We’ve created a variable name called survey_result and bound a string slice (haven’t talked about strings yet, don’t worry for now), an integer, and a boolean together into a tuple. This variable could represent the data received after submission of a survey form. There are type annotations immediately following the variable name. These are optional. In most cases, Rust can “infer” (figure out) the types needed.&lt;&#x2F;p&gt;
+&lt;p&gt;There are a couple of different ways to access the values inside a tuple.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Via Indicies&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Individual values inside a tuple are indexed from 0, 1, 2… similar to arrays or vectors. Values can be accessed with a (.) followed by the value index, like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;    let survey_result: (&amp;amp;str, u8, bool) = (&amp;quot;John&amp;quot;, 36, true);
+&lt;&#x2F;span&gt;&lt;span&gt;    let name = survey_result.0;
+&lt;&#x2F;span&gt;&lt;span&gt;    let age = survey_result.1;
+&lt;&#x2F;span&gt;&lt;span&gt;    let answer = survey_result.2;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;em&gt;Via Destructuring&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The index method is a little verbose and it can be difficult to track the indicies if the tuple is large. It’s more elegant (and efficient) to use the destructuring method, like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;     let survey_result: (&amp;amp;str, u8, bool) = (&amp;quot;John&amp;quot;, 36, true);
+&lt;&#x2F;span&gt;&lt;span&gt;     let (name, age, answer) = survey_result;
+&lt;&#x2F;span&gt;&lt;span&gt;     println!(&amp;quot;{}, aged {}, answered {} on the survey form.&amp;quot;, name,    age, answer);
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We’ve created the same tuple named survey_result and bound the same three values as the previous example. Next, we bind the individual values within the tuple to three new variables named name, age, and answer. We’ve used the destructuring pattern instead of three separate let statements. Finally, we print out the result to the console.&lt;&#x2F;p&gt;
+&lt;p&gt;Tuples are useful for small data structures, but they become unwieldy for more complex needs. The better choice is a struct, which will be the topic of a future article.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;arrays&quot;&gt;Arrays&lt;&#x2F;h3&gt;
+&lt;p&gt;The next compound data type is an array. Similar to tuples, arrays are fixed length and cannot grow or shrink. Unlike tuples, arrays can only contain the same type of basic values. Arrays are useful in situations where a fixed number of elements is desired. An example array of the names of the days of the week can be created like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;let days = [&amp;quot;Monday&amp;quot;, &amp;quot;Tuesday&amp;quot;, &amp;quot;Wednesday&amp;quot;, &amp;quot;Thursday&amp;quot;, &amp;quot;Friday&amp;quot;, &amp;quot;Saturday&amp;quot;, &amp;quot;Sunday&amp;quot;];
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;I haven’t discussed memory yet as it relates to Rust, but similar to tuples, arrays are held in memory on the stack. This is because they are a known, fixed length, similar to the basic data types. Rust knows how much memory to allocate for them at compile time.&lt;&#x2F;p&gt;
+&lt;p&gt;Arrays are declared with square brackets and can receive an optional type declaration, like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;let numbers: [i32; 6] = [1, 2, 3, 4, 5, 6];
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We’ve created an array of six integers and bound it to the variable named numbers. The type declaration is enclosed in square brackets and contains the type followed by a semicolon and the number of elements in the array.&lt;&#x2F;p&gt;
+&lt;p&gt;If for some reason an array is needed that initially has all the same elements, a short form can be used to declare it, like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;let initial_values = [3; 3];
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This creates an array with three elements, all having the integer value 3.&lt;&#x2F;p&gt;
+&lt;p&gt;Elements within an array are accessed by referencing the variable name and appending an index surrounded with square brackets, like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;     let weekdays = [&amp;quot;Monday&amp;quot;, &amp;quot;Tuesday&amp;quot;, &amp;quot;Wednesday&amp;quot;, &amp;quot;Thursday&amp;quot;, &amp;quot;Friday&amp;quot;]
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;     let midweek = weekdays[2];
+&lt;&#x2F;span&gt;&lt;span&gt;     let endofweek = weekdays[4];
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here we declare an array variable that contains the five days of the week. Individual elements are indexed from 0 to 4. We then assign Wednesday to a new variable called midweek and Friday to a new variable called endofweek.&lt;&#x2F;p&gt;
+&lt;p&gt;It’s important to remember the 0 start index of an array. I messed up while writing this 🙂 I think whoever decided to start indexing at zero should have their head examined, but it is what it is.&lt;&#x2F;p&gt;
+&lt;p&gt;To conclude the discussion on arrays, Rust will help you when accessing array elements by automatically checking that the specified index is less than the array’s length. A runtime error will be received in the event the program tries to access an array index that is beyond the end of the array.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
+&lt;p&gt;This article has covered Rust’s compound data types, tuples and arrays. I haven’t seen or written giant amounts of Rust code yet, but I’ve not seen these data structures used particularly often. The go-to seems to be vectors, particularly vectors of structs. The potential unwieldiness of tuples and the inability of arrays to grow or shrink I think limits their use cases. They both have the advantage of being stored on the stack in memory, so they are cheap to make and quick to access. At the end of the day, both are an available tool and you the programmer must choose what works best for your particular problem.&lt;&#x2F;p&gt;
+&lt;p&gt;References&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch03-02-data-types.html&quot;&gt;The Rust Programming Language, Chapter 3.2&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Pouring the Footings: Single Value Data Types</title>
+        <published>2022-04-14T00:00:00+00:00</published>
+        <updated>2022-04-14T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-04-14-pouring-the-footings-single/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-04-14-pouring-the-footings-single/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-04-14-pouring-the-footings-single/">&lt;p&gt;Today I continue my writing campaign about the Rust language. If you haven’t noticed, I’m roughly following the chapter layout of The Rust Programming Language, also known as “The Rust Book”. I’ve tried repeatedly to read The Book, but have concluded reading passively is useless. It’s a book that requires active reading.&lt;&#x2F;p&gt;
+&lt;p&gt;So, I will semi-blog my way through it here on my site.&lt;&#x2F;p&gt;
+&lt;p&gt;I’ve covered the following basics so far:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;creating a Hello, World&lt;&#x2F;li&gt;
+&lt;li&gt;use of constants&lt;&#x2F;li&gt;
+&lt;li&gt;variables, mutability, shadowing, and comments&lt;&#x2F;li&gt;
+&lt;li&gt;I’ll now turn to another basic language building block, data types. Data types are at the core of getting things done in Rust.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;There are two broad data types available, single value and compound value. This article will focus on single value types. Compound value types are on deck as they deserve attention on their own.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;scalar-types&quot;&gt;Scalar Types&lt;&#x2F;h3&gt;
+&lt;p&gt;Single value data types represent one value, be it a number, character, or boolean. They are the simplest data types to work with and can be used in lots of ways and in combination with more complex data structures. Grouping these simple data types into structures, vectors, or hashmaps are typical use cases.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Integers&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;An integer is a number without a fractional component and can be signed or unsigned. There are several different maximum lengths of integers, chosen depending on the size of the number you need to represent. Rust defaults to an i32 or 32-bit integer.&lt;&#x2F;p&gt;
+&lt;p&gt;Here’s an example of an integer variable:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;let life = 42;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We’ve created a variable named life and bound the integer value 42 to it.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Floating-Point&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;A floating-point number has a decimal component. Rust supports 32-bit (f32) and 64-bit (f64) floating-point numbers. The default is f64. All floating-point numbers can be signed, there is no unsigned option like with integers.&lt;&#x2F;p&gt;
+&lt;p&gt;Let’s create a floating-point variable:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;let pi = 3.14;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We’ve created a variable named pi and bound the floating-point value 3.14 to it.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Numeric Operations&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Rust supports all the basic mathematical operations that one would expect in a programming language. These are addition, subtraction, multiplication, and division. There is also a remainder operation, which provides the remainder when one number is not cleanly divisible by the other.&lt;&#x2F;p&gt;
+&lt;p&gt;The combined knowledge I’ve written about in my articles thus far allows us to write a tiny program to do math on integers or floating point numbers. Here’s one possiblity:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;fn main() {
+&lt;&#x2F;span&gt;&lt;span&gt;     let x = 5;
+&lt;&#x2F;span&gt;&lt;span&gt;     let y = 6;
+&lt;&#x2F;span&gt;&lt;span&gt;     let sum = x + y;
+&lt;&#x2F;span&gt;&lt;span&gt;     println!(&amp;quot;The sum of {} and {} is: {}&amp;quot;, x, y, sum);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Let’s walk through that:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;declare a main function as the starting point of the program&lt;&#x2F;li&gt;
+&lt;li&gt;create a variable named x and bind the integer value 5 to it&lt;&#x2F;li&gt;
+&lt;li&gt;create a variable named y and bind the integer value 6 to it&lt;&#x2F;li&gt;
+&lt;li&gt;create a variable named sum and use the addition operator to add x and y together and bind the result to the sum variable&lt;&#x2F;li&gt;
+&lt;li&gt;use the println! macro to print out a message with our inputs and the sum&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;em&gt;Boolean&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;If you need a true or false value, a boolean is the data type of choice. Booleans are used a lot when controlling flow in a program. Here’s an example:&lt;&#x2F;p&gt;
+&lt;p&gt;let liar_liar = true;
+We’ve created a variable name liar_liar and bound the boolean value true to it.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Character&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The final simple single value is a character. Characters are bound to variable names like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;let char = &amp;#39;Z&amp;#39;;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The character data type can be used to hold emojis as well as traditional characters. It’s important to remember that character values represent a single character. You may be asking yourself about strings, what about them? Well, strings are a separate and distinct data type from characters. Strings carry many different quirks and just as The Book does, I’ll be treating them separately in the future.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
+&lt;p&gt;The basic building blocks in Rust are pretty close to my ancient coding knowledge of a language called Pascal. As such, I’ve found them pretty easy to get acquainted with. This article has provided you with an overview of the basic, single value data types in Rust. These basic types can be composed in many different ways and are the core building blocks of any Rust program. Even advanced, higher-order stuff will have some basic math in it somewhere.&lt;&#x2F;p&gt;
+&lt;p&gt;There are lots of subtleties to read about regarding the single value data types, I invite you to consult The Rust Book should you wish to learn more.&lt;&#x2F;p&gt;
+&lt;p&gt;References&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch03-02-data-types.html&quot;&gt;The Rust Programming Language, Chapter 3.2&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Pouring the Footings</title>
+        <published>2022-04-12T00:00:00+00:00</published>
+        <updated>2022-04-12T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-04-12-pouring-the-footings/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-04-12-pouring-the-footings/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-04-12-pouring-the-footings/">&lt;p&gt;Before I continue in my series of articles on learning Rust, I’d like to remind you that I’m a random internet nobody. I’m far from an expert in this language and feel I have no right to be writing about anything to anyone most of the time. Learning to code is difficult and there are probably far better-informed experts to learn from than me. However, I have the tiny hope that sharing my journey will be beneficial to someone. There are precious few people writing about their experience with Rust. The act of writing about my learning process and the hurdles I overcome benefit me and I hope you do as well.&lt;&#x2F;p&gt;
+&lt;p&gt;Enough navel-gazing, let’s get on with some more foundational concepts in Rust. These building blocks are crucial. I know, speaking for myself, I’m in a terrible race to understand the higher-order concepts, because those are what make you able to build things other than toy software. The truth is that higher-order concepts are meaningless without solid footings to rest on. I’ve already written a short piece about Getting started with a Hello World app as well as a short piece on the advantages of Constants, so now I’ll turn to comments, variables, mutability, and shadowing.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;comments&quot;&gt;Comments&lt;&#x2F;h3&gt;
+&lt;p&gt;I’m going to start by asking you to take my advice because I’m not using it. I say that because I’m terrible at commenting on my code. Comments are important, don’t be like me. You should liberally comment on your code. Think of comments as bread crumbs to your future self. You could struggle for days on a particular piece of your program and if you’re diligent with commenting, you’ll have something to come back to later when faced with a similar problem. Comments are a great way to document the problem-solving process. Try to make them reflect the thinking in getting to the code, not so much what the code does.&lt;&#x2F;p&gt;
+&lt;p&gt;Comments are prefaced with two slashes, like so:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; This is a Rust comment.
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Multi-line comments are done like so:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; This is the first line...
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; ...of a multi-line comment.
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Comments can go anywhere you like, but tend to be most useful right around what they’re commenting on.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; This is a great place for a comment. Let&amp;#39;s bind an integer
+&lt;&#x2F;span&gt;&lt;span&gt;     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; to the variable named life, we&amp;#39;ll then print out to the
+&lt;&#x2F;span&gt;&lt;span&gt;     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; console the value of the meaning of life.
+&lt;&#x2F;span&gt;&lt;span&gt;     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; life = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;42&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;     println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;What is the meaning of life? &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, life);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;There is a third type of comment, which powers as an aspect of the Rust that I find amazing. The third type is a documentation comment. It looks like this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F;&#x2F; This is a documentation comment in Rust.  These comments are picked up by Cargo&amp;#39;s automated documentation tool.
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;I’ll write more about this down the road. If you want to read more now, head over to Publishing a Crate to Crates.io in the Rust Book.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;variables-mutability-and-shadowing&quot;&gt;Variables, Mutability, and Shadowing&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;em&gt;Assigning Variables&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Programming languages would be all but useless without variables. Variables allow the creation of programs that can accept a wide variety of input to do some action. In Rust, the act of creating a variable and giving it a value looks like this:&lt;&#x2F;p&gt;
+&lt;p&gt;let album = “Attero Dominatus”;
+Here we bind a string slice (more about that in another article) to a variable named album, using the let keyword.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Immutability of Variables&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;If you write some code that re-assigns the album variable later in your program, you’ll receive a compiler error that informs you that you can’t assign twice to the immutable variable ‘band’. A pillar of Rust is that variables are always immutable, meaning they can’t be changed after assignment. This protects you from a whole range of bugs involving variables that change when least expected. If a variable does need to change, then use the mut keyword to make it mutable.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; band = “Sabaton”;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This will allow you to change the value assigned to the variable band, if needed, elsewhere in the program. Default immutability is one of Rust’s terrific safety features and helps you protect yourself by making you think carefully about how and when variables need to be modified.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Shadowing of Variables&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Rust allows one variable to be shadowed by another. Here’s an example:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; x = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;5&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; x = x + &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;println!(“The value of x is: {}”, x);
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Let’s break it down…&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;first, bind the value 5 to the variable named x&lt;&#x2F;li&gt;
+&lt;li&gt;second, shadow the value of x, take the original value (5) and add one&lt;&#x2F;li&gt;
+&lt;li&gt;the value of x will be 6 and this gets printed to the console&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Shadowing variables is a useful way to transform values from one type to another as well as perform operations on them. The variable is still immutable, even after the completion of any transformations.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
+&lt;p&gt;In this article, I’ve hopefully given you some foundational breadcrumbs in the Rust language. Take these and go off to do your reading, research, and practice. As always, I recommend The &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;&quot;&gt;Rust Programming Language&lt;&#x2F;a&gt; for further reading and detail.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Just Say No to Magic Values</title>
+        <published>2022-04-09T00:00:00+00:00</published>
+        <updated>2022-04-09T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-04-09-constants/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-04-09-constants/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-04-09-constants/">&lt;p&gt;The journey to proficiency in Rust continues. In a &lt;a href=&quot;https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2022&#x2F;2022-04-05-baby-steps-with-rust&#x2F;&quot;&gt;previous article&lt;&#x2F;a&gt;, I provided a brief overview of how to get started with Rust by creating a tiny cliche of a program that displays the message, “Hello, World!”.&lt;&#x2F;p&gt;
+&lt;p&gt;This article will focus on a specific language aspect, namely constants.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;what-is-a-constant&quot;&gt;What is a Constant?&lt;&#x2F;h3&gt;
+&lt;p&gt;A constant is a value that can be bound to a name, similar to a variable. By its nature, the value cannot change.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;what-is-the-purpose-of-a-constant&quot;&gt;What is the Purpose of a Constant?&lt;&#x2F;h3&gt;
+&lt;p&gt;Constants are useful in any programming language because they help you avoid so-called “magic values”. A magic value is something that is hardcoded into the code base…likely in a million different locations, by the time all is said and done, which makes it impossible (or at least nasty) to properly update and change the code.&lt;&#x2F;p&gt;
+&lt;p&gt;Instead of hardcoded values, a handful of constants declared upfront make it clear and easy to update them later, should their values need to change.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;declaring-constants&quot;&gt;Declaring Constants&lt;&#x2F;h3&gt;
+&lt;p&gt;Here’s how to declare the speed of light (in metric) as a constant in Rust:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;SPEED_OF_LIGHT&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;u32 &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;299792458
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;First, the const keyword is used, followed by a name. The convention is all caps. Next, the constant must receive a type annotation, I’ve used a 32-bit unsigned integer type. The last step is to bind the value to the new constant with the = operator.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;scope-of-validity&quot;&gt;Scope of Validity&lt;&#x2F;h3&gt;
+&lt;p&gt;Constants can be declared in any scope, including the global scope, as such, they can be made widely available.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;other-considerations&quot;&gt;Other Considerations&lt;&#x2F;h3&gt;
+&lt;p&gt;As one might expect, constants are immutable by default. Their values can’t be changed and you can’t use the mut keyword with them. A key concept in Rust is the notion that variables are immutable by default. One must expressly choose to make them mutable (changeable) by adding the keyword mut to the variable binding. Mut does not work with values that are constant.&lt;&#x2F;p&gt;
+&lt;p&gt;Thanks for reading my short but sweet thoughts on contants in Rust.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;resources&quot;&gt;Resources&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;ch03-01-variables-and-mutability.html&quot;&gt;Rust Programming Language: Common Programming Concepts, Constants&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Baby Steps with Rust</title>
+        <published>2022-04-05T00:00:00+00:00</published>
+        <updated>2022-04-05T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2022/2022-04-05-baby-steps-with-rust/"/>
+        <id>https://jeff-mitchell.dev/blog/2022/2022-04-05-baby-steps-with-rust/</id>
+        
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2022/2022-04-05-baby-steps-with-rust/">&lt;h3 id=&quot;why&quot;&gt;Why?&lt;&#x2F;h3&gt;
+&lt;p&gt;Late in 2020, I decided I needed to properly learn to code. The goal is to modernize myself and build things that will help myself and eventually the world around me. I’ve danced with several things but at the beginning of 2022 decided to double down on the Rust language. Rust is an immensely powerful tool which can be used to create pretty much any kind of software imaginable. It has a steep learning curve, but it’s well worth mastering. Rust is inherently safe and performant, has excellent tools, and some of the best compiler help I’ve ever experienced.&lt;&#x2F;p&gt;
+&lt;p&gt;Rust is available for Windows, Linux, and macOS and generally can be used to create software for any&#x2F;all of these platforms. I say generally because you will hit the odd occasion where certain libraries (referred to as “crates” in the Rust world) are only compiled for say Linux but not Windows or macOS. I hit this last year when following a tutorial to build a vim clone, one of the supporting crates was only compiled for Linux. The project wouldn’t work on Windows.&lt;&#x2F;p&gt;
+&lt;p&gt;This is a short article which will help you get off the ground should you wish to explore this language.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;assumptions&quot;&gt;Assumptions:&lt;&#x2F;h3&gt;
+&lt;ul&gt;
+&lt;li&gt;a solid foundation of general computer skills&lt;&#x2F;li&gt;
+&lt;li&gt;comfort with the command line (on the platform of your choice)&lt;&#x2F;li&gt;
+&lt;li&gt;experience in another compiled programming language (I don’t recommend coming to Rust cold, you should pick something else first if you have no previous experience)&lt;&#x2F;li&gt;
+&lt;li&gt;you’re using Visual Studio Code as your editor&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h3 id=&quot;concepts&quot;&gt;Concepts:&lt;&#x2F;h3&gt;
+&lt;p&gt;Rust is a compiled language, meaning the programs you write need to be translated (compiled) into a format that your computer can use. This is different from an interpreted language, in which you can write your programs and have the computer immediately do the work so you can see the result. If you’d like a more in-depth explanation of the difference, this article on freeCodeCamp is a great start.&lt;&#x2F;p&gt;
+&lt;p&gt;Rust uses a system of packages, crates, and modules in which to organize code, The Rust Book states:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Rust has a number of features that allow you to manage your code’s organization, including which details are exposed, which details are private, and what names are in each scope in your programs. These features, sometimes collectively referred to as the module system&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;Cargo is Rust’s package management tool. Cargo allows you to build, test, run and deploy your program. You can create Rust programs without it, but I don’t recommend that. I will use Cargo exclusively for the rest of this article as well as in everything I write&#x2F;do going forward.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;installation&quot;&gt;Installation:&lt;&#x2F;h3&gt;
+&lt;p&gt;If you haven’t already, follow the official installation instructions for your computer platform to get Rust installed.&lt;&#x2F;p&gt;
+&lt;p&gt;Greeting&lt;&#x2F;p&gt;
+&lt;p&gt;It’s a cliche, but let’s make a program that says hello and displays your name. Create a directory in a location of your choosing and type:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cargo&lt;&#x2F;span&gt;&lt;span&gt; new HelloName
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This will create a new binary project in a directory called HelloWorld. Rust programs fall into two broad types, binaries and libraries. A binary is an independent program which can be run on its own. A library cannot be run on its own and is meant to be used as a dependency internally to your program or by other Rust programs.&lt;&#x2F;p&gt;
+&lt;p&gt;Next, type:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;cd&lt;&#x2F;span&gt;&lt;span&gt; HelloName
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This will change you into the freshly created HelloName project directory. From here, fire up Visual Studio code by typing:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;code&lt;&#x2F;span&gt;&lt;span&gt; .
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Visual Studio Code will launch and open the HelloWorld directory and display all its contents in the file browser. You should see a directory called src, click on it to reveal main.rs, the entry point of the bare bones Rust program that Cargo created for you. Cargo actually mocks up all the code we need without anything additional. The code should look like this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; name = &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Jeff&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;;
+&lt;&#x2F;span&gt;&lt;span&gt;     println!(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;Hello, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;{}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;!&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, name);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This extremely simple starting point highlights some key components of a Rust program:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;the main() function serves as the entry point to your program&lt;&#x2F;li&gt;
+&lt;li&gt;we bind the string &amp;quot;Jeff&amp;quot; to a variable called &amp;quot;name&amp;quot; (you should change this to be your own name!)&lt;&#x2F;li&gt;
+&lt;li&gt;the println! macro takes the string &amp;quot;Hello, {}!&amp;quot; as an argument, inserts the value of name in place of the curly braces and prints it to the console&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;The other key items to note are are that Rust expressions must terminate with a semi-colon and expressions and statements within a function are surrounded by curly braces. The curly braces are especially important in the discussion of ownership, a core memory management feature offered by Rust&lt;&#x2F;p&gt;
+&lt;p&gt;To run our very basic program, back at the command line, type:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;cargo&lt;&#x2F;span&gt;&lt;span&gt; run
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;You should see the message “Hello, (your name)” outputted to the terminal. Congratulations! No matter how simple, you’ve just programmed in Rust.&lt;&#x2F;p&gt;
+&lt;p&gt;That’s it for this very bare bones introduction. The language has a lot of power and there are many concepts to learn and master. More to come in the future!&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;resources&quot;&gt;Resources:&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;&quot;&gt;The Rust Programming Language&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;cargo&#x2F;index.html&quot;&gt;The Cargo Book&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>
