@@ -13,7 +13,7 @@ It is the day after yesterday's mini CSS induced meltdown.
 
 Today is brighter.
 
-My Metallica page is started and available here: [Metallica Weekend](https://metallica-weekend.shuttleapp.rs)
+My Metallica page is started and available here: [Metallica Weekend](https://metallica-seattle-2024-eqpf.shuttle.app)
 
 For those of you finding and reading my content, yesterday is a bit of a warning. I will, on occasion, freak out and be public in my freaking out.
 

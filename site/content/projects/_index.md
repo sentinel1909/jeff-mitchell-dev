@@ -7,9 +7,9 @@ Here are some projects I'm working on or have worked on.
 
 _Frontend Web Dev in WebAssembly_
 
-[NASA Imagery Viewer](https://nasa-imagery-viewer.shuttleapp.rs)
+[Astronomy Lover](https://astronomy-lover.net)
 
-I just don't want to be the billionth person focusing on the traditional web stack of HTML/CSS/Javascript. As a hobbyist, I have the ability to explore different things. Thii project is a simple web page, compiled to WebAssembly using [Yew](https://yew.rs) for Rust, served up with a minimal [Rocket](https://rocket.rs) web server, hosted on [Shuttle](https://shuttle.rs).
+I just don't want to be the billionth person focusing on the traditional web stack of HTML/CSS/Javascript. As a hobbyist, I have the ability to explore different things. Thii project is a simple web page, compiled to WebAssembly using [Yew](https://yew.rs) for Rust, served up with a minimal [Rocket](https://rocket.rs) web server, hosted on [Shuttle](https://shuttle.rs). It fetches the daily photo from the NASA Astronomy Photo of the Day API and displays it. I'd like to eventually embelish this project with a history feature, so that you can look back at past images or videos.
 
 _Backend Development - APIs_
 
