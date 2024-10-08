@@ -455,7 +455,7 @@
 &lt;p&gt;I&#x27;ve only skimmed this weeks issue. One thing that stood out to me was &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;scientificcomputing.rs&#x2F;monthly&#x2F;2024-09&quot;&gt;Scientific Computing in Rust #2&lt;&#x2F;a&gt;. I always nurse the desire to write some piece of computational fluid dynamics software using Rust, but for the moment that goal is out of reach...because skill issues. :)&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;my-week-in-rust&quot;&gt;My Week in Rust&lt;&#x2F;h2&gt;
 &lt;p&gt;What have I been working on this week?&lt;&#x2F;p&gt;
-&lt;p&gt;Per usual, I drift. I started out the week all fired up about my own static site generator in Rust. Needless to say I didn&#x27;t get far. I have some frustrations with Zola (this platform), and to work through those am working on another version of this blog that will not involve a pre-made theme, but the going is slow there. I&#x27;m unfortunately impatient (see my &lt;a href=&quot;https:&#x2F;&#x2F;jeff-mitchell.dev&#x2F;blog&#x2F;2024&#x2F;2024-09-01-utter-frustration-that-is-css-morning-after&#x2F;&quot;&gt;previous words&lt;&#x2F;a&gt; about just wanting the answer), which often impacts my ability to truly learn. Always on my mind is building something I understand and document from the ground up, because frequently I just can&#x27;t get into the minds and documentation of others.&lt;&#x2F;p&gt;
+&lt;p&gt;Per usual, I drift. I started out the week all fired up about my own static site generator in Rust. Needless to say I didn&#x27;t get far. I have some frustrations with Zola (this platform), and to work through those am working on another version of this blog that will not involve a pre-made theme, but the going is slow there. I&#x27;m unfortunately impatient , which often impacts my ability to truly learn. Always on my mind is building something I understand and document from the ground up, because frequently I just can&#x27;t get into the minds and documentation of others.&lt;&#x2F;p&gt;
 &lt;p&gt;A few weeks ago I embarked on a redo of my office intranet site using the &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;yew.rs&quot;&gt;Yew&lt;&#x2F;a&gt; web framework for Rust. I discovered Yew back in 2022 and have always found it approachable and &amp;quot;React&amp;quot; like, in terms of how to structure a web site with routes, views and components. Some aspects of Yew, such as handling form input, and enabling interactivity, have troubled me and I was unable to make progress.&lt;&#x2F;p&gt;
 &lt;p&gt;Until last week...&lt;&#x2F;p&gt;
 &lt;p&gt;A long time ago, when Google searching about Yew and how to do things, I discovered &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;www.workfall.com&#x2F;learning&#x2F;blog&#x2F;&quot;&gt;The Workfall Blog&lt;&#x2F;a&gt;. In particular, &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;www.workfall.com&#x2F;learning&#x2F;blog&#x2F;how-to-handle-forms-efficiently-in-yew-web-development&#x2F;&quot;&gt;this article&lt;&#x2F;a&gt; about form handling kind of filled in some missing pieces I couldn&#x27;t glean from the Yew documentation.&lt;&#x2F;p&gt;
@@ -510,62 +510,6 @@
 &lt;p&gt;Until I read this, I didn&#x27;t realize just &lt;em&gt;where&lt;&#x2F;em&gt; the pain comes from.&lt;&#x2F;p&gt;
 &lt;p&gt;Give the piece a read, it might just open your eyes.&lt;&#x2F;p&gt;
 &lt;p&gt;There are other ways and other choices. I hope to explore more as my experience grows.&lt;&#x2F;p&gt;
-</content>
-        
-    </entry>
-    <entry xml:lang="en">
-        <title>The Utter Frustration That is CSS: The Morning After</title>
-        <published>2024-09-01T00:00:00+00:00</published>
-        <updated>2024-09-01T00:00:00+00:00</updated>
-        
-        <author>
-          <name>
-            Jeff Mitchell
-          </name>
-        </author>
-        
-        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2024/2024-09-01-utter-frustration-that-is-css-morning-after/"/>
-        <id>https://jeff-mitchell.dev/blog/2024/2024-09-01-utter-frustration-that-is-css-morning-after/</id>
-        
-        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2024/2024-09-01-utter-frustration-that-is-css-morning-after/">&lt;p&gt;It is the day after yesterday&#x27;s mini CSS induced meltdown.&lt;&#x2F;p&gt;
-&lt;p&gt;Today is brighter.&lt;&#x2F;p&gt;
-&lt;p&gt;My Metallica page is started and available here: &lt;a rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;metallica-seattle-2024-eqpf.shuttle.app&quot;&gt;Metallica Weekend&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
-&lt;p&gt;For those of you finding and reading my content, yesterday is a bit of a warning. I will, on occasion, freak out and be public in my freaking out.&lt;&#x2F;p&gt;
-&lt;p&gt;At least you know this writing is mine, from a real person, and not AI generated.&lt;&#x2F;p&gt;
-&lt;p&gt;Anyhow, I&#x27;m still no closer to a solid, viable method for learning CSS. I read a bit of the MDN documentation on it this morning, which I&#x27;ve read before but always found borderline helpful. I think the core of my issue is I want one resource to tell me how to lay out a page, in a clear and unambiguous way. Not sure that makes any sense.&lt;&#x2F;p&gt;
-&lt;p&gt;I just want the answer.&lt;&#x2F;p&gt;
-&lt;p&gt;To add extra flavour, in my mind people are judging me as weak for not immediately having the answer.&lt;&#x2F;p&gt;
-&lt;p&gt;This is something I&#x27;ve struggled with my whole life...I just...want..the answer. Oftentimes, my brain is unable to figure out what it needs to do to get to the answer, it&#x27;s like there&#x27;s missing bits or something. How can I train my brain to enjoy the journey and not just the end result?&lt;&#x2F;p&gt;
-&lt;p&gt;Anyways, onwards and upwards. This writing is my way of therapy. Apologies for the rant yesterday and I thank you for reading my trials and tribulations.&lt;&#x2F;p&gt;
-</content>
-        
-    </entry>
-    <entry xml:lang="en">
-        <title>The Utter Frustration That is CSS</title>
-        <published>2024-08-31T00:00:00+00:00</published>
-        <updated>2024-08-31T00:00:00+00:00</updated>
-        
-        <author>
-          <name>
-            Jeff Mitchell
-          </name>
-        </author>
-        
-        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2024/2024-08-31-the-utter-frustration-that-is-css/"/>
-        <id>https://jeff-mitchell.dev/blog/2024/2024-08-31-the-utter-frustration-that-is-css/</id>
-        
-        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2024/2024-08-31-the-utter-frustration-that-is-css/">&lt;p&gt;I&#x27;m currently in Seattle, saturating myself with two nights of all things Metallica. I started making a simple little site, with Rocket and hosted on Shuttle, as a way of immortalizing the weekend. I wanted to put up the set lists (I write them down as the songs are played) and display a few photos...maybe a video clip  or two.&lt;&#x2F;p&gt;
-&lt;p&gt;I&#x27;ve got the site organized with Rocket server, assets, templates...all the bones.&lt;&#x2F;p&gt;
-&lt;p&gt;I go to style it.&lt;&#x2F;p&gt;
-&lt;p&gt;Once again, I bash my head against CSS. I hate this fuckin&#x27; shit...I&#x27;m serious, I really, really loathe it. Every time...every single time, I sling code for hours against &lt;code&gt;screen.css&lt;&#x2F;code&gt;, like the Peter Griffin in that gif with the blinds.&lt;&#x2F;p&gt;
-&lt;p&gt;I know my loathing is rooted in ignorance. Trust me, I get it. I just don&#x27;t know what to do or what resource to use to learn it in a way that&#x27;s effective for me.&lt;&#x2F;p&gt;
-&lt;p&gt;I&#x27;ve tried many things, but typically the learning resources approach the topic from a direction that my mind rejects. Yes, properties, selectors, etc. are important to know, but I can&#x27;t connect in my mind how those building blocks translate to the actual result I want to see on the site.&lt;&#x2F;p&gt;
-&lt;p&gt;Videos are useless to me, I have to be in there typing and getting my hands dirty.&lt;&#x2F;p&gt;
-&lt;p&gt;The written content approaches the topic from the wrong direction, as I said a moment ago.&lt;&#x2F;p&gt;
-&lt;p&gt;What to do?&lt;&#x2F;p&gt;
-&lt;p&gt;My typical fallback has been to grudgingly grab Tailwind and use ChatGPT to give me roughly what I want. I don&#x27;t really want to be using tools like this, I&#x27;d rather have some basic level of compentance with CSS.&lt;&#x2F;p&gt;
-&lt;p&gt;Right now I just don&#x27;t know what to do to get anywhere near productive. &lt;&#x2F;p&gt;
-&lt;p&gt;I guess my Metallica site will never see the light of day, which makes me sad.&lt;&#x2F;p&gt;
 </content>
         
     </entry>
