@@ -26,7 +26,7 @@ pub fn build() -> Router {
     // create public assets, wrap them in a trace layer
     let public_assets = ServiceBuilder::new()
         .layer(&trace_layer)
-        .service(ServeDir::new("public"));
+        .service(ServeDir::new("public").append_index_html_on_directories(true));
 
     // build the router and wrap it with the telemetry layers
     let x_request_id = HeaderName::from_static("x-request-id");
