@@ -8,7 +8,7 @@
     <updated>2024-10-15T00:00:00+00:00</updated>
     <id>https://jeff-mitchell.dev/categories/author-s-notes/atom.xml</id>
     <entry xml:lang="en">
-        <title>Technical Difficultities</title>
+        <title>Technical Difficulties</title>
         <published>2024-10-15T00:00:00+00:00</published>
         <updated>2024-10-15T00:00:00+00:00</updated>
         
@@ -18,10 +18,10 @@
           </name>
         </author>
         
-        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2024/2024-10-15-techncial-difficulties/"/>
-        <id>https://jeff-mitchell.dev/blog/2024/2024-10-15-techncial-difficulties/</id>
+        <link rel="alternate" type="text/html" href="https://jeff-mitchell.dev/blog/2024/2024-10-15-technical-difficulties/"/>
+        <id>https://jeff-mitchell.dev/blog/2024/2024-10-15-technical-difficulties/</id>
         
-        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2024/2024-10-15-techncial-difficulties/">&lt;p&gt;I&#x27;m currently experiencing some technical difficulties with this blog site. For some reason, if you don&#x27;t append &amp;quot;index.html&amp;quot; to the end of all routes, your browser will display an error page with &amp;quot;too many redirects&amp;quot;.&lt;&#x2F;p&gt;
+        <content type="html" xml:base="https://jeff-mitchell.dev/blog/2024/2024-10-15-technical-difficulties/">&lt;p&gt;I&#x27;m currently experiencing some technical difficulties with this blog site. For some reason, if you don&#x27;t append &amp;quot;index.html&amp;quot; to the end of all routes, your browser will display an error page with &amp;quot;too many redirects&amp;quot;.&lt;&#x2F;p&gt;
 &lt;p&gt;I&#x27;ll be exploring this further in the coming days, mostly to learn, but am also working behind the scenes on an alternate blog which will be hosted on Netlify. That is a few weeks...no wait, let&#x27;s not be overly optimistic...months away though and am targeting the beginning of next year to make it go live.&lt;&#x2F;p&gt;
 </content>
         

@@ -1,5 +1,5 @@
 +++
-title = "Technical Difficultities"
+title = "Technical Difficulties"
 description = "An update from the auther regarding the technical difficulties currently being encountered on this site."
 date = "2024-10-15"
 authors = ["Jeff Mitchell"]
