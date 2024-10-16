@@ -1,8 +1,8 @@
 // src/main.rs
 
 // dependencies
-use jeff_mitchell_dev_lib::{build, get_subscriber, init_subscriber};
 use jeff_mitchell_dev_lib::service::JeffMitchellDevService;
+use jeff_mitchell_dev_lib::{build, get_subscriber, init_subscriber};
 use shuttle_runtime::Error;
 
 // main function
@@ -16,5 +16,5 @@ async fn main() -> Result<JeffMitchellDevService, Error> {
     let app_router = build();
 
     // start the service
-    Ok( JeffMitchellDevService { app_router} )
+    Ok(JeffMitchellDevService { app_router })
 }
