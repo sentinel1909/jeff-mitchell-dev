@@ -5,14 +5,14 @@
 
 # Build artifacts
 /target
+/public
 
 # Shuttle Related
 .shuttle-storage
+.shuttle
 Secrets*.toml
 
 # Mac OS
 .DS_Store
+  
 
-# Zola executable
-site/zola
-.shuttle*
