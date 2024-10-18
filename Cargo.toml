@@ -3,7 +3,7 @@
 [package]
 name = "jeff-mitchell-dev"
 authors = ["Jeffery D. Mitchell", "<sentinel1909@jeff-mitchell.dev>"]
-version = "0.16.0"
+version = "0.17.0"
 edition = "2021"
 description = "My Zola blog, served up by Axum, hosted on Shuttle"
 readme = "README.md"

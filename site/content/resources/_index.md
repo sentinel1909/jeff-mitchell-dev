@@ -7,32 +7,33 @@ This is my sort of clearing house of resources, both Rust related and Rust adjac
 
 ## Rust Language
 
-[Rust](https://rust-lang.org)
+- [Rust](https://rust-lang.org)
 
 ## Crates
 
-[crates.io](https://crates.io)
+- [crates.io](https://crates.io)
 
 ## WebAssembly
 
-[webassembly.org](https://webassembly.org)
+- [webassembly.org](https://webassembly.org)
 
 ## Front End
 
-[Yew](https://yew.rs)
+- [Leptos](https://leptos.dev)
+- [Yew](https://yew.rs)
 
 ## Back End
 
-[Axum](https://docs.rs/axum/latest/axum/)
-[Rocket](https://rocket.rs)
+- [Axum](https://docs.rs/axum/latest/axum/)
+- [Rocket](https://rocket.rs)
 
 ## Asynchronous Runtime
 
-[Tokio](https://tokio.rs)
+- [Tokio](https://tokio.rs)
 
 ## Platforms
 
-[Shuttle](https://shuttle.rs)
+- [Shuttle](https://shuttle.rs)
 
 ## Other Blogs and Written Things
 

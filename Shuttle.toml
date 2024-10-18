@@ -1,6 +1,11 @@
 # jeff-mitchell-dev Shuttle configuration
 name = "jeff-mitchell-dev"
 
+[deploy]
+include = [
+  "public/*"
+]
+
 [build]
 assets = [
   "public/*"
