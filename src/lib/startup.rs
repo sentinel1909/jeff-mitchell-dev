@@ -6,6 +6,7 @@ use crate::telemetry::MakeRequestUuid;
 use axum::{http::HeaderName, routing::get, Router};
 use tower::{layer::Layer, ServiceBuilder};
 use tower_http::{
+    cors::{Any, CorsLayer},
     normalize_path::NormalizePathLayer,
     request_id::{PropagateRequestIdLayer, SetRequestIdLayer},
     services::ServeDir,
@@ -15,6 +16,11 @@ use tracing::Level;
 
 // function to build and return a configured application that serves out the Zola built public assets
 pub fn build() -> Router {
+    // create a layer for Cross Origin Resource Sharing
+    let cors = CorsLayer::new()
+        .allow_methods(Any)
+        .allow_origin(Any);
+
     // define the tracing layer
     let trace_layer = TraceLayer::new_for_http()
         .make_span_with(
@@ -33,6 +39,7 @@ pub fn build() -> Router {
     let x_request_id = HeaderName::from_static("x-request-id");
     let api_routes = Router::new()
         .route("/health_check", get(health_check))
+        .layer(cors)
         .layer(
             ServiceBuilder::new()
                 .layer(SetRequestIdLayer::new(

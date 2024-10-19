@@ -5,17 +5,9 @@ aliases = ["/projects.html"]
 
 Here are some projects I'm working on or have worked on.
 
-_Frontend Web Dev in WebAssembly_
+*Crusty Rustacean Newsletter*
 
-[Astronomy Lover](https://astronomy-lover.net)
-
-I just don't want to be the billionth person focusing on the traditional web stack of HTML/CSS/Javascript. As a hobbyist, I have the ability to explore different things. Thii project is a simple web page, compiled to WebAssembly using [Yew](https://yew.rs) for Rust, served up with a minimal [Rocket](https://rocket.rs) web server, hosted on [Shuttle](https://shuttle.rs). It fetches the daily photo from the NASA Astronomy Photo of the Day API and displays it. I'd like to eventually embelish this project with a history feature, so that you can look back at past images or videos.
-
-_Backend Development - APIs_
-
-[Crusty Rustacean Newsletter API](https://github.com/sentinel1909/crusty-rustacean-api.git)
-
-This project is my completed take on [Zero to Production in Rust](https://www.zero2prod.com) by [Luca Palmieri](https://www.lpalmieri.com). I did it using the Axum web framework, instead of Actix Web. I deployed this project, for a time, on Railway, but took it down as I became increasingly nervous about having something less than amateurish exposed to the internet. I'm thinking about getting it going again...on Shuttle.
+This project is my completed take on [Zero to Production in Rust](https://www.zero2prod.com) by [Luca Palmieri](https://www.lpalmieri.com). I did it using the Axum web framework, instead of Actix Web. I deployed this project, for a time, on Railway, but took it down as I became increasingly nervous about having something less than amateurish exposed to the internet. I'm thinking about getting it going again...on Shuttle. Code is here on Github: [Crusty Rustacean Newsletter](https://github.com/sentinel1909/crusty-rustacean-newsletter)
 
 [Shuttle Template - Hyper](https://github.com/sentinel1909/shuttle-hyper-emplate.git)
 
