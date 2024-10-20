@@ -21,6 +21,15 @@ as pagination -%} {% import "macros/footer.html" as footer -%} {% import
     endblock favicon -%} {%- block rss -%} {{ head::rss() }} {%- endblock rss
     -%} {%- block math -%} {%- endblock math -%}
   </head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SPFV08WPM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SPFV08WPM');
+</script>
   <body>
     {# "container full" when width == True, regardless of center "container
     center" when only center == True "container" when both false. #} {%- if
